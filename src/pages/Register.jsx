@@ -8,6 +8,7 @@ import { authRegistrationSchema } from '../utils/validationSchemas';
 import { useAuth } from '../contexts/AuthContext';
 import FormInput from '../components/forms/FormInput';
 import PasswordInput from '../components/forms/PasswordInput';
+import PhoneInput from '../components/forms/PhoneInput';
 import GoogleButton from '../components/auth/GoogleButton';
 import Button from '../components/ui/Button';
 
@@ -42,7 +43,7 @@ const Register = () => {
         firstName: data.firstName,
         lastName: data.lastName,
         email: data.email,
-        phone: '' // Will be filled in Step3 if needed
+        phone: data.phone
       };
 
       // Store user data in auth context (auto-login)
@@ -199,6 +200,16 @@ const Register = () => {
               placeholder="john@example.com"
               register={register}
               error={errors.email}
+              required
+            />
+
+            {/* Phone Number */}
+            <PhoneInput
+              label="Phone Number"
+              name="phone"
+              placeholder="+998 90 123 45 67"
+              register={register}
+              error={errors.phone}
               required
             />
 

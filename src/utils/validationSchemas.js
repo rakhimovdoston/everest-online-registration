@@ -1,12 +1,20 @@
 import { z } from 'zod';
 
-// Login form validation schema
+// Login form validation schema (accepts email or phone number)
 export const loginSchema = z.object({
-  email: z
+  emailOrPhone: z
     .string()
-    .min(1, 'Email is required')
-    .email('Please enter a valid email address')
-    .toLowerCase(),
+    .min(1, 'Email or Phone Number is required')
+    .refine(
+      (value) => {
+        // Check if it's an email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        // Check if it's a phone number (international format)
+        const phoneRegex = /^[\+]?[0-9]{9,15}$/;
+        return emailRegex.test(value) || phoneRegex.test(value.replace(/[\s\-\(\)]/g, ''));
+      },
+      'Please enter a valid email address or phone number'
+    ),
 
   password: z
     .string()
@@ -32,6 +40,14 @@ export const authRegistrationSchema = z.object({
     .min(1, 'Email is required')
     .email('Please enter a valid email address')
     .toLowerCase(),
+
+  phone: z
+    .string()
+    .min(1, 'Phone number is required')
+    .regex(
+      /^[\+]?[0-9]{9,15}$/,
+      'Please enter a valid phone number (e.g., +998901234567)'
+    ),
 
   password: z
     .string()

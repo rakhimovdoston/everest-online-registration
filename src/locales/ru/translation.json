@@ -7,6 +7,7 @@
     "faq": "FAQ",
     "signIn": "Войти",
     "startMockTest": "Начать Тест",
+    "myProfile": "Мой Профиль",
     "logout": "Выйти"
   },
   "hero": {
@@ -48,7 +49,24 @@
     "termsOfService": "Условиями Обслуживания",
     "and": "и",
     "privacyPolicy": "Политикой Конфиденциальности",
-    "agree": ""
+    "agree": "",
+    "phoneNumber": "Номер Телефона",
+    "enterPhone": "Введите номер телефона",
+    "phonePlaceholder": "+998 90 123 45 67",
+    "sendCode": "Отправить Код",
+    "sendingCode": "Отправка кода...",
+    "enterVerificationCode": "Введите код подтверждения",
+    "codeSentTo": "6-значный код отправлен на номер",
+    "verifyCode": "Подтвердить Код",
+    "verifying": "Проверка...",
+    "resendCode": "Отправить код повторно",
+    "resendIn": "Повторная отправка через",
+    "seconds": "сек",
+    "changeNumber": "Изменить номер",
+    "invalidCode": "Неверный код. Попробуйте снова.",
+    "codeSent": "Код успешно отправлен",
+    "phoneRequired": "Номер телефона обязателен",
+    "invalidPhone": "Неверный формат номера телефона"
   },
   "testRegistration": {
     "step1": {
@@ -136,6 +154,53 @@
     "error": "Ошибка",
     "success": "Успешно",
     "pleaseWait": "Пожалуйста, подождите...",
-    "required": "Обязательно"
+    "required": "Обязательно",
+    "save": "Сохранить",
+    "saving": "Сохранение...",
+    "cancel": "Отмена",
+    "edit": "Редактировать",
+    "backToProfile": "Вернуться к профилю"
+  },
+  "profile": {
+    "title": "Мой Профиль",
+    "subtitle": "Личные данные и история тестов",
+    "personalInfo": "Личные Данные",
+    "fullName": "Полное имя",
+    "phone": "Телефон",
+    "statistics": "Статистика",
+    "totalTests": "Всего тестов",
+    "completedTests": "Завершено",
+    "testHistory": "История Тестов",
+    "testSessions": "Тестовые Сессии",
+    "speakingSessions": "Speaking Сессии",
+    "session": "Сессия",
+    "speakingPending": "Ожидание",
+    "testResults": "Результаты Теста",
+    "resultsNotAvailable": "Результаты еще не готовы. Пожалуйста, подождите.",
+    "noTests": "Нет тестов",
+    "noTestsDescription": "Вы еще не зарегистрировались ни на один тест",
+    "registerForTest": "Зарегистрироваться на Тест",
+    "relatedTestSessions": "Связанные тестовые сессии",
+    "overallProgress": "Общий Прогресс",
+    "completedSessions": "Завершенные Сессии",
+    "speakingCompleted": "Speaking Завершен",
+    "avgScore": "Средний Балл",
+    "downloadPDF": "Скачать PDF",
+    "status": {
+      "completed": "Завершено",
+      "pending": "Ожидание",
+      "scheduled": "Запланировано",
+      "cancelled": "Отменено"
+    },
+    "payment": {
+      "paid": "Оплачено",
+      "pending": "Ожидание",
+      "failed": "Неудачно"
+    },
+    "time": {
+      "morning": "Утро",
+      "afternoon": "День",
+      "evening": "Вечер"
+    }
   }
 }

@@ -1,13 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { CheckCircleIcon as CheckCircleSolidIcon, ClockIcon, CalendarIcon } from '@heroicons/react/24/solid';
+import { CheckCircleIcon as CheckCircleSolidIcon, PencilIcon, XMarkIcon } from '@heroicons/react/24/solid';
+import { Dialog, Transition } from '@headlessui/react';
 import { useAuth } from '../../contexts/AuthContext';
 import FormInput from '../../components/forms/FormInput';
 import Button from '../../components/ui/Button';
+import { packagesData, branchesData } from '../../data/testData';
 
 const detailsSchema = z.object({
   firstName: z.string().min(2, "Ism kamida 2 ta belgidan iborat bo'lishi kerak"),
@@ -22,11 +24,13 @@ const Step3Details = () => {
   const { isAuthenticated, user } = useAuth();
   const [registrationData, setRegistrationData] = useState(null);
   const [testDates, setTestDates] = useState([]);
-  const [speakingDates, setSpeakingDates] = useState([]);
   const [selectedTestDates, setSelectedTestDates] = useState([]);
-  const [selectedSpeakingDates, setSelectedSpeakingDates] = useState([]);
   const [isLoadingTestDates, setIsLoadingTestDates] = useState(false);
-  const [isLoadingSpeakingDates, setIsLoadingSpeakingDates] = useState(false);
+  const [selectedTestTime, setSelectedTestTime] = useState('');
+
+  // Modals
+  const [isPackageModalOpen, setIsPackageModalOpen] = useState(false);
+  const [isBranchModalOpen, setIsBranchModalOpen] = useState(false);
 
   const {
     register,
@@ -56,6 +60,11 @@ const Step3Details = () => {
       return;
     }
     setRegistrationData(data);
+
+    // Load previously selected test dates if any
+    if (data.testDates) {
+      setSelectedTestDates(data.testDates);
+    }
   }, [isAuthenticated, navigate, location.pathname]);
 
   // Auto-fill form if registrationType is 'myself'
@@ -78,38 +87,12 @@ const Step3Details = () => {
   const fetchTestDates = async () => {
     setIsLoadingTestDates(true);
     try {
-      // Mock API call - replace with real API
+      // Mock API call - replace with real API endpoint
+      // Real API: GET /api/test-dates?branchId={branchId}
       await new Promise(resolve => setTimeout(resolve, 500));
 
-      // Mock data
+      // Mock data matching real API response format
       const mockTestDates = [
-        {
-          id: 8600,
-          date: "2026-01-13",
-          time: "morning",
-          timeString: "10:00",
-          existedSpace: 18,
-          branchName: registrationData.branch.name,
-          dayOfWeek: "TUESDAY"
-        },
-        {
-          id: 8601,
-          date: "2026-01-13",
-          time: "afternoon",
-          timeString: "14:30",
-          existedSpace: 11,
-          branchName: registrationData.branch.name,
-          dayOfWeek: "TUESDAY"
-        },
-        {
-          id: 8602,
-          date: "2026-01-13",
-          time: "evening",
-          timeString: "18:30",
-          existedSpace: 19,
-          branchName: registrationData.branch.name,
-          dayOfWeek: "TUESDAY"
-        },
         {
           id: 8603,
           date: "2026-01-14",
@@ -124,7 +107,7 @@ const Step3Details = () => {
           date: "2026-01-14",
           time: "afternoon",
           timeString: "14:30",
-          existedSpace: 10,
+          existedSpace: 9,
           branchName: registrationData.branch.name,
           dayOfWeek: "WEDNESDAY"
         },
@@ -136,6 +119,159 @@ const Step3Details = () => {
           existedSpace: 23,
           branchName: registrationData.branch.name,
           dayOfWeek: "WEDNESDAY"
+        },
+        {
+          id: 8606,
+          date: "2026-01-15",
+          time: "morning",
+          timeString: "10:00",
+          existedSpace: 20,
+          branchName: registrationData.branch.name,
+          dayOfWeek: "THURSDAY"
+        },
+        {
+          id: 8607,
+          date: "2026-01-15",
+          time: "afternoon",
+          timeString: "14:30",
+          existedSpace: 8,
+          branchName: registrationData.branch.name,
+          dayOfWeek: "THURSDAY"
+        },
+        {
+          id: 8608,
+          date: "2026-01-15",
+          time: "evening",
+          timeString: "18:30",
+          existedSpace: 20,
+          branchName: registrationData.branch.name,
+          dayOfWeek: "THURSDAY"
+        },
+        {
+          id: 8609,
+          date: "2026-01-16",
+          time: "morning",
+          timeString: "10:00",
+          existedSpace: 18,
+          branchName: registrationData.branch.name,
+          dayOfWeek: "FRIDAY"
+        },
+        {
+          id: 8610,
+          date: "2026-01-16",
+          time: "afternoon",
+          timeString: "14:30",
+          existedSpace: 12,
+          branchName: registrationData.branch.name,
+          dayOfWeek: "FRIDAY"
+        },
+        {
+          id: 8611,
+          date: "2026-01-16",
+          time: "evening",
+          timeString: "18:30",
+          existedSpace: 23,
+          branchName: registrationData.branch.name,
+          dayOfWeek: "FRIDAY"
+        },
+        {
+          id: 8612,
+          date: "2026-01-17",
+          time: "morning",
+          timeString: "10:00",
+          existedSpace: 10,
+          branchName: registrationData.branch.name,
+          dayOfWeek: "SATURDAY"
+        },
+        {
+          id: 8613,
+          date: "2026-01-17",
+          time: "afternoon",
+          timeString: "14:30",
+          existedSpace: 4,
+          branchName: registrationData.branch.name,
+          dayOfWeek: "SATURDAY"
+        },
+        {
+          id: 8614,
+          date: "2026-01-17",
+          time: "evening",
+          timeString: "18:30",
+          existedSpace: 21,
+          branchName: registrationData.branch.name,
+          dayOfWeek: "SATURDAY"
+        },
+        {
+          id: 8615,
+          date: "2026-01-18",
+          time: "morning",
+          timeString: "11:30",
+          existedSpace: 20,
+          branchName: registrationData.branch.name,
+          dayOfWeek: "SUNDAY"
+        },
+        {
+          id: 8616,
+          date: "2026-01-18",
+          time: "afternoon",
+          timeString: "14:30",
+          existedSpace: 9,
+          branchName: registrationData.branch.name,
+          dayOfWeek: "SUNDAY"
+        },
+        {
+          id: 8619,
+          date: "2026-01-19",
+          time: "morning",
+          timeString: "10:00",
+          existedSpace: 20,
+          branchName: registrationData.branch.name,
+          dayOfWeek: "MONDAY"
+        },
+        {
+          id: 8620,
+          date: "2026-01-19",
+          time: "afternoon",
+          timeString: "14:30",
+          existedSpace: 15,
+          branchName: registrationData.branch.name,
+          dayOfWeek: "MONDAY"
+        },
+        {
+          id: 8621,
+          date: "2026-01-19",
+          time: "evening",
+          timeString: "18:30",
+          existedSpace: 23,
+          branchName: registrationData.branch.name,
+          dayOfWeek: "MONDAY"
+        },
+        {
+          id: 8622,
+          date: "2026-01-20",
+          time: "morning",
+          timeString: "10:00",
+          existedSpace: 18,
+          branchName: registrationData.branch.name,
+          dayOfWeek: "TUESDAY"
+        },
+        {
+          id: 8623,
+          date: "2026-01-20",
+          time: "afternoon",
+          timeString: "14:30",
+          existedSpace: 11,
+          branchName: registrationData.branch.name,
+          dayOfWeek: "TUESDAY"
+        },
+        {
+          id: 8624,
+          date: "2026-01-20",
+          time: "evening",
+          timeString: "18:30",
+          existedSpace: 22,
+          branchName: registrationData.branch.name,
+          dayOfWeek: "TUESDAY"
         }
       ];
 
@@ -147,89 +283,79 @@ const Step3Details = () => {
     }
   };
 
-  const fetchSpeakingDates = async () => {
-    setIsLoadingSpeakingDates(true);
-    try {
-      // Mock API call
-      await new Promise(resolve => setTimeout(resolve, 500));
+  const handlePackageChange = (newPackage) => {
+    const oldTotalSessions = registrationData.package.totalSessions;
+    const newTotalSessions = newPackage.totalSessions;
 
-      const mockSpeakingDates = [
-        {
-          id: 36503,
-          date: "2026-01-15",
-          time: "14:00",
-          branchName: registrationData.branch.name,
-          speakerName: "Sevinch Rustambekova",
-          speakerId: 844,
-          type: "ONLINE"
-        },
-        {
-          id: 36504,
-          date: "2026-01-15",
-          time: "14:20",
-          branchName: registrationData.branch.name,
-          speakerName: "Sevinch Rustambekova",
-          speakerId: 844,
-          type: "ONLINE"
-        },
-        {
-          id: 36505,
-          date: "2026-01-15",
-          time: "14:40",
-          branchName: registrationData.branch.name,
-          speakerName: "Sevinch Rustambekova",
-          speakerId: 844,
-          type: "ONLINE"
-        },
-        {
-          id: 36506,
-          date: "2026-01-15",
-          time: "15:00",
-          branchName: registrationData.branch.name,
-          speakerName: "Sevinch Rustambekova",
-          speakerId: 844,
-          type: "ONLINE"
-        }
-      ];
+    let updatedTestDates = [...selectedTestDates];
 
-      setSpeakingDates(mockSpeakingDates);
-    } catch (error) {
-      console.error('Error fetching speaking dates:', error);
-    } finally {
-      setIsLoadingSpeakingDates(false);
-    }
-  };
-
-  const handleTestDateSelect = (testDate) => {
-    const maxTestDates = registrationData?.package?.totalSessions || 0;
-
-    const isSelected = selectedTestDates.some(d => d.id === testDate.id);
-
-    if (isSelected) {
-      setSelectedTestDates(selectedTestDates.filter(d => d.id !== testDate.id));
-    } else {
-      if (selectedTestDates.length < maxTestDates) {
-        setSelectedTestDates([...selectedTestDates, testDate]);
-      } else {
-        alert(`Maksimal ${maxTestDates} ta test sanasini tanlashingiz mumkin!`);
+    if (newTotalSessions < oldTotalSessions) {
+      // Kamaysa - oxirgilarini o'chirish
+      updatedTestDates = updatedTestDates.slice(0, newTotalSessions);
+    } else if (newTotalSessions > oldTotalSessions) {
+      // Ko'paysa - eskilarini saqlash, yangilarini bo'sh qoldirish
+      // Array.from bilan yangi bo'sh joylar qo'shamiz
+      while (updatedTestDates.length < newTotalSessions) {
+        updatedTestDates.push(null);
       }
     }
+
+    const updatedData = {
+      ...registrationData,
+      package: newPackage,
+      testDates: updatedTestDates.filter(d => d !== null && d !== undefined)
+    };
+
+    setRegistrationData(updatedData);
+    setSelectedTestDates(updatedTestDates);
+    localStorage.setItem('testRegistration', JSON.stringify(updatedData));
+    setIsPackageModalOpen(false);
   };
 
-  const handleSpeakingDateSelect = (speakingDate) => {
-    const maxSpeakingDates = registrationData?.package?.speakingSessions || 0;
+  const handleBranchChange = (newBranch) => {
+    // Branch o'zgarsa - barcha datelarni reset qilish
+    const updatedData = {
+      ...registrationData,
+      branch: newBranch,
+      testDates: [],
+      speakingDates: [],
+      speakingType: ''
+    };
 
-    const isSelected = selectedSpeakingDates.some(d => d.id === speakingDate.id);
+    setRegistrationData(updatedData);
+    setSelectedTestDates([]);
+    localStorage.setItem('testRegistration', JSON.stringify(updatedData));
+    setIsBranchModalOpen(false);
 
-    if (isSelected) {
-      setSelectedSpeakingDates(selectedSpeakingDates.filter(d => d.id !== speakingDate.id));
-    } else {
-      if (selectedSpeakingDates.length < maxSpeakingDates) {
-        setSelectedSpeakingDates([...selectedSpeakingDates, speakingDate]);
-      } else {
-        alert(`Maksimal ${maxSpeakingDates} ta speaking sanasini tanlashingiz mumkin!`);
-      }
+    // Yangi branch uchun test datelarni qayta yuklash
+    fetchTestDates();
+  };
+
+  const handleTestDateChange = (index, testDateId) => {
+    if (!testDateId) {
+      // Clear selection
+      const newSelectedDates = [...selectedTestDates];
+      newSelectedDates[index] = null;
+      setSelectedTestDates(newSelectedDates);
+      return;
     }
+
+    const testDate = testDates.find(d => d.id === parseInt(testDateId));
+    if (!testDate) return;
+
+    // Check for duplicates
+    const isDuplicate = selectedTestDates.some((selected, i) =>
+      i !== index && selected && selected.id === testDate.id
+    );
+
+    if (isDuplicate) {
+      alert('Bu sana allaqachon tanlangan!');
+      return;
+    }
+
+    const newSelectedDates = [...selectedTestDates];
+    newSelectedDates[index] = testDate;
+    setSelectedTestDates(newSelectedDates);
   };
 
   const handleBack = () => {
@@ -238,26 +364,22 @@ const Step3Details = () => {
 
   const onSubmit = (formData) => {
     // Validate test dates
-    if (selectedTestDates.length !== registrationData?.package?.totalSessions) {
-      alert(`Iltimos, ${registrationData?.package?.totalSessions} ta test sanasini tanlang!`);
-      return;
-    }
+    const requiredTestDates = registrationData?.package?.totalSessions || 0;
+    const validSelectedDates = selectedTestDates.filter(d => d && d.id);
 
-    // Validate speaking dates
-    if (selectedSpeakingDates.length !== registrationData?.package?.speakingSessions) {
-      alert(`Iltimos, ${registrationData?.package?.speakingSessions} ta speaking sanasini tanlang!`);
+    if (validSelectedDates.length !== requiredTestDates) {
+      alert(`Iltimos, ${requiredTestDates} ta test sanasini tanlang!`);
       return;
     }
 
     const updatedData = {
       ...registrationData,
       personalInfo: formData,
-      testDates: selectedTestDates,
-      speakingDates: selectedSpeakingDates
+      testDates: validSelectedDates
     };
 
     localStorage.setItem('testRegistration', JSON.stringify(updatedData));
-    navigate('/test-registration/review');
+    navigate('/test-registration/speaking');
   };
 
   const formatDate = (dateString) => {
@@ -278,12 +400,35 @@ const Step3Details = () => {
     return labels[time] || time;
   };
 
-  useEffect(() => {
-    // Fetch speaking dates when all test dates are selected
-    if (selectedTestDates.length === registrationData?.package?.totalSessions) {
-      fetchSpeakingDates();
-    }
-  }, [selectedTestDates.length, registrationData?.package?.totalSessions]);
+  const getDayOfWeekLabel = (dayOfWeek) => {
+    const labels = {
+      MONDAY: 'Dushanba',
+      TUESDAY: 'Seshanba',
+      WEDNESDAY: 'Chorshanba',
+      THURSDAY: 'Payshanba',
+      FRIDAY: 'Juma',
+      SATURDAY: 'Shanba',
+      SUNDAY: 'Yakshanba'
+    };
+    return labels[dayOfWeek] || dayOfWeek;
+  };
+
+  const formatTestDateOption = (testDate) => {
+    return `${formatDate(testDate.date)} - ${getDayOfWeekLabel(testDate.dayOfWeek)} - ${getTimeLabel(testDate.time)} (${testDate.timeString}) - ${testDate.existedSpace} joy`;
+  };
+
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat('uz-UZ').format(price) + ' UZS';
+  };
+
+  // Filter test dates by selected time
+  const filteredTestDates = selectedTestTime
+    ? testDates.filter(d => d.time === selectedTestTime)
+    : testDates;
+
+  const totalTestDates = registrationData?.package?.totalSessions || 0;
+  const activePackages = packagesData.filter(p => p.active);
+  const activeBranches = branchesData.filter(b => b.active);
 
   return (
     <div className="min-h-screen bg-slate-50 pt-28 pb-12 px-4 sm:px-6 lg:px-8">
@@ -309,7 +454,14 @@ const Step3Details = () => {
               <div className="flex items-center justify-center w-10 h-10 rounded-full bg-indigo-600 text-white font-semibold">
                 3
               </div>
-              <span className="ml-2 text-sm font-medium text-indigo-600">Ma'lumotlar</span>
+              <span className="ml-2 text-sm font-medium text-indigo-600">Test Sanalari</span>
+            </div>
+            <div className="w-16 h-0.5 bg-slate-300" />
+            <div className="flex items-center">
+              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-300 text-slate-600 font-semibold">
+                4
+              </div>
+              <span className="ml-2 text-sm font-medium text-slate-400">Speaking</span>
             </div>
           </div>
         </div>
@@ -322,33 +474,46 @@ const Step3Details = () => {
           className="text-center mb-8"
         >
           <h1 className="text-4xl font-display font-bold text-slate-900 mb-2">
-            {registrationData?.registrationType === 'myself'
-              ? 'Shaxsiy Ma\'lumotlar'
-              : 'Test Topshiruvchi Ma\'lumotlari'}
+            Test Sanalarini Tanlang
           </h1>
           <p className="text-slate-600">
-            Shaxsiy ma'lumotlar, test va speaking vaqtlarini tanlang
+            Shaxsiy ma'lumotlar va test sanalarini kiriting
           </p>
         </motion.div>
 
-        {/* Summary Cards */}
-        <div className="grid md:grid-cols-3 gap-4 mb-8">
+        {/* Summary Cards with Edit */}
+        <div className="grid md:grid-cols-2 gap-4 mb-8">
           <div className="bg-white rounded-xl p-4 border border-slate-200">
-            <p className="text-sm text-slate-600 mb-1">Tanlangan paket</p>
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-sm text-slate-600">Tanlangan paket</p>
+              <button
+                onClick={() => setIsPackageModalOpen(true)}
+                className="text-indigo-600 hover:text-indigo-700 transition-colors"
+                title="Paketni o'zgartirish"
+              >
+                <PencilIcon className="w-4 h-4" />
+              </button>
+            </div>
             <p className="text-lg font-bold text-slate-900">
               {registrationData?.package?.name}
             </p>
-          </div>
-          <div className="bg-white rounded-xl p-4 border border-slate-200">
-            <p className="text-sm text-slate-600 mb-1">Filial</p>
-            <p className="text-lg font-bold text-slate-900">
-              {registrationData?.branch?.name}
+            <p className="text-sm text-slate-600">
+              {totalTestDates} ta test sessiyasi
             </p>
           </div>
           <div className="bg-white rounded-xl p-4 border border-slate-200">
-            <p className="text-sm text-slate-600 mb-1">Test / Speaking</p>
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-sm text-slate-600">Filial</p>
+              <button
+                onClick={() => setIsBranchModalOpen(true)}
+                className="text-indigo-600 hover:text-indigo-700 transition-colors"
+                title="Filialni o'zgartirish"
+              >
+                <PencilIcon className="w-4 h-4" />
+              </button>
+            </div>
             <p className="text-lg font-bold text-slate-900">
-              {registrationData?.package?.totalSessions} / {registrationData?.package?.speakingSessions}
+              {registrationData?.branch?.name}
             </p>
           </div>
         </div>
@@ -412,13 +577,66 @@ const Step3Details = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="bg-white rounded-2xl shadow-xl p-8 border border-slate-200 mb-6"
           >
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-semibold text-slate-900">
+            <div className="mb-6">
+              <h2 className="text-lg font-semibold text-slate-900 mb-2">
                 Test Sanalarini Tanlang
               </h2>
-              <span className="text-sm text-slate-600">
-                {selectedTestDates.length} / {registrationData?.package?.totalSessions} tanlandi
-              </span>
+              <p className="text-sm text-slate-600">
+                {totalTestDates} ta test sanasini tanlashingiz kerak
+              </p>
+            </div>
+
+            {/* Test Time Filter */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Vaqt bo'yicha filter (ixtiyoriy)
+              </label>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setSelectedTestTime('')}
+                  className={`px-4 py-2 rounded-lg border-2 transition-all ${
+                    selectedTestTime === ''
+                      ? 'border-indigo-600 bg-indigo-50 text-indigo-900'
+                      : 'border-slate-200 hover:border-slate-300 text-slate-700'
+                  }`}
+                >
+                  Hammasi
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectedTestTime('morning')}
+                  className={`px-4 py-2 rounded-lg border-2 transition-all ${
+                    selectedTestTime === 'morning'
+                      ? 'border-indigo-600 bg-indigo-50 text-indigo-900'
+                      : 'border-slate-200 hover:border-slate-300 text-slate-700'
+                  }`}
+                >
+                  Ertalab
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectedTestTime('afternoon')}
+                  className={`px-4 py-2 rounded-lg border-2 transition-all ${
+                    selectedTestTime === 'afternoon'
+                      ? 'border-indigo-600 bg-indigo-50 text-indigo-900'
+                      : 'border-slate-200 hover:border-slate-300 text-slate-700'
+                  }`}
+                >
+                  Kunduzi
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectedTestTime('evening')}
+                  className={`px-4 py-2 rounded-lg border-2 transition-all ${
+                    selectedTestTime === 'evening'
+                      ? 'border-indigo-600 bg-indigo-50 text-indigo-900'
+                      : 'border-slate-200 hover:border-slate-300 text-slate-700'
+                  }`}
+                >
+                  Kechqurun
+                </button>
+              </div>
             </div>
 
             {isLoadingTestDates ? (
@@ -427,103 +645,30 @@ const Step3Details = () => {
                 <p className="text-slate-600 mt-2">Yuklanmoqda...</p>
               </div>
             ) : (
-              <div className="space-y-3">
-                {testDates.map((testDate) => {
-                  const isSelected = selectedTestDates.some(d => d.id === testDate.id);
-                  return (
-                    <button
-                      key={testDate.id}
-                      type="button"
-                      onClick={() => handleTestDateSelect(testDate)}
-                      className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
-                        isSelected
-                          ? 'border-indigo-600 bg-indigo-50'
-                          : 'border-slate-200 hover:border-slate-300'
-                      }`}
+              <div className="space-y-4">
+                {Array.from({ length: totalTestDates }).map((_, index) => (
+                  <div key={index}>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Test sana {index + 1}
+                    </label>
+                    <select
+                      value={selectedTestDates[index]?.id || ''}
+                      onChange={(e) => handleTestDateChange(index, e.target.value)}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                      required
                     >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <CalendarIcon className={`w-5 h-5 ${isSelected ? 'text-indigo-600' : 'text-slate-600'}`} />
-                          <div>
-                            <p className={`font-semibold ${isSelected ? 'text-indigo-900' : 'text-slate-900'}`}>
-                              {formatDate(testDate.date)} - {getTimeLabel(testDate.time)}
-                            </p>
-                            <p className="text-sm text-slate-600">
-                              {testDate.timeString} • {testDate.existedSpace} ta joy mavjud
-                            </p>
-                          </div>
-                        </div>
-                        {isSelected && (
-                          <CheckCircleSolidIcon className="w-6 h-6 text-indigo-600" />
-                        )}
-                      </div>
-                    </button>
-                  );
-                })}
+                      <option value="">Sanani tanlang</option>
+                      {filteredTestDates.map((testDate) => (
+                        <option key={testDate.id} value={testDate.id}>
+                          {formatTestDateOption(testDate)}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                ))}
               </div>
             )}
           </motion.div>
-
-          {/* Speaking Dates Selection */}
-          {selectedTestDates.length === registrationData?.package?.totalSessions && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="bg-white rounded-2xl shadow-xl p-8 border border-slate-200 mb-6"
-            >
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-semibold text-slate-900">
-                  Speaking Sanalarini Tanlang
-                </h2>
-                <span className="text-sm text-slate-600">
-                  {selectedSpeakingDates.length} / {registrationData?.package?.speakingSessions} tanlandi
-                </span>
-              </div>
-
-              {isLoadingSpeakingDates ? (
-                <div className="text-center py-8">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto"></div>
-                  <p className="text-slate-600 mt-2">Yuklanmoqda...</p>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {speakingDates.map((speakingDate) => {
-                    const isSelected = selectedSpeakingDates.some(d => d.id === speakingDate.id);
-                    return (
-                      <button
-                        key={speakingDate.id}
-                        type="button"
-                        onClick={() => handleSpeakingDateSelect(speakingDate)}
-                        className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
-                          isSelected
-                            ? 'border-indigo-600 bg-indigo-50'
-                            : 'border-slate-200 hover:border-slate-300'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <ClockIcon className={`w-5 h-5 ${isSelected ? 'text-indigo-600' : 'text-slate-600'}`} />
-                            <div>
-                              <p className={`font-semibold ${isSelected ? 'text-indigo-900' : 'text-slate-900'}`}>
-                                {formatDate(speakingDate.date)} - {speakingDate.time}
-                              </p>
-                              <p className="text-sm text-slate-600">
-                                {speakingDate.speakerName} • {speakingDate.type}
-                              </p>
-                            </div>
-                          </div>
-                          {isSelected && (
-                            <CheckCircleSolidIcon className="w-6 h-6 text-indigo-600" />
-                          )}
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-            </motion.div>
-          )}
 
           {/* Navigation */}
           <div className="flex justify-between items-center">
@@ -540,11 +685,152 @@ const Step3Details = () => {
               size="lg"
               type="submit"
             >
-              Ko'rib chiqish
+              Keyingisi
             </Button>
           </div>
         </form>
       </div>
+
+      {/* Package Modal */}
+      <Transition appear show={isPackageModalOpen} as={Fragment}>
+        <Dialog as="div" className="relative z-50" onClose={() => setIsPackageModalOpen(false)}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Title as="div" className="flex items-center justify-between mb-6">
+                    <h3 className="text-lg font-semibold text-slate-900">
+                      Paketni O'zgartirish
+                    </h3>
+                    <button
+                      onClick={() => setIsPackageModalOpen(false)}
+                      className="text-slate-400 hover:text-slate-600 transition-colors"
+                    >
+                      <XMarkIcon className="w-6 h-6" />
+                    </button>
+                  </Dialog.Title>
+
+                  <div className="space-y-3">
+                    {activePackages.map((pkg) => (
+                      <button
+                        key={pkg.id}
+                        onClick={() => handlePackageChange(pkg)}
+                        className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
+                          registrationData?.package?.id === pkg.id
+                            ? 'border-indigo-600 bg-indigo-50'
+                            : 'border-slate-200 hover:border-slate-300'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex-1">
+                            <p className="font-bold text-lg text-slate-900">{pkg.name}</p>
+                            <p className="text-sm text-slate-600">
+                              {pkg.totalSessions} ta test • {pkg.speakingSessions} ta speaking
+                            </p>
+                          </div>
+                          <p className="text-xl font-bold text-indigo-600">
+                            {formatPrice(pkg.price)}
+                          </p>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+
+      {/* Branch Modal */}
+      <Transition appear show={isBranchModalOpen} as={Fragment}>
+        <Dialog as="div" className="relative z-50" onClose={() => setIsBranchModalOpen(false)}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Title as="div" className="flex items-center justify-between mb-6">
+                    <h3 className="text-lg font-semibold text-slate-900">
+                      Filialni O'zgartirish
+                    </h3>
+                    <button
+                      onClick={() => setIsBranchModalOpen(false)}
+                      className="text-slate-400 hover:text-slate-600 transition-colors"
+                    >
+                      <XMarkIcon className="w-6 h-6" />
+                    </button>
+                  </Dialog.Title>
+
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+                    <p className="text-sm text-yellow-800">
+                      <strong>Diqqat:</strong> Filialni o'zgartirsangiz, barcha tanlangan test va speaking datelar o'chib ketadi.
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    {activeBranches.map((branch) => (
+                      <button
+                        key={branch.id}
+                        onClick={() => handleBranchChange(branch)}
+                        className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
+                          registrationData?.branch?.id === branch.id
+                            ? 'border-indigo-600 bg-indigo-50'
+                            : 'border-slate-200 hover:border-slate-300'
+                        }`}
+                      >
+                        <p className="font-bold text-lg text-slate-900">{branch.name}</p>
+                        <p className="text-sm text-slate-600">
+                          {branch.location} • Maksimal {branch.maxStudents} ta o'quvchi
+                        </p>
+                      </button>
+                    ))}
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
     </div>
   );
 };

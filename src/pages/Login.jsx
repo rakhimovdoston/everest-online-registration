@@ -1,66 +1,153 @@
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { motion } from 'framer-motion';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { loginSchema } from '../utils/validationSchemas';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
-import FormInput from '../components/forms/FormInput';
-import PasswordInput from '../components/forms/PasswordInput';
-import GoogleButton from '../components/auth/GoogleButton';
+import { authApi } from '../services/api';
+import OTPInput from '../components/forms/OTPInput';
 import Button from '../components/ui/Button';
+import { ArrowLeftIcon, DevicePhoneMobileIcon } from '@heroicons/react/24/outline';
+import { CheckCircleIcon } from '@heroicons/react/24/solid';
+
+const RESEND_TIMEOUT = 60; // seconds
 
 const Login = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const returnUrl = searchParams.get('returnUrl');
+  const location = useLocation();
+  const { t } = useTranslation();
   const { login } = useAuth();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Form state
+  const [step, setStep] = useState('phone'); // 'phone' | 'otp'
+  const [phone, setPhone] = useState('');
+  const [phoneError, setPhoneError] = useState('');
+
+  // Loading states
+  const [isSendingCode, setIsSendingCode] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
+
+  // OTP state
+  const [otpError, setOtpError] = useState('');
+  const [resendTimer, setResendTimer] = useState(0);
+
+  // Server error
   const [serverError, setServerError] = useState('');
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: zodResolver(loginSchema),
-    mode: 'onBlur',
-  });
+  // Resend timer countdown
+  useEffect(() => {
+    if (resendTimer > 0) {
+      const timer = setTimeout(() => setResendTimer(resendTimer - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [resendTimer]);
 
-  const onSubmit = async (data) => {
-    try {
-      setIsSubmitting(true);
-      setServerError('');
+  // Format phone number for display
+  const formatPhoneDisplay = (value) => {
+    const digits = value.replace(/\D/g, '');
+    if (digits.length <= 3) return digits;
+    if (digits.length <= 5) return `${digits.slice(0, 3)} ${digits.slice(3)}`;
+    if (digits.length <= 7) return `${digits.slice(0, 3)} ${digits.slice(3, 5)} ${digits.slice(5)}`;
+    if (digits.length <= 9) return `${digits.slice(0, 3)} ${digits.slice(3, 5)} ${digits.slice(5, 7)} ${digits.slice(7)}`;
+    return `${digits.slice(0, 3)} ${digits.slice(3, 5)} ${digits.slice(5, 7)} ${digits.slice(7, 9)}`;
+  };
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+  // Handle phone input change
+  const handlePhoneChange = (e) => {
+    const value = e.target.value.replace(/[^\d\s]/g, '');
+    const digits = value.replace(/\D/g, '');
 
-      console.log('Login data:', data);
-
-      // Simulate API response with user data
-      const userData = {
-        firstName: 'John',
-        lastName: 'Doe',
-        email: data.email,
-        phone: '+998901234567'
-      };
-
-      // Store user data in auth context
-      login(userData);
-
-      // Redirect to returnUrl or test registration
-      navigate(returnUrl || '/test-registration');
-    } catch (error) {
-      setServerError('Invalid email or password. Please try again.');
-      console.error('Login error:', error);
-    } finally {
-      setIsSubmitting(false);
+    if (digits.length <= 9) {
+      setPhone(digits);
+      setPhoneError('');
     }
   };
 
-  const handleGoogleLogin = () => {
-    console.log('Google login clicked');
-    alert('Google login integration coming soon!');
+  // Validate phone number
+  const validatePhone = () => {
+    const digits = phone.replace(/\D/g, '');
+
+    if (!digits) {
+      setPhoneError(t('auth.phoneRequired'));
+      return false;
+    }
+
+    if (digits.length !== 9) {
+      setPhoneError(t('auth.invalidPhone'));
+      return false;
+    }
+
+    return true;
+  };
+
+  // Get full phone number with country code
+  const getFullPhone = () => {
+    return `+998${phone}`;
+  };
+
+  // Handle send code
+  const handleSendCode = async () => {
+    if (!validatePhone()) return;
+
+    // try {
+      setIsSendingCode(true);
+      setServerError('');
+
+      // await authApi.requestSmsCode(getFullPhone());
+
+      setStep('otp');
+      setResendTimer(RESEND_TIMEOUT);
+    // } catch (error) {
+    //   setServerError(error.message || t('common.error'));
+    // } finally {
+    //   setIsSendingCode(false);
+    // }
+  };
+
+  // Handle OTP complete
+  const handleOtpComplete = async (code) => {
+    try {
+      setIsVerifying(true);
+      setOtpError('');
+      setServerError('');
+
+      const response = await authApi.verifySmsCode(getFullPhone(), code);
+
+      // Store user data and token
+      login(response.user, response.token);
+
+      // Redirect to returnUrl or home
+      const from = location.state?.from?.pathname || '/';
+      navigate(from, { replace: true });
+    } catch (error) {
+      setOtpError(t('auth.invalidCode'));
+      setIsVerifying(false);
+    }
+  };
+
+  // Handle resend code
+  const handleResendCode = async () => {
+    if (resendTimer > 0) return;
+
+    try {
+      setIsSendingCode(true);
+      setServerError('');
+      setOtpError('');
+
+      await authApi.requestSmsCode(getFullPhone());
+
+      setResendTimer(RESEND_TIMEOUT);
+    } catch (error) {
+      setServerError(error.message || t('common.error'));
+    } finally {
+      setIsSendingCode(false);
+    }
+  };
+
+  // Handle change number
+  const handleChangeNumber = () => {
+    setStep('phone');
+    setOtpError('');
+    setServerError('');
   };
 
   return (
@@ -79,137 +166,227 @@ const Login = () => {
             transition={{ duration: 0.3 }}
           >
             <h1 className="text-4xl font-display font-bold text-slate-900 mb-2">
-              Welcome Back
+              {t('auth.welcomeBack')}
             </h1>
             <p className="text-slate-600">
-              Sign in to continue to IELTS Mock Exam
+              {t('auth.signInSubtitle')}
             </p>
           </motion.div>
         </div>
 
         {/* Login Card */}
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-slate-200">
-          {/* Google Login */}
-          <div className="mb-6">
-            <GoogleButton onClick={handleGoogleLogin} text="Sign in with Google" />
-          </div>
-
-          {/* Divider */}
-          <div className="relative my-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-slate-200" />
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white text-slate-500">
-                Or continue with email
-              </span>
-            </div>
-          </div>
-
           {/* Server Error */}
-          {serverError && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg"
-            >
-              <p className="text-sm text-red-600 text-center">{serverError}</p>
-            </motion.div>
-          )}
-
-          {/* Login Form */}
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            <FormInput
-              label="Email Address"
-              name="email"
-              type="email"
-              placeholder="john@example.com"
-              register={register}
-              error={errors.email}
-              required
-            />
-
-            <PasswordInput
-              label="Password"
-              name="password"
-              placeholder="Enter your password"
-              register={register}
-              error={errors.password}
-              required
-            />
-
-            {/* Forgot Password */}
-            <div className="flex items-center justify-end">
-              <button
-                type="button"
-                className="text-sm font-medium text-indigo-600 hover:text-indigo-700 transition-colors"
-                onClick={() => alert('Forgot password feature coming soon!')}
+          <AnimatePresence>
+            {serverError && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="mb-6 p-3 bg-red-50 border border-red-200 rounded-lg"
               >
-                Forgot password?
-              </button>
-            </div>
+                <p className="text-sm text-red-600 text-center">{serverError}</p>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-            {/* Submit Button */}
-            <Button
-              type="submit"
-              variant="primary"
-              size="lg"
-              disabled={isSubmitting}
-              className="w-full"
-            >
-              {isSubmitting ? (
-                <span className="flex items-center justify-center gap-2">
-                  <svg
-                    className="animate-spin h-5 w-5"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    />
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    />
-                  </svg>
-                  Signing in...
-                </span>
-              ) : (
-                'Sign In'
-              )}
-            </Button>
-          </form>
-
-          {/* Sign Up Link */}
-          <div className="mt-6 text-center">
-            <p className="text-sm text-slate-600">
-              Don't have an account?{' '}
-              <Link
-                to="/register"
-                className="font-semibold text-indigo-600 hover:text-indigo-700 transition-colors"
+          <AnimatePresence mode="wait">
+            {step === 'phone' ? (
+              <motion.div
+                key="phone"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.3 }}
               >
-                Sign up
-              </Link>
-            </p>
-          </div>
+                {/* Phone Icon */}
+                <div className="flex justify-center mb-6">
+                  <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center">
+                    <DevicePhoneMobileIcon className="w-8 h-8 text-indigo-600" />
+                  </div>
+                </div>
+
+                {/* Phone Input */}
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    {t('auth.phoneNumber')}
+                  </label>
+                  <div className="flex">
+                    <div className="flex items-center px-4 bg-slate-100 border border-r-0 border-slate-300 rounded-l-lg">
+                      <span className="text-slate-600 font-medium">+998</span>
+                    </div>
+                    <input
+                      type="tel"
+                      inputMode="numeric"
+                      value={formatPhoneDisplay(phone)}
+                      onChange={handlePhoneChange}
+                      placeholder="90 123 45 67"
+                      className={`
+                        flex-1 px-4 py-3 border rounded-r-lg
+                        focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500
+                        transition-colors
+                        ${phoneError ? 'border-red-500 bg-red-50' : 'border-slate-300'}
+                      `}
+                      disabled={isSendingCode}
+                    />
+                  </div>
+                  {phoneError && (
+                    <motion.p
+                      initial={{ opacity: 0, y: -5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mt-2 text-sm text-red-600"
+                    >
+                      {phoneError}
+                    </motion.p>
+                  )}
+                </div>
+
+                {/* Send Code Button */}
+                <Button
+                  type="button"
+                  variant="primary"
+                  size="lg"
+                  onClick={handleSendCode}
+                  disabled={isSendingCode}
+                  className="w-full"
+                >
+                  {isSendingCode ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <svg
+                        className="animate-spin h-5 w-5"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        />
+                      </svg>
+                      {t('auth.sendingCode')}
+                    </span>
+                  ) : (
+                    t('auth.sendCode')
+                  )}
+                </Button>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="otp"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                {/* Back Button */}
+                <button
+                  type="button"
+                  onClick={handleChangeNumber}
+                  className="flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-6 transition-colors"
+                >
+                  <ArrowLeftIcon className="w-4 h-4" />
+                  <span className="text-sm">{t('auth.changeNumber')}</span>
+                </button>
+
+                {/* Success Icon */}
+                <div className="flex justify-center mb-4">
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                    <CheckCircleIcon className="w-10 h-10 text-green-600" />
+                  </div>
+                </div>
+
+                {/* OTP Info */}
+                <div className="text-center mb-6">
+                  <h2 className="text-lg font-semibold text-slate-900 mb-2">
+                    {t('auth.enterVerificationCode')}
+                  </h2>
+                  <p className="text-sm text-slate-600">
+                    {t('auth.codeSentTo')}
+                  </p>
+                  <p className="text-sm font-medium text-slate-900">
+                    +998 {formatPhoneDisplay(phone)}
+                  </p>
+                </div>
+
+                {/* OTP Input */}
+                <div className="mb-6">
+                  <OTPInput
+                    length={6}
+                    onComplete={handleOtpComplete}
+                    error={otpError}
+                    disabled={isVerifying}
+                  />
+                </div>
+
+                {/* Verify Button */}
+                {isVerifying && (
+                  <div className="flex justify-center mb-6">
+                    <div className="flex items-center gap-2 text-indigo-600">
+                      <svg
+                        className="animate-spin h-5 w-5"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        />
+                      </svg>
+                      <span className="text-sm font-medium">{t('auth.verifying')}</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Resend Code */}
+                <div className="text-center">
+                  {resendTimer > 0 ? (
+                    <p className="text-sm text-slate-500">
+                      {t('auth.resendIn')} {resendTimer} {t('auth.seconds')}
+                    </p>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={handleResendCode}
+                      disabled={isSendingCode}
+                      className="text-sm font-medium text-indigo-600 hover:text-indigo-700 transition-colors disabled:opacity-50"
+                    >
+                      {isSendingCode ? t('auth.sendingCode') : t('auth.resendCode')}
+                    </button>
+                  )}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Footer Text */}
         <p className="mt-6 text-center text-xs text-slate-400">
-          By signing in, you agree to our{' '}
+          {t('auth.agreeToTerms')}{' '}
           <a href="#terms" className="underline hover:text-slate-600">
-            Terms of Service
+            {t('auth.termsOfService')}
           </a>{' '}
-          and{' '}
+          {t('auth.and')}{' '}
           <a href="#privacy" className="underline hover:text-slate-600">
-            Privacy Policy
+            {t('auth.privacyPolicy')}
           </a>
         </p>
       </motion.div>

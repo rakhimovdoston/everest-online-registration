@@ -7,6 +7,7 @@
     "faq": "FAQ",
     "signIn": "Kirish",
     "startMockTest": "Test Boshlash",
+    "myProfile": "Profilim",
     "logout": "Chiqish"
   },
   "hero": {
@@ -48,7 +49,24 @@
     "termsOfService": "Xizmat Shartlari",
     "and": "va",
     "privacyPolicy": "Maxfiylik Siyosati",
-    "agree": "ga rozilik bildirasiz"
+    "agree": "ga rozilik bildirasiz",
+    "phoneNumber": "Telefon Raqami",
+    "enterPhone": "Telefon raqamingizni kiriting",
+    "phonePlaceholder": "+998 90 123 45 67",
+    "sendCode": "Kod Yuborish",
+    "sendingCode": "Kod yuborilmoqda...",
+    "enterVerificationCode": "Tasdiqlash kodini kiriting",
+    "codeSentTo": "6 raqamli kod quyidagi raqamga yuborildi",
+    "verifyCode": "Kodni Tasdiqlash",
+    "verifying": "Tasdiqlanmoqda...",
+    "resendCode": "Kodni qayta yuborish",
+    "resendIn": "Qayta yuborish",
+    "seconds": "soniya",
+    "changeNumber": "Raqamni o'zgartirish",
+    "invalidCode": "Noto'g'ri kod. Qaytadan urinib ko'ring.",
+    "codeSent": "Kod muvaffaqiyatli yuborildi",
+    "phoneRequired": "Telefon raqami kiritish majburiy",
+    "invalidPhone": "Noto'g'ri telefon raqami formati"
   },
   "testRegistration": {
     "step1": {
@@ -136,6 +154,53 @@
     "error": "Xatolik",
     "success": "Muvaffaqiyatli",
     "pleaseWait": "Iltimos kuting...",
-    "required": "Majburiy"
+    "required": "Majburiy",
+    "save": "Saqlash",
+    "saving": "Saqlanmoqda...",
+    "cancel": "Bekor qilish",
+    "edit": "Tahrirlash",
+    "backToProfile": "Profilga qaytish"
+  },
+  "profile": {
+    "title": "Profilim",
+    "subtitle": "Shaxsiy ma'lumotlar va testlar tarixi",
+    "personalInfo": "Shaxsiy Ma'lumotlar",
+    "fullName": "To'liq ism",
+    "phone": "Telefon",
+    "statistics": "Statistika",
+    "totalTests": "Jami testlar",
+    "completedTests": "Tugatilgan",
+    "testHistory": "Testlar Tarixi",
+    "testSessions": "Test Sessiyalari",
+    "speakingSessions": "Speaking Sessiyalari",
+    "session": "Sessiya",
+    "speakingPending": "Kutilmoqda",
+    "testResults": "Test Natijalari",
+    "resultsNotAvailable": "Natijalar hali tayyor emas. Iltimos kuting.",
+    "noTests": "Testlar mavjud emas",
+    "noTestsDescription": "Siz hali birorta test uchun ro'yxatdan o'tmagansiz",
+    "registerForTest": "Test Uchun Ro'yxatdan O'tish",
+    "relatedTestSessions": "Bog'liq test sessiyalari",
+    "overallProgress": "Umumiy Progress",
+    "completedSessions": "Tugatilgan Sessiyalar",
+    "speakingCompleted": "Speaking Tugatildi",
+    "avgScore": "O'rtacha Ball",
+    "downloadPDF": "PDF Yuklash",
+    "status": {
+      "completed": "Tugatilgan",
+      "pending": "Kutilmoqda",
+      "scheduled": "Rejalashtirilgan",
+      "cancelled": "Bekor qilingan"
+    },
+    "payment": {
+      "paid": "To'langan",
+      "pending": "Kutilmoqda",
+      "failed": "Muvaffaqiyatsiz"
+    },
+    "time": {
+      "morning": "Ertalab",
+      "afternoon": "Kunduzi",
+      "evening": "Kechqurun"
+    }
   }
 }

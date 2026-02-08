@@ -7,6 +7,7 @@
     "faq": "FAQ",
     "signIn": "Sign In",
     "startMockTest": "Start Mock Test",
+    "myProfile": "My Profile",
     "logout": "Logout"
   },
   "hero": {
@@ -48,7 +49,24 @@
     "termsOfService": "Terms of Service",
     "and": "and",
     "privacyPolicy": "Privacy Policy",
-    "agree": ""
+    "agree": "",
+    "phoneNumber": "Phone Number",
+    "enterPhone": "Enter your phone number",
+    "phonePlaceholder": "+998 90 123 45 67",
+    "sendCode": "Send Code",
+    "sendingCode": "Sending code...",
+    "enterVerificationCode": "Enter verification code",
+    "codeSentTo": "A 6-digit code was sent to",
+    "verifyCode": "Verify Code",
+    "verifying": "Verifying...",
+    "resendCode": "Resend code",
+    "resendIn": "Resend in",
+    "seconds": "seconds",
+    "changeNumber": "Change number",
+    "invalidCode": "Invalid code. Please try again.",
+    "codeSent": "Code sent successfully",
+    "phoneRequired": "Phone number is required",
+    "invalidPhone": "Invalid phone number format"
   },
   "testRegistration": {
     "step1": {
@@ -136,6 +154,53 @@
     "error": "Error",
     "success": "Success",
     "pleaseWait": "Please wait...",
-    "required": "Required"
+    "required": "Required",
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "backToProfile": "Back to Profile"
+  },
+  "profile": {
+    "title": "My Profile",
+    "subtitle": "Personal information and test history",
+    "personalInfo": "Personal Information",
+    "fullName": "Full name",
+    "phone": "Phone",
+    "statistics": "Statistics",
+    "totalTests": "Total tests",
+    "completedTests": "Completed",
+    "testHistory": "Test History",
+    "testSessions": "Test Sessions",
+    "speakingSessions": "Speaking Sessions",
+    "session": "Session",
+    "speakingPending": "Pending",
+    "testResults": "Test Results",
+    "resultsNotAvailable": "Results are not available yet. Please wait.",
+    "noTests": "No tests",
+    "noTestsDescription": "You haven't registered for any tests yet",
+    "registerForTest": "Register for Test",
+    "relatedTestSessions": "Related test sessions",
+    "overallProgress": "Overall Progress",
+    "completedSessions": "Completed Sessions",
+    "speakingCompleted": "Speaking Completed",
+    "avgScore": "Avg Score",
+    "downloadPDF": "Download PDF",
+    "status": {
+      "completed": "Completed",
+      "pending": "Pending",
+      "scheduled": "Scheduled",
+      "cancelled": "Cancelled"
+    },
+    "payment": {
+      "paid": "Paid",
+      "pending": "Pending",
+      "failed": "Failed"
+    },
+    "time": {
+      "morning": "Morning",
+      "afternoon": "Afternoon",
+      "evening": "Evening"
+    }
   }
 }

@@ -14,11 +14,9 @@ import {
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import Button from '../../components/ui/Button';
 
-const Step4Review = () => {
+const Step5Review = () => {
   const navigate = useNavigate();
   const [registrationData, setRegistrationData] = useState(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
     const savedData = localStorage.getItem('testRegistration');
@@ -28,33 +26,19 @@ const Step4Review = () => {
     }
     const data = JSON.parse(savedData);
     if (!data.personalInfo || !data.testDates || !data.speakingDates) {
-      navigate('/test-registration/details');
+      navigate('/test-registration/speaking');
       return;
     }
     setRegistrationData(data);
   }, [navigate]);
 
   const handleBack = () => {
-    navigate('/test-registration/details');
+    navigate('/test-registration/speaking');
   };
 
-  const handleSubmit = async () => {
-    setIsSubmitting(true);
-
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    console.log('Registration submitted:', registrationData);
-    setIsSuccess(true);
-    setIsSubmitting(false);
-
-    // Clear localStorage
-    localStorage.removeItem('testRegistration');
-
-    // Redirect after 3 seconds
-    setTimeout(() => {
-      navigate('/');
-    }, 3000);
+  const handleSubmit = () => {
+    // Navigate to payment page
+    navigate('/test-registration/payment');
   };
 
   const formatPrice = (price) => {
@@ -71,56 +55,6 @@ const Step4Review = () => {
     });
   };
 
-  if (isSuccess) {
-    return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="w-full max-w-md"
-        >
-          <div className="bg-white rounded-2xl shadow-xl p-8 border border-slate-200 text-center">
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{
-                type: 'spring',
-                stiffness: 200,
-                damping: 15,
-                delay: 0.2,
-              }}
-              className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6"
-            >
-              <CheckCircleIcon className="w-12 h-12 text-green-600" />
-            </motion.div>
-            <h2 className="text-3xl font-display font-bold text-slate-900 mb-4">
-              Muvaffaqiyatli Ro'yxatdan O'tdingiz!
-            </h2>
-            <p className="text-slate-700 mb-2">
-              Test uchun ro'yxatdan o'tishingiz tasdiqlandi
-            </p>
-            <p className="text-sm text-slate-600 mb-6">
-              Tez orada siz bilan bog'lanamiz
-            </p>
-            <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4 mb-6">
-              <p className="text-sm text-indigo-700 mb-1">Test sanasi:</p>
-              <p className="text-lg font-bold text-indigo-900">
-                {registrationData?.testDates?.[0]?.date && formatDate(registrationData.testDates[0].date)}
-              </p>
-              <p className="text-sm text-indigo-700 mt-2">
-                {registrationData?.testDates?.length} ta test sessiyasi
-              </p>
-            </div>
-            <p className="text-xs text-slate-400">
-              Avtomatik ravishda bosh sahifaga yo'naltirilmoqda...
-            </p>
-          </div>
-        </motion.div>
-      </div>
-    );
-  }
-
   if (!registrationData) {
     return null;
   }
@@ -130,33 +64,40 @@ const Step4Review = () => {
       <div className="max-w-4xl mx-auto">
         {/* Progress Steps */}
         <div className="mb-8">
-          <div className="flex items-center justify-center space-x-4">
+          <div className="flex items-center justify-center space-x-2">
             <div className="flex items-center">
               <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-600 text-white">
                 <CheckCircleSolidIcon className="w-6 h-6" />
               </div>
               <span className="ml-2 text-sm font-medium text-green-600">Paket</span>
             </div>
-            <div className="w-16 h-0.5 bg-green-600" />
+            <div className="w-12 h-0.5 bg-green-600" />
             <div className="flex items-center">
               <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-600 text-white">
                 <CheckCircleSolidIcon className="w-6 h-6" />
               </div>
               <span className="ml-2 text-sm font-medium text-green-600">Filial</span>
             </div>
-            <div className="w-16 h-0.5 bg-green-600" />
+            <div className="w-12 h-0.5 bg-green-600" />
             <div className="flex items-center">
               <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-600 text-white">
                 <CheckCircleSolidIcon className="w-6 h-6" />
               </div>
-              <span className="ml-2 text-sm font-medium text-green-600">Ma'lumotlar</span>
+              <span className="ml-2 text-sm font-medium text-green-600">Test</span>
             </div>
-            <div className="w-16 h-0.5 bg-indigo-600" />
+            <div className="w-12 h-0.5 bg-green-600" />
+            <div className="flex items-center">
+              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-600 text-white">
+                <CheckCircleSolidIcon className="w-6 h-6" />
+              </div>
+              <span className="ml-2 text-sm font-medium text-green-600">Speaking</span>
+            </div>
+            <div className="w-12 h-0.5 bg-indigo-600" />
             <div className="flex items-center">
               <div className="flex items-center justify-center w-10 h-10 rounded-full bg-indigo-600 text-white font-semibold">
-                4
+                5
               </div>
-              <span className="ml-2 text-sm font-medium text-indigo-600">Ko'rib chiqish</span>
+              <span className="ml-2 text-sm font-medium text-indigo-600">Tasdiqlash</span>
             </div>
           </div>
         </div>
@@ -328,7 +269,6 @@ const Step4Review = () => {
             variant="secondary"
             size="lg"
             onClick={handleBack}
-            disabled={isSubmitting}
           >
             Orqaga
           </Button>
@@ -336,35 +276,8 @@ const Step4Review = () => {
             variant="primary"
             size="lg"
             onClick={handleSubmit}
-            disabled={isSubmitting}
           >
-            {isSubmitting ? (
-              <span className="flex items-center justify-center gap-2">
-                <svg
-                  className="animate-spin h-5 w-5"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  />
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  />
-                </svg>
-                Yuborilmoqda...
-              </span>
-            ) : (
-              'Tasdiqlash va Yuborish'
-            )}
+            To'lovga O'tish
           </Button>
         </div>
       </div>
@@ -372,4 +285,4 @@ const Step4Review = () => {
   );
 };
 
-export default Step4Review;
+export default Step5Review;
