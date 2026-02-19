@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
-const OTPInput = ({ length = 6, onComplete, error, disabled = false }) => {
+const OTPInput = ({ length = 6, onChange, error, disabled = false }) => {
   const [otp, setOtp] = useState(new Array(length).fill(''));
   const inputRefs = useRef([]);
 
@@ -25,9 +25,7 @@ const OTPInput = ({ length = 6, onComplete, error, disabled = false }) => {
     }
 
     const otpValue = newOtp.join('');
-    if (otpValue.length === length) {
-      onComplete?.(otpValue);
-    }
+    onChange?.(otpValue);
   };
 
   const handleKeyDown = (e, index) => {
@@ -64,9 +62,7 @@ const OTPInput = ({ length = 6, onComplete, error, disabled = false }) => {
     const focusIndex = Math.min(pastedData.length, length - 1);
     inputRefs.current[focusIndex].focus();
 
-    if (pastedData.length === length) {
-      onComplete?.(pastedData);
-    }
+    onChange?.(newOtp.join(''));
   };
 
   const handleFocus = (e) => {

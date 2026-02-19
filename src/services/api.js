@@ -1,79 +1,90 @@
-const API_BASE_URL = '/api/v1';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+});
+
+api.interceptors.request.use((config) => {
+  const token = Cookies.get('accessToken');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+api.interceptors.response.use(
+  (response) => {
+    const data = response.data;
+    if (data && data.success === false) {
+      return Promise.reject(new ApiError(data.message || 'An error occurred', data.code, data));
+    }
+    return data;
+  },
+  (error) => {
+    const message = error.response?.data?.message || 'An error occurred';
+    const status = error.response?.status;
+    const data = error.response?.data;
+    return Promise.reject(new ApiError(message, status, data));
+  }
+);
 
 class ApiError extends Error {
   constructor(message, status, data) {
     super(message);
     this.status = status;
     this.data = data;
+    this.fieldErrors = data?.error && typeof data.error === 'object' ? data.error : null;
   }
 }
 
-const handleResponse = async (response) => {
-  const data = await response.json();
+export const authApi = {
+  requestSmsCode: (phone) =>
+    api.post('/auth/sms/send-code', { phone }),
 
-  if (!response.ok) {
-    throw new ApiError(
-      data.message || 'An error occurred',
-      response.status,
-      data
-    );
-  }
+  verifySmsCode: (phone, code) =>
+    api.post('/auth/sms/verify', { phone, code }),
 
-  return data;
+  resendSmsCode: (phone) =>
+    api.get('/auth/sms/resend-code', { params: { phone } }),
+
+  getProfile: () =>
+    api.get('/user/profile'),
+
+  completeRegistration: (data, config) =>
+    api.post('/user/complete-registration', data, config),
+
+  getBookingsByUser: (userId) =>
+    api.get(`/booking/by-user?userId=${userId}`),
+
+  logout: () =>
+    api.post('/auth/logout'),
 };
 
-export const authApi = {
-  // Request SMS code
-  requestSmsCode: async (phone) => {
-    const response = await fetch(`${API_BASE_URL}/auth/sms/ask`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ phone }),
-    });
+export const branchApi = {
+  getAll: (active) =>
+    api.get('/branch/all', { params: { active } }),
+  getSpeakers: (branchId) =>
+    api.get(`/branch/speakers/${branchId}`),
+};
 
-    return handleResponse(response);
-  },
+export const bookingApi = {
+  save: (data) =>
+    api.post('/booking/save', data),
+  getPaymentMethods: (bookingId) =>
+    api.get(`/payment/methods/${bookingId}`),
+  makePayment: (bookingId, paymentMethod) =>
+    api.post('/payment/make', { bookingId, paymentMethod }),
+};
 
-  // Verify SMS code
-  verifySmsCode: async (phone, code) => {
-    const response = await fetch(`${API_BASE_URL}/auth/sms/verify-code`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ phone, code }),
-    });
-
-    return handleResponse(response);
-  },
-
-  // Get current user profile
-  getProfile: async (token) => {
-    const response = await fetch(`${API_BASE_URL}/auth/profile`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-    });
-
-    return handleResponse(response);
-  },
-
-  // Logout
-  logout: async (token) => {
-    const response = await fetch(`${API_BASE_URL}/auth/logout`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-    });
-
-    return handleResponse(response);
-  },
+export const testSessionApi = {
+  getAvailable: (date, branchId) =>
+    api.get('/test-session/available', { params: { date, branch: branchId, website: true } }),
+  getSpeakingAvailable: (date, branchId, type, speakerId) =>
+    api.get('/test-session/speaking/available', {
+      params: { date, branch: branchId, type, speakerId },
+    }),
 };
 
 export { ApiError };
+export default api;

@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { AuthModalProvider } from './contexts/AuthModalContext';
+import { PackageProvider } from './contexts/PackageContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import LoginModal from './components/auth/LoginModal';
 import Header from './components/layout/Header';
@@ -30,6 +31,7 @@ const Layout = ({ children }) => (
 function App() {
   return (
     <AuthProvider>
+      <PackageProvider>
       <Router>
         <AuthModalProvider>
           {/* Login Modal - rendered globally */}
@@ -47,13 +49,14 @@ function App() {
             <Route path="/test-registration/details" element={<Layout><ProtectedRoute><Step3Details /></ProtectedRoute></Layout>} />
             <Route path="/test-registration/speaking" element={<Layout><ProtectedRoute><Step4SpeakingDates /></ProtectedRoute></Layout>} />
             <Route path="/test-registration/review" element={<Layout><ProtectedRoute><Step5Review /></ProtectedRoute></Layout>} />
-            <Route path="/test-registration/payment" element={<Layout><ProtectedRoute><Step6Payment /></ProtectedRoute></Layout>} />
+            <Route path="/test-registration/payment/:bookingId" element={<Layout><ProtectedRoute><Step6Payment /></ProtectedRoute></Layout>} />
             <Route path="/test-results/:sessionId/listening" element={<Layout><ProtectedRoute><ListeningResults /></ProtectedRoute></Layout>} />
             <Route path="/test-results/:sessionId/reading" element={<Layout><ProtectedRoute><ReadingResults /></ProtectedRoute></Layout>} />
             <Route path="/test-results/:sessionId/writing" element={<Layout><ProtectedRoute><WritingResults /></ProtectedRoute></Layout>} />
           </Routes>
         </AuthModalProvider>
       </Router>
+      </PackageProvider>
     </AuthProvider>
   );
 }

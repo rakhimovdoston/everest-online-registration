@@ -1,21 +1,22 @@
 {
   "header": {
-    "features": "Xususiyatlar",
-    "examEnvironment": "Imtihon",
-    "testRegistration": "Ro'yxat",
+    "testRegistration": "Ro'yxatdan o'tish",
     "pricing": "Narxlar",
-    "faq": "FAQ",
     "signIn": "Kirish",
-    "startMockTest": "Test Boshlash",
+    "register": "Ro'yxatdan o'tish",
     "myProfile": "Profilim",
     "logout": "Chiqish"
   },
   "hero": {
-    "badge": "10,000+ IELTS nomzodlari ishonadi",
-    "title": "Haqiqiy IELTS Imtihonini Tajriba Qiling",
-    "subtitle": "IDP IELTS Computer-Delivered test interfeysining aniq nusxasi bilan mashq qiling. AI tomonidan oniy ball va batafsil fikr oling.",
-    "startButton": "Bepul Mock Test Boshlash",
-    "featuresButton": "Xususiyatlarni Ko'rish"
+    "badge": "Everest Mock Test — Rasmiy ro'yxatdan o'tish",
+    "titleLine1": "IELTS Mock Test uchun",
+    "titleLine2": "Online Ro'yxatdan O'ting",
+    "subtitle": "Qulay vaqt va filialni tanlang, online ro'yxatdan o'ting. Toshkent bo'ylab 6 ta filialda har kuni imtihon topshirish imkoniyati.",
+    "startButton": "Ro'yxatdan O'tish",
+    "pricingButton": "Narxlarni Ko'rish",
+    "branches": "Filiallar",
+    "dailyTests": "Kunlik smena",
+    "students": "Talabalar"
   },
   "auth": {
     "welcomeBack": "Qaytganingizdan Xursandmiz",
@@ -66,9 +67,31 @@
     "invalidCode": "Noto'g'ri kod. Qaytadan urinib ko'ring.",
     "codeSent": "Kod muvaffaqiyatli yuborildi",
     "phoneRequired": "Telefon raqami kiritish majburiy",
-    "invalidPhone": "Noto'g'ri telefon raqami formati"
+    "invalidPhone": "Noto'g'ri telefon raqami formati",
+    "username": "Foydalanuvchi nomi",
+    "usernameRequired": "Foydalanuvchi nomi kiritish majburiy",
+    "completeRegistration": "Ro'yxatdan O'tishni Yakunlang",
+    "completeRegSubtitle": "Davom etish uchun ma'lumotlaringizni kiriting",
+    "emailRequired": "Email kiritish majburiy",
+    "invalidEmail": "Noto'g'ri email format",
+    "firstNameRequired": "Ism kiritish majburiy",
+    "lastNameRequired": "Familiya kiritish majburiy",
+    "passwordRequired": "Parol kiritish majburiy",
+    "passwordMin": "Parol kamida 6 ta belgidan iborat bo'lishi kerak",
+    "registerSaving": "Saqlanmoqda...",
+    "registerSave": "Saqlash"
   },
   "testRegistration": {
+    "alerts": {
+      "selectPackage": "Iltimos, paketni tanlang!",
+      "selectBranch": "Iltimos, filialni tanlang!",
+      "dateAlreadySelected": "Bu sana allaqachon tanlangan!",
+      "selectTestDates": "Iltimos, {{count}} ta test sanasini tanlang!",
+      "selectSpeakingType": "Iltimos, speaking turini tanlang!",
+      "selectSpeakingDates": "Iltimos, {{count}} ta speaking sanasini tanlang!",
+      "registrationFailed": "Ro'yxatdan o'tish amalga oshmadi. Qaytadan urinib ko'ring.",
+      "googleComingSoon": "Google orqali ro'yxatdan o'tish tez orada ishga tushadi!"
+    },
     "step1": {
       "title": "Test Uchun Ro'yxatdan O'tish",
       "subtitle": "IELTS Mock Test uchun paketni tanlang",
@@ -128,11 +151,142 @@
       "package": "Paket",
       "branch": "Filial",
       "details": "Ma'lumotlar",
-      "review": "Ko'rib chiqish"
+      "testDates": "Test Sanalari",
+      "speaking": "Speaking",
+      "test": "Test",
+      "review": "Ko'rib chiqish",
+      "confirm": "Tasdiqlash",
+      "view": "Ko'rish",
+      "payment": "To'lov"
+    },
+    "step5": {
+      "title": "Ma'lumotlarni Tasdiqlang",
+      "subtitle": "Barcha ma'lumotlarni tekshiring va tasdiqlang",
+      "selectedPackage": "Tanlangan Paket",
+      "branch": "Filial",
+      "personalInfo": "Shaxsiy Ma'lumotlar",
+      "testDates": "Test Sanalar",
+      "speakingDates": "Speaking Sanalar",
+      "sessions": "ta test sessiyasi",
+      "speaking": "ta Speaking",
+      "goToPayment": "To'lovga O'tish",
+      "saving": "Saqlanmoqda...",
+      "saveError": "Ma'lumotlarni saqlashda xatolik yuz berdi"
+    },
+    "step6": {
+      "selectMethodAlert": "Iltimos, to'lov usulini tanlang!",
+      "title": "To'lov Usulini Tanlang",
+      "subtitle": "Xavfsiz to'lov tizimlaridan birini tanlang",
+      "paymentAmount": "To'lov summa",
+      "package": "paketi",
+      "selectMethod": "To'lov Usulini Tanlang",
+      "paymeDesc": "Payme orqali to'lash",
+      "clickDesc": "Click orqali to'lash",
+      "uzumDesc": "Uzum Bank orqali to'lash",
+      "securePayment": "Xavfsiz To'lov",
+      "securePaymentDesc": "Barcha to'lovlar xavfsiz protokol orqali amalga oshiriladi. Sizning bank ma'lumotlaringiz himoyalangan.",
+      "processing": "To'lov amalga oshirilmoqda...",
+      "pay": "To'lovni Amalga Oshirish",
+      "success": "Muvaffaqiyatli Ro'yxatdan O'tdingiz!",
+      "successMessage": "Test uchun ro'yxatdan o'tishingiz va to'lovingiz tasdiqlandi",
+      "contactSoon": "Tez orada siz bilan bog'lanamiz",
+      "redirecting": "Avtomatik ravishda bosh sahifaga yo'naltirilmoqda...",
+      "paymentError": "To'lovda xatolik yuz berdi. Qaytadan urinib ko'ring.",
+      "noMethods": "To'lov usullari topilmadi"
+    },
+    "common": {
+      "back": "Orqaga",
+      "next": "Keyingisi",
+      "cancel": "Bekor qilish",
+      "review": "Ko'rib chiqish",
+      "loading": "Yuklanmoqda...",
+      "selectedPackage": "Tanlangan paket",
+      "branch": "Filial",
+      "testSessions": "ta test sessiyasi",
+      "speakingSessions": "ta speaking sessiyasi",
+      "selectDate": "Sanani tanlang",
+      "changePackage": "Paketni O'zgartirish",
+      "changeBranch": "Filialni O'zgartirish",
+      "branchWarning": "Filialni o'zgartirsangiz, barcha tanlangan test va speaking datelar o'chib ketadi.",
+      "warning": "Diqqat:",
+      "seats": "ta o'rin",
+      "test": "ta test",
+      "speaking": "ta speaking",
+      "available": "joy"
+    },
+    "step3Extended": {
+      "title": "Test Sanalarini Tanlang",
+      "subtitle": "Shaxsiy ma'lumotlar va test sanalarini kiriting",
+      "personalInfo": "Shaxsiy Ma'lumotlar",
+      "firstName": "Ism",
+      "lastName": "Familiya",
+      "phone": "Telefon",
+      "emailOptional": "Email (ixtiyoriy)",
+      "testDatesTitle": "Test Sanalarini Tanlang",
+      "testDatesNeeded": "ta test sanasini tanlashingiz kerak",
+      "timeFilter": "Vaqt bo'yicha filter (ixtiyoriy)",
+      "all": "Hammasi",
+      "morning": "Ertalab",
+      "afternoon": "Kunduzi",
+      "evening": "Kechqurun",
+      "testDate": "Test sana"
+    },
+    "step4Extended": {
+      "title": "Speaking Sanalarini Tanlang",
+      "subtitle": "Speaking turini, spikerni va sanalarini tanlang",
+      "selectType": "Speaking Turini Tanlang",
+      "typeDescription": "Online yoki Face to Face speaking testini tanlang",
+      "online": "Online",
+      "onlineDesc": "Video orqali speaking test",
+      "faceToFace": "Face to Face",
+      "faceToFaceDesc": "Filialdagi speaking test",
+      "selectSpeaker": "Spikerni Tanlang",
+      "selectSpeakerDesc": "Speaking testingiz uchun spikerni tanlang",
+      "allSpeakers": "Barcha spikerlar",
+      "speakingDatesTitle": "Speaking Sanalarini Tanlang",
+      "speakingDatesNeeded": "ta speaking sanasini tanlashingiz kerak",
+      "speakingDate": "Speaking sana"
     }
   },
+  "pricing": {
+    "title": "O'zingizga Mos",
+    "titleHighlight": "Paketni Tanlang",
+    "subtitle": "Har bir maqsad uchun moslashuvchan narx paketlari. Barcha paketlarga haqiqiy IELTS test tajribasi kiritilgan.",
+    "plans": {
+      "onetime": {
+        "name": "Bir Martalik",
+        "period": "Bir martalik to'lov",
+        "description": "Platformani sinab ko'rish uchun",
+        "features": ["1 ta Mock Test sessiya", "1 ta Speaking baholash", "Barcha 4 modul (L, R, W, S)", "Shu kunlik natijalar", "Kompyuter formatida"],
+        "cta": "Boshlash"
+      },
+      "three": {
+        "name": "Uch Sessiya",
+        "period": "1 haftalik dastur",
+        "description": "Tez ball oshirish uchun",
+        "features": ["3 ta Mock Test sessiya", "1 ta Speaking baholash", "Kun oralab jadval", "Speaking barcha testlarga tegishli", "Progress analitika", "Kompyuter formatida"],
+        "cta": "Boshlash"
+      },
+      "six": {
+        "name": "Olti Sessiya",
+        "period": "2 haftalik dastur",
+        "description": "To'liq imtihon tayyorgarlik",
+        "features": ["6 ta Mock Test sessiya", "2 ta Speaking baholash", "Kun oralab jadval", "Haftalik speaking ko'rib chiqish", "Kengaytirilgan analitika", "Kompyuter formatida"],
+        "cta": "Tanlash"
+      },
+      "twelve": {
+        "name": "O'n Ikki Sessiya",
+        "period": "4 haftalik dastur",
+        "description": "Yuqori ball uchun maksimal tayyorgarlik",
+        "features": ["12 ta Mock Test sessiya", "4 ta Speaking baholash", "Kun oralab jadval", "Haftalik speaking ko'rib chiqish", "To'liq progress kuzatuv", "Kompyuter formatida", "Ustuvor qo'llab-quvvatlash"],
+        "cta": "Tanlash"
+      }
+    },
+    "bottomBadge": "Barcha paketlarga haqiqiy IDP IELTS interfeysi kiritilgan",
+    "bottomNote": "Xavfsiz to'lov • Shu kunlik natijalar • Mutaxassis yordami"
+  },
   "footer": {
-    "description": "Haqiqiy IELTS imtihon tajribasini bizning AI-powered mock test platformamiz bilan oling.",
+    "description": "IELTS Mock Test uchun online ro'yxatdan o'tish platformasi.",
     "product": "Mahsulot",
     "company": "Kompaniya",
     "support": "Yordam",
@@ -159,7 +313,13 @@
     "saving": "Saqlanmoqda...",
     "cancel": "Bekor qilish",
     "edit": "Tahrirlash",
-    "backToProfile": "Profilga qaytish"
+    "backToProfile": "Profilga qaytish",
+    "months": ["Yanvar", "Fevral", "Mart", "Aprel", "May", "Iyun", "Iyul", "Avgust", "Sentabr", "Oktabr", "Noyabr", "Dekabr"],
+    "monthsShort": ["Yan", "Fev", "Mar", "Apr", "May", "Iyn", "Iyl", "Avg", "Sen", "Okt", "Noy", "Dek"],
+    "weekDaysShort": ["Du", "Se", "Cho", "Pa", "Ju", "Sha", "Ya"],
+    "weekDays": ["Dushanba", "Seshanba", "Chorshanba", "Payshanba", "Juma", "Shanba", "Yakshanba"],
+    "noSessions": "Bu sana uchun sessiya mavjud emas",
+    "full": "To'lgan"
   },
   "profile": {
     "title": "Profilim",
@@ -177,9 +337,10 @@
     "speakingPending": "Kutilmoqda",
     "testResults": "Test Natijalari",
     "resultsNotAvailable": "Natijalar hali tayyor emas. Iltimos kuting.",
-    "noTests": "Testlar mavjud emas",
+    "incompleteProfile": "Profilingiz to'liq emas. Iltimos, barcha maydonlarni to'ldiring.",
+    "noTests": "Hali testlar yo'q",
     "noTestsDescription": "Siz hali birorta test uchun ro'yxatdan o'tmagansiz",
-    "registerForTest": "Test Uchun Ro'yxatdan O'tish",
+    "registerForTest": "Everest Mock Testga Ro'yxatdan O'tish",
     "relatedTestSessions": "Bog'liq test sessiyalari",
     "overallProgress": "Umumiy Progress",
     "completedSessions": "Tugatilgan Sessiyalar",

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   CheckCircleIcon as CheckCircleSolidIcon,
   BuildingOfficeIcon,
@@ -16,6 +17,7 @@ import Button from '../../components/ui/Button';
 
 const Step4Review = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [registrationData, setRegistrationData] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -63,12 +65,11 @@ const Step4Review = () => {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('uz-UZ', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
+    const months = t('common.months', { returnObjects: true });
+    const weekDaysArr = t('common.weekDays', { returnObjects: true });
+    const dayOfWeek = date.getDay();
+    const weekDay = weekDaysArr[dayOfWeek === 0 ? 6 : dayOfWeek - 1];
+    return `${weekDay}, ${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
   };
 
   if (isSuccess) {

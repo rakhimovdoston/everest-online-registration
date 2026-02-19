@@ -1,21 +1,22 @@
 {
   "header": {
-    "features": "Features",
-    "examEnvironment": "Exam Environment",
-    "testRegistration": "Test Registration",
+    "testRegistration": "Registration",
     "pricing": "Pricing",
-    "faq": "FAQ",
     "signIn": "Sign In",
-    "startMockTest": "Start Mock Test",
+    "register": "Register Now",
     "myProfile": "My Profile",
     "logout": "Logout"
   },
   "hero": {
-    "badge": "Trusted by 10,000+ IELTS candidates",
-    "title": "Experience the Real IELTS Exam",
-    "subtitle": "Practice with an exact replica of the IDP IELTS Computer-Delivered test interface. Get instant AI-powered scoring and detailed feedback.",
-    "startButton": "Start Free Mock Test",
-    "featuresButton": "See Features"
+    "badge": "Everest Mock Test — Official Registration",
+    "titleLine1": "Register for IELTS",
+    "titleLine2": "Mock Test Online",
+    "subtitle": "Choose a convenient time and branch, register online. Daily test sessions available across 6 branches in Tashkent.",
+    "startButton": "Register Now",
+    "pricingButton": "View Pricing",
+    "branches": "Branches",
+    "dailyTests": "Daily Shifts",
+    "students": "Students"
   },
   "auth": {
     "welcomeBack": "Welcome Back",
@@ -66,9 +67,31 @@
     "invalidCode": "Invalid code. Please try again.",
     "codeSent": "Code sent successfully",
     "phoneRequired": "Phone number is required",
-    "invalidPhone": "Invalid phone number format"
+    "invalidPhone": "Invalid phone number format",
+    "username": "Username",
+    "usernameRequired": "Username is required",
+    "completeRegistration": "Complete Registration",
+    "completeRegSubtitle": "Enter your details to continue",
+    "emailRequired": "Email is required",
+    "invalidEmail": "Invalid email format",
+    "firstNameRequired": "First name is required",
+    "lastNameRequired": "Last name is required",
+    "passwordRequired": "Password is required",
+    "passwordMin": "Password must be at least 6 characters",
+    "registerSaving": "Saving...",
+    "registerSave": "Save"
   },
   "testRegistration": {
+    "alerts": {
+      "selectPackage": "Please select a package!",
+      "selectBranch": "Please select a branch!",
+      "dateAlreadySelected": "This date is already selected!",
+      "selectTestDates": "Please select {{count}} test dates!",
+      "selectSpeakingType": "Please select a speaking type!",
+      "selectSpeakingDates": "Please select {{count}} speaking dates!",
+      "registrationFailed": "Registration failed. Please try again.",
+      "googleComingSoon": "Google registration integration coming soon!"
+    },
     "step1": {
       "title": "Test Registration",
       "subtitle": "Select a package for IELTS Mock Test",
@@ -128,11 +151,142 @@
       "package": "Package",
       "branch": "Branch",
       "details": "Details",
-      "review": "Review"
+      "testDates": "Test Dates",
+      "speaking": "Speaking",
+      "test": "Test",
+      "review": "Review",
+      "confirm": "Confirm",
+      "view": "View",
+      "payment": "Payment"
+    },
+    "step5": {
+      "title": "Confirm Information",
+      "subtitle": "Review and confirm all information",
+      "selectedPackage": "Selected Package",
+      "branch": "Branch",
+      "personalInfo": "Personal Information",
+      "testDates": "Test Dates",
+      "speakingDates": "Speaking Dates",
+      "sessions": "test sessions",
+      "speaking": "Speaking sessions",
+      "goToPayment": "Go to Payment",
+      "saving": "Saving...",
+      "saveError": "An error occurred while saving your data"
+    },
+    "step6": {
+      "selectMethodAlert": "Please select a payment method!",
+      "title": "Select Payment Method",
+      "subtitle": "Choose one of the secure payment systems",
+      "paymentAmount": "Payment amount",
+      "package": "package",
+      "selectMethod": "Select Payment Method",
+      "paymeDesc": "Pay via Payme",
+      "clickDesc": "Pay via Click",
+      "uzumDesc": "Pay via Uzum Bank",
+      "securePayment": "Secure Payment",
+      "securePaymentDesc": "All payments are processed through a secure protocol. Your bank information is protected.",
+      "processing": "Processing payment...",
+      "pay": "Make Payment",
+      "success": "Successfully Registered!",
+      "successMessage": "Your test registration and payment have been confirmed",
+      "contactSoon": "We will contact you shortly",
+      "redirecting": "Automatically redirecting to the home page...",
+      "paymentError": "Payment failed. Please try again.",
+      "noMethods": "No payment methods available"
+    },
+    "common": {
+      "back": "Back",
+      "next": "Next",
+      "cancel": "Cancel",
+      "review": "Review",
+      "loading": "Loading...",
+      "selectedPackage": "Selected package",
+      "branch": "Branch",
+      "testSessions": "test sessions",
+      "speakingSessions": "speaking sessions",
+      "selectDate": "Select date",
+      "changePackage": "Change Package",
+      "changeBranch": "Change Branch",
+      "branchWarning": "If you change the branch, all selected test and speaking dates will be cleared.",
+      "warning": "Warning:",
+      "seats": "seats",
+      "test": "tests",
+      "speaking": "speaking",
+      "available": "available"
+    },
+    "step3Extended": {
+      "title": "Select Test Dates",
+      "subtitle": "Enter personal information and test dates",
+      "personalInfo": "Personal Information",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "phone": "Phone",
+      "emailOptional": "Email (optional)",
+      "testDatesTitle": "Select Test Dates",
+      "testDatesNeeded": "test dates need to be selected",
+      "timeFilter": "Filter by time (optional)",
+      "all": "All",
+      "morning": "Morning",
+      "afternoon": "Afternoon",
+      "evening": "Evening",
+      "testDate": "Test date"
+    },
+    "step4Extended": {
+      "title": "Select Speaking Dates",
+      "subtitle": "Choose speaking type, speaker, and dates",
+      "selectType": "Select Speaking Type",
+      "typeDescription": "Choose Online or Face to Face speaking test",
+      "online": "Online",
+      "onlineDesc": "Speaking test via video",
+      "faceToFace": "Face to Face",
+      "faceToFaceDesc": "Speaking test at the branch",
+      "selectSpeaker": "Select Speaker",
+      "selectSpeakerDesc": "Choose a speaker for your speaking test",
+      "allSpeakers": "All speakers",
+      "speakingDatesTitle": "Select Speaking Dates",
+      "speakingDatesNeeded": "speaking dates need to be selected",
+      "speakingDate": "Speaking date"
     }
   },
+  "pricing": {
+    "title": "Choose Your",
+    "titleHighlight": "Perfect Plan",
+    "subtitle": "Flexible pricing packages designed for every preparation goal. All plans include authentic IELTS test experience.",
+    "plans": {
+      "onetime": {
+        "name": "One Timer",
+        "period": "One-time payment",
+        "description": "Perfect for trying out the platform",
+        "features": ["1 Mock Test Session", "1 Speaking Assessment", "All 4 Modules (L, R, W, S)", "Same-day results", "Computer-based format"],
+        "cta": "Start Now"
+      },
+      "three": {
+        "name": "Three Sessions",
+        "period": "1 week program",
+        "description": "Ideal for rapid score improvement",
+        "features": ["3 Mock Test Sessions", "1 Speaking Assessment", "Alternate day scheduling", "Speaking applies to all tests", "Progress analytics", "Computer-based format"],
+        "cta": "Get Started"
+      },
+      "six": {
+        "name": "Six Sessions",
+        "period": "2 week program",
+        "description": "Comprehensive exam preparation",
+        "features": ["6 Mock Test Sessions", "2 Speaking Assessments", "Alternate day scheduling", "Weekly speaking reviews", "Advanced analytics", "Computer-based format"],
+        "cta": "Choose Plan"
+      },
+      "twelve": {
+        "name": "Twelve Sessions",
+        "period": "4 week program",
+        "description": "Maximum preparation for high scores",
+        "features": ["12 Mock Test Sessions", "4 Speaking Assessments", "Alternate day scheduling", "Weekly speaking reviews", "Full progress tracking", "Computer-based format", "Priority support"],
+        "cta": "Choose Plan"
+      }
+    },
+    "bottomBadge": "All plans include authentic IDP IELTS interface",
+    "bottomNote": "Secure payment • Same-day results • Expert support"
+  },
   "footer": {
-    "description": "Get the real IELTS exam experience with our AI-powered mock test platform.",
+    "description": "Online registration platform for IELTS Mock Test.",
     "product": "Product",
     "company": "Company",
     "support": "Support",
@@ -159,7 +313,13 @@
     "saving": "Saving...",
     "cancel": "Cancel",
     "edit": "Edit",
-    "backToProfile": "Back to Profile"
+    "backToProfile": "Back to Profile",
+    "months": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+    "monthsShort": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    "weekDaysShort": ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
+    "weekDays": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+    "noSessions": "No sessions available for this date",
+    "full": "Full"
   },
   "profile": {
     "title": "My Profile",
@@ -177,9 +337,10 @@
     "speakingPending": "Pending",
     "testResults": "Test Results",
     "resultsNotAvailable": "Results are not available yet. Please wait.",
-    "noTests": "No tests",
+    "incompleteProfile": "Your profile is incomplete. Please fill in all required fields.",
+    "noTests": "No tests yet",
     "noTestsDescription": "You haven't registered for any tests yet",
-    "registerForTest": "Register for Test",
+    "registerForTest": "Register Everest Mock Test",
     "relatedTestSessions": "Related test sessions",
     "overallProgress": "Overall Progress",
     "completedSessions": "Completed Sessions",

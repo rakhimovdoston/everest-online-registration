@@ -3,11 +3,14 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { BuildingOfficeIcon, MapPinIcon, UsersIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon as CheckCircleSolidIcon } from '@heroicons/react/24/solid';
-import { branchesData } from '../../data/testData';
+import { usePackages } from '../../contexts/PackageContext';
 import Button from '../../components/ui/Button';
+import { useTranslation } from 'react-i18next';
 
 const Step2Branch = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
+  const { activeBranches, isLoading } = usePackages();
   const [selectedBranch, setSelectedBranch] = useState(null);
   const [registrationData, setRegistrationData] = useState(null);
 
@@ -21,11 +24,9 @@ const Step2Branch = () => {
     setRegistrationData(JSON.parse(savedData));
   }, [navigate]);
 
-  const activeBranches = branchesData.filter(branch => branch.active);
-
   const handleNext = () => {
     if (!selectedBranch) {
-      alert('Iltimos, filialni tanlang!');
+      alert(t('testRegistration.alerts.selectBranch'));
       return;
     }
 
@@ -54,21 +55,21 @@ const Step2Branch = () => {
               <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-600 text-white">
                 <CheckCircleSolidIcon className="w-6 h-6" />
               </div>
-              <span className="ml-2 text-sm font-medium text-green-600">Paket</span>
+              <span className="ml-2 text-sm font-medium text-green-600">{t('testRegistration.progress.package')}</span>
             </div>
             <div className="w-16 h-0.5 bg-indigo-600" />
             <div className="flex items-center">
               <div className="flex items-center justify-center w-10 h-10 rounded-full bg-indigo-600 text-white font-semibold">
                 2
               </div>
-              <span className="ml-2 text-sm font-medium text-indigo-600">Filial tanlash</span>
+              <span className="ml-2 text-sm font-medium text-indigo-600">{t('testRegistration.progress.branch')}</span>
             </div>
             <div className="w-16 h-0.5 bg-slate-300" />
             <div className="flex items-center">
               <div className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-300 text-slate-600 font-semibold">
                 3
               </div>
-              <span className="ml-2 text-sm font-medium text-slate-500">Ma'lumotlar</span>
+              <span className="ml-2 text-sm font-medium text-slate-500">{t('testRegistration.progress.details')}</span>
             </div>
           </div>
         </div>
@@ -81,10 +82,10 @@ const Step2Branch = () => {
           className="text-center mb-8"
         >
           <h1 className="text-4xl font-display font-bold text-slate-900 mb-2">
-            Filialni Tanlang
+            {t('testRegistration.step2.title')}
           </h1>
           <p className="text-slate-600">
-            Test topshirmoqchi bo'lgan filialni tanlang
+            {t('testRegistration.step2.subtitle')}
           </p>
         </motion.div>
 
@@ -98,7 +99,7 @@ const Step2Branch = () => {
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-indigo-700">Tanlangan paket:</p>
+                <p className="text-sm text-indigo-700">{t('testRegistration.common.selectedPackage')}:</p>
                 <p className="text-lg font-bold text-indigo-900">
                   {registrationData.package.name}
                 </p>
@@ -118,7 +119,16 @@ const Step2Branch = () => {
           className="mb-8"
         >
           <div className="grid md:grid-cols-2 gap-4">
-            {activeBranches.map((branch) => (
+            {isLoading && (
+              <div className="col-span-2 text-center py-12">
+                <svg className="animate-spin h-8 w-8 text-indigo-600 mx-auto mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+                <p className="text-slate-600">{t('common.loading')}</p>
+              </div>
+            )}
+            {!isLoading && activeBranches.map((branch) => (
               <motion.button
                 key={branch.id}
                 whileHover={{ scale: 1.02 }}
@@ -152,7 +162,7 @@ const Step2Branch = () => {
                     </div>
                     <div className="flex items-center gap-2 text-sm text-slate-600">
                       <UsersIcon className="w-4 h-4" />
-                      <span>{branch.maxStudents} ta o'rin</span>
+                      <span>{branch.maxStudents} {t('testRegistration.common.seats')}</span>
                     </div>
                   </div>
                 </div>
@@ -174,7 +184,7 @@ const Step2Branch = () => {
             size="lg"
             onClick={handleBack}
           >
-            Orqaga
+            {t('testRegistration.common.back')}
           </Button>
           <Button
             variant="primary"
@@ -182,7 +192,7 @@ const Step2Branch = () => {
             onClick={handleNext}
             disabled={!selectedBranch}
           >
-            Keyingisi
+            {t('testRegistration.common.next')}
           </Button>
         </div>
       </div>

@@ -1,21 +1,22 @@
 {
   "header": {
-    "features": "Функции",
-    "examEnvironment": "Экзамен",
     "testRegistration": "Регистрация",
     "pricing": "Цены",
-    "faq": "FAQ",
     "signIn": "Войти",
-    "startMockTest": "Начать Тест",
+    "register": "Регистрация",
     "myProfile": "Мой Профиль",
     "logout": "Выйти"
   },
   "hero": {
-    "badge": "Нам доверяют более 10,000+ кандидатов IELTS",
-    "title": "Испытайте Настоящий Экзамен IELTS",
-    "subtitle": "Практикуйтесь с точной копией интерфейса IDP IELTS Computer-Delivered теста. Получайте мгновенную оценку и детальную обратную связь от AI.",
-    "startButton": "Начать Тест",
-    "featuresButton": "Посмотреть Особенности"
+    "badge": "Everest Mock Test — Официальная регистрация",
+    "titleLine1": "Зарегистрируйтесь на",
+    "titleLine2": "IELTS Mock Test Онлайн",
+    "subtitle": "Выберите удобное время и филиал, зарегистрируйтесь онлайн. Ежедневные тестовые сессии в 6 филиалах Ташкента.",
+    "startButton": "Зарегистрироваться",
+    "pricingButton": "Посмотреть Цены",
+    "branches": "Филиалы",
+    "dailyTests": "Ежедн. смены",
+    "students": "Студенты"
   },
   "auth": {
     "welcomeBack": "Добро Пожаловать",
@@ -66,9 +67,31 @@
     "invalidCode": "Неверный код. Попробуйте снова.",
     "codeSent": "Код успешно отправлен",
     "phoneRequired": "Номер телефона обязателен",
-    "invalidPhone": "Неверный формат номера телефона"
+    "invalidPhone": "Неверный формат номера телефона",
+    "username": "Имя пользователя",
+    "usernameRequired": "Имя пользователя обязательно",
+    "completeRegistration": "Завершите Регистрацию",
+    "completeRegSubtitle": "Введите ваши данные для продолжения",
+    "emailRequired": "Email обязателен",
+    "invalidEmail": "Неверный формат email",
+    "firstNameRequired": "Имя обязательно",
+    "lastNameRequired": "Фамилия обязательна",
+    "passwordRequired": "Пароль обязателен",
+    "passwordMin": "Пароль должен содержать минимум 6 символов",
+    "registerSaving": "Сохранение...",
+    "registerSave": "Сохранить"
   },
   "testRegistration": {
+    "alerts": {
+      "selectPackage": "Пожалуйста, выберите пакет!",
+      "selectBranch": "Пожалуйста, выберите филиал!",
+      "dateAlreadySelected": "Эта дата уже выбрана!",
+      "selectTestDates": "Пожалуйста, выберите {{count}} дат тестов!",
+      "selectSpeakingType": "Пожалуйста, выберите тип speaking!",
+      "selectSpeakingDates": "Пожалуйста, выберите {{count}} дат speaking!",
+      "registrationFailed": "Ошибка регистрации. Пожалуйста, попробуйте снова.",
+      "googleComingSoon": "Регистрация через Google скоро будет доступна!"
+    },
     "step1": {
       "title": "Регистрация на Тест",
       "subtitle": "Выберите пакет для IELTS Mock Test",
@@ -128,11 +151,142 @@
       "package": "Пакет",
       "branch": "Филиал",
       "details": "Данные",
-      "review": "Просмотр"
+      "testDates": "Даты Тестов",
+      "speaking": "Speaking",
+      "test": "Тест",
+      "review": "Просмотр",
+      "confirm": "Подтверждение",
+      "view": "Просмотр",
+      "payment": "Оплата"
+    },
+    "step5": {
+      "title": "Подтвердите Данные",
+      "subtitle": "Проверьте и подтвердите все данные",
+      "selectedPackage": "Выбранный Пакет",
+      "branch": "Филиал",
+      "personalInfo": "Личные Данные",
+      "testDates": "Даты Тестов",
+      "speakingDates": "Даты Speaking",
+      "sessions": "тестовых сессий",
+      "speaking": "Speaking сессий",
+      "goToPayment": "Перейти к Оплате",
+      "saving": "Сохранение...",
+      "saveError": "Ошибка при сохранении данных"
+    },
+    "step6": {
+      "selectMethodAlert": "Пожалуйста, выберите способ оплаты!",
+      "title": "Выберите Способ Оплаты",
+      "subtitle": "Выберите одну из безопасных платежных систем",
+      "paymentAmount": "Сумма оплаты",
+      "package": "пакет",
+      "selectMethod": "Выберите Способ Оплаты",
+      "paymeDesc": "Оплата через Payme",
+      "clickDesc": "Оплата через Click",
+      "uzumDesc": "Оплата через Uzum Bank",
+      "securePayment": "Безопасная Оплата",
+      "securePaymentDesc": "Все платежи осуществляются по безопасному протоколу. Ваши банковские данные защищены.",
+      "processing": "Обработка платежа...",
+      "pay": "Произвести Оплату",
+      "success": "Регистрация Успешна!",
+      "successMessage": "Ваша регистрация на тест и оплата подтверждены",
+      "contactSoon": "Мы свяжемся с вами в ближайшее время",
+      "redirecting": "Автоматическое перенаправление на главную страницу...",
+      "paymentError": "Ошибка оплаты. Попробуйте еще раз.",
+      "noMethods": "Способы оплаты не найдены"
+    },
+    "common": {
+      "back": "Назад",
+      "next": "Далее",
+      "cancel": "Отмена",
+      "review": "Просмотр",
+      "loading": "Загрузка...",
+      "selectedPackage": "Выбранный пакет",
+      "branch": "Филиал",
+      "testSessions": "тестовых сессий",
+      "speakingSessions": "speaking сессий",
+      "selectDate": "Выберите дату",
+      "changePackage": "Изменить Пакет",
+      "changeBranch": "Изменить Филиал",
+      "branchWarning": "При изменении филиала все выбранные даты тестов и speaking будут сброшены.",
+      "warning": "Внимание:",
+      "seats": "мест",
+      "test": "тестов",
+      "speaking": "speaking",
+      "available": "мест"
+    },
+    "step3Extended": {
+      "title": "Выберите Даты Тестов",
+      "subtitle": "Введите личные данные и даты тестов",
+      "personalInfo": "Личные Данные",
+      "firstName": "Имя",
+      "lastName": "Фамилия",
+      "phone": "Телефон",
+      "emailOptional": "Email (необязательно)",
+      "testDatesTitle": "Выберите Даты Тестов",
+      "testDatesNeeded": "дат тестов необходимо выбрать",
+      "timeFilter": "Фильтр по времени (необязательно)",
+      "all": "Все",
+      "morning": "Утро",
+      "afternoon": "День",
+      "evening": "Вечер",
+      "testDate": "Дата теста"
+    },
+    "step4Extended": {
+      "title": "Выберите Даты Speaking",
+      "subtitle": "Выберите тип, спикера и даты speaking",
+      "selectType": "Выберите Тип Speaking",
+      "typeDescription": "Выберите Online или Face to Face speaking тест",
+      "online": "Онлайн",
+      "onlineDesc": "Speaking тест по видеосвязи",
+      "faceToFace": "Face to Face",
+      "faceToFaceDesc": "Speaking тест в филиале",
+      "selectSpeaker": "Выберите Спикера",
+      "selectSpeakerDesc": "Выберите спикера для вашего speaking теста",
+      "allSpeakers": "Все спикеры",
+      "speakingDatesTitle": "Выберите Даты Speaking",
+      "speakingDatesNeeded": "дат speaking необходимо выбрать",
+      "speakingDate": "Дата Speaking"
     }
   },
+  "pricing": {
+    "title": "Выберите",
+    "titleHighlight": "Идеальный Пакет",
+    "subtitle": "Гибкие ценовые пакеты для любой цели подготовки. Все пакеты включают настоящий опыт теста IELTS.",
+    "plans": {
+      "onetime": {
+        "name": "Одноразовый",
+        "period": "Одноразовая оплата",
+        "description": "Идеально для пробы платформы",
+        "features": ["1 Mock Test сессия", "1 Speaking оценка", "Все 4 модуля (L, R, W, S)", "Результаты в тот же день", "Компьютерный формат"],
+        "cta": "Начать"
+      },
+      "three": {
+        "name": "Три Сессии",
+        "period": "Программа на 1 неделю",
+        "description": "Идеально для быстрого повышения балла",
+        "features": ["3 Mock Test сессии", "1 Speaking оценка", "Расписание через день", "Speaking применяется ко всем тестам", "Аналитика прогресса", "Компьютерный формат"],
+        "cta": "Начать"
+      },
+      "six": {
+        "name": "Шесть Сессий",
+        "period": "Программа на 2 недели",
+        "description": "Комплексная подготовка к экзамену",
+        "features": ["6 Mock Test сессий", "2 Speaking оценки", "Расписание через день", "Еженедельный обзор speaking", "Расширенная аналитика", "Компьютерный формат"],
+        "cta": "Выбрать"
+      },
+      "twelve": {
+        "name": "Двенадцать Сессий",
+        "period": "Программа на 4 недели",
+        "description": "Максимальная подготовка для высоких баллов",
+        "features": ["12 Mock Test сессий", "4 Speaking оценки", "Расписание через день", "Еженедельный обзор speaking", "Полное отслеживание прогресса", "Компьютерный формат", "Приоритетная поддержка"],
+        "cta": "Выбрать"
+      }
+    },
+    "bottomBadge": "Все пакеты включают настоящий интерфейс IDP IELTS",
+    "bottomNote": "Безопасная оплата • Результаты в тот же день • Поддержка экспертов"
+  },
   "footer": {
-    "description": "Получите настоящий опыт экзамена IELTS с нашей платформой пробных тестов на основе AI.",
+    "description": "Онлайн-платформа регистрации на IELTS Mock Test.",
     "product": "Продукт",
     "company": "Компания",
     "support": "Поддержка",
@@ -159,7 +313,13 @@
     "saving": "Сохранение...",
     "cancel": "Отмена",
     "edit": "Редактировать",
-    "backToProfile": "Вернуться к профилю"
+    "backToProfile": "Вернуться к профилю",
+    "months": ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
+    "monthsShort": ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"],
+    "weekDaysShort": ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"],
+    "weekDays": ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"],
+    "noSessions": "Нет доступных сессий на эту дату",
+    "full": "Заполнено"
   },
   "profile": {
     "title": "Мой Профиль",
@@ -177,9 +337,10 @@
     "speakingPending": "Ожидание",
     "testResults": "Результаты Теста",
     "resultsNotAvailable": "Результаты еще не готовы. Пожалуйста, подождите.",
-    "noTests": "Нет тестов",
+    "incompleteProfile": "Ваш профиль не заполнен. Пожалуйста, заполните все обязательные поля.",
+    "noTests": "Тестов пока нет",
     "noTestsDescription": "Вы еще не зарегистрировались ни на один тест",
-    "registerForTest": "Зарегистрироваться на Тест",
+    "registerForTest": "Зарегистрироваться на Everest Mock Test",
     "relatedTestSessions": "Связанные тестовые сессии",
     "overallProgress": "Общий Прогресс",
     "completedSessions": "Завершенные Сессии",

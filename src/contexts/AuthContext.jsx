@@ -1,83 +1,78 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
+import { authApi } from '../services/api';
 
 const AuthContext = createContext(null);
+
+// Normalize API profile data to consistent camelCase
+const normalizeProfile = (raw) => {
+  if (!raw) return raw;
+  // API returns { code, data: { ... }, success }, extract inner data
+  const data = raw.data && raw.data.id ? raw.data : raw;
+  return {
+    ...data,
+    firstName: data.firstName || data.firstname || data.first_name || '',
+    lastName: data.lastName || data.lastname || data.last_name || '',
+    username: data.username || '',
+    email: data.email || '',
+    phone: data.phone || data.phone_number || '',
+  };
+};
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load user data from localStorage on mount
+  // Load user session on mount
   useEffect(() => {
-    const loadUserFromStorage = () => {
+    const restoreSession = async () => {
       try {
-        const storedAuth = localStorage.getItem('authUser');
-        const storedToken = localStorage.getItem('authToken');
-        if (storedAuth && storedToken) {
-          const authData = JSON.parse(storedAuth);
-          setUser(authData.user);
-          setToken(storedToken);
+        const accessToken = Cookies.get('accessToken');
+        if (accessToken) {
+          // Fetch profile to validate token and get user data
+          const profileData = await authApi.getProfile();
+          setUser(normalizeProfile(profileData));
           setIsAuthenticated(true);
         }
       } catch (error) {
-        console.error('Error loading user from localStorage:', error);
-        localStorage.removeItem('authUser');
-        localStorage.removeItem('authToken');
+        // Token invalid or expired — clear cookies
+        Cookies.remove('accessToken');
+        Cookies.remove('refreshToken');
       } finally {
         setIsLoading(false);
       }
     };
 
-    loadUserFromStorage();
+    restoreSession();
   }, []);
 
-  // Save user data to localStorage
-  const saveUserToStorage = (userData, authToken) => {
-    try {
-      const authData = {
-        isAuthenticated: true,
-        user: userData,
-      };
-      localStorage.setItem('authUser', JSON.stringify(authData));
-      if (authToken) {
-        localStorage.setItem('authToken', authToken);
-      }
-    } catch (error) {
-      console.error('Error saving user to localStorage:', error);
+  // Login function - stores tokens in cookies and user in state
+  const login = (userData, accessToken, refreshToken) => {
+    Cookies.set('accessToken', accessToken, { expires: 7 });
+    if (refreshToken) {
+      Cookies.set('refreshToken', refreshToken, { expires: 30 });
     }
-  };
-
-  // Login function - stores user data and token
-  const login = (userData, authToken) => {
-    setUser(userData);
-    setToken(authToken);
+    setUser(normalizeProfile(userData));
     setIsAuthenticated(true);
-    saveUserToStorage(userData, authToken);
   };
 
-  // Register function - stores user data and auto-login
-  const register = (userData, authToken) => {
-    setUser(userData);
-    setToken(authToken);
-    setIsAuthenticated(true);
-    saveUserToStorage(userData, authToken);
+  // Register function - same as login
+  const register = (userData, accessToken, refreshToken) => {
+    login(userData, accessToken, refreshToken);
   };
 
-  // Logout function - clears authentication state
+  // Logout function - clears cookies and state
   const logout = () => {
+    Cookies.remove('accessToken');
+    Cookies.remove('refreshToken');
     setUser(null);
-    setToken(null);
     setIsAuthenticated(false);
-    localStorage.removeItem('authUser');
-    localStorage.removeItem('authToken');
   };
 
   // Update user profile data
   const updateUser = (userData) => {
-    const updatedUser = { ...user, ...userData };
-    setUser(updatedUser);
-    saveUserToStorage(updatedUser, token);
+    setUser(prev => ({ ...prev, ...normalizeProfile(userData) }));
   };
 
   // Check if user is logged in
@@ -87,13 +82,13 @@ export const AuthProvider = ({ children }) => {
 
   // Get auth token
   const getToken = () => {
-    return token;
+    return Cookies.get('accessToken');
   };
 
   const value = {
     isAuthenticated,
     user,
-    token,
+    token: Cookies.get('accessToken'),
     isLoading,
     login,
     register,

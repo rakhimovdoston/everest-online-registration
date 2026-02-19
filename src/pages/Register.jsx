@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { authRegistrationSchema } from '../utils/validationSchemas';
 import { useAuth } from '../contexts/AuthContext';
 import FormInput from '../components/forms/FormInput';
@@ -13,6 +14,7 @@ import GoogleButton from '../components/auth/GoogleButton';
 import Button from '../components/ui/Button';
 
 const Register = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { register: registerUser } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -60,7 +62,7 @@ const Register = () => {
       }, 3000);
     } catch (error) {
       console.error('Registration error:', error);
-      alert('Registration failed. Please try again.');
+      alert(t('testRegistration.alerts.registrationFailed'));
     } finally {
       setIsSubmitting(false);
     }
@@ -68,7 +70,7 @@ const Register = () => {
 
   const handleGoogleRegister = () => {
     console.log('Google registration clicked');
-    alert('Google registration integration coming soon!');
+    alert(t('testRegistration.alerts.googleComingSoon'));
   };
 
   if (isSuccess) {
@@ -95,13 +97,13 @@ const Register = () => {
               <CheckCircleIcon className="w-12 h-12 text-green-600" />
             </motion.div>
             <h2 className="text-3xl font-display font-bold text-slate-900 mb-4">
-              Account Created!
+              {t('auth.accountCreated')}
             </h2>
             <p className="text-slate-700 mb-2">
-              Welcome to IELTS Mock Exam Platform
+              {t('auth.welcomeMessage')}
             </p>
             <p className="text-sm text-slate-600 mb-6">
-              A confirmation email has been sent to{' '}
+              {t('auth.confirmationEmailSent')}{' '}
               <span className="font-semibold">{registeredEmail}</span>
             </p>
             <div className="space-y-3">
@@ -111,11 +113,11 @@ const Register = () => {
                   size="lg"
                   className="w-full"
                 >
-                  Start Test Registration
+                  {t('auth.startTestRegistration')}
                 </Button>
               </Link>
               <p className="text-xs text-slate-400">
-                Redirecting automatically in 3 seconds...
+                {t('auth.redirecting')}
               </p>
             </div>
           </div>
@@ -140,10 +142,10 @@ const Register = () => {
             transition={{ duration: 0.3 }}
           >
             <h1 className="text-4xl font-display font-bold text-slate-900 mb-2">
-              Create Account
+              {t('auth.createAccount')}
             </h1>
             <p className="text-slate-600">
-              Join IELTS Mock Exam Platform today
+              {t('auth.createAccountSubtitle')}
             </p>
           </motion.div>
         </div>
@@ -152,7 +154,7 @@ const Register = () => {
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-slate-200">
           {/* Google Registration */}
           <div className="mb-6">
-            <GoogleButton onClick={handleGoogleRegister} text="Sign up with Google" />
+            <GoogleButton onClick={handleGoogleRegister} text={t('auth.signUpWithGoogle')} />
           </div>
 
           {/* Divider */}
@@ -162,7 +164,7 @@ const Register = () => {
             </div>
             <div className="relative flex justify-center text-sm">
               <span className="px-4 bg-white text-slate-500">
-                Or register with email
+                {t('auth.orRegisterWithEmail')}
               </span>
             </div>
           </div>
@@ -172,7 +174,7 @@ const Register = () => {
             {/* Name Fields */}
             <div className="grid grid-cols-2 gap-4">
               <FormInput
-                label="First Name"
+                label={t('auth.firstName')}
                 name="firstName"
                 type="text"
                 placeholder="John"
@@ -182,7 +184,7 @@ const Register = () => {
               />
 
               <FormInput
-                label="Last Name"
+                label={t('auth.lastName')}
                 name="lastName"
                 type="text"
                 placeholder="Doe"
@@ -194,7 +196,7 @@ const Register = () => {
 
             {/* Email */}
             <FormInput
-              label="Email Address"
+              label={t('auth.email')}
               name="email"
               type="email"
               placeholder="john@example.com"
@@ -205,7 +207,7 @@ const Register = () => {
 
             {/* Phone Number */}
             <PhoneInput
-              label="Phone Number"
+              label={t('auth.phoneNumber')}
               name="phone"
               placeholder="+998 90 123 45 67"
               register={register}
@@ -215,7 +217,7 @@ const Register = () => {
 
             {/* Password */}
             <PasswordInput
-              label="Password"
+              label={t('auth.password')}
               name="password"
               placeholder="Create a strong password"
               register={register}
@@ -226,7 +228,7 @@ const Register = () => {
 
             {/* Confirm Password */}
             <PasswordInput
-              label="Confirm Password"
+              label={t('auth.confirmPassword')}
               name="confirmPassword"
               placeholder="Re-enter your password"
               register={register}
@@ -264,10 +266,10 @@ const Register = () => {
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     />
                   </svg>
-                  Creating account...
+                  {t('auth.creatingAccount')}
                 </span>
               ) : (
-                'Create Account'
+                t('auth.createAccountButton')
               )}
             </Button>
           </form>
@@ -275,12 +277,12 @@ const Register = () => {
           {/* Login Link */}
           <div className="mt-6 text-center">
             <p className="text-sm text-slate-600">
-              Already have an account?{' '}
+              {t('auth.alreadyHaveAccount')}{' '}
               <Link
                 to="/login"
                 className="font-semibold text-indigo-600 hover:text-indigo-700 transition-colors"
               >
-                Sign in
+                {t('auth.signInButton')}
               </Link>
             </p>
           </div>
@@ -288,13 +290,13 @@ const Register = () => {
 
         {/* Footer Text */}
         <p className="mt-6 text-center text-xs text-slate-400">
-          By creating an account, you agree to our{' '}
+          {t('auth.agreeToTerms')}{' '}
           <a href="#terms" className="underline hover:text-slate-600">
-            Terms of Service
+            {t('auth.termsOfService')}
           </a>{' '}
-          and{' '}
+          {t('auth.and')}{' '}
           <a href="#privacy" className="underline hover:text-slate-600">
-            Privacy Policy
+            {t('auth.privacyPolicy')}
           </a>
         </p>
       </motion.div>

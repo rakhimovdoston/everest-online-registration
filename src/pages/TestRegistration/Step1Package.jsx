@@ -3,21 +3,20 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { CheckCircleIcon, UserIcon, UsersIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon as CheckCircleSolidIcon } from '@heroicons/react/24/solid';
-import { packagesData } from '../../data/testData';
+import { usePackages } from '../../contexts/PackageContext';
 import Button from '../../components/ui/Button';
+import { useTranslation } from 'react-i18next';
 
 const Step1Package = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
+  const { activePackages, isLoading } = usePackages();
   const [registrationType, setRegistrationType] = useState('myself'); // 'myself' or 'other'
   const [selectedPackage, setSelectedPackage] = useState(null);
 
-  const activePackages = packagesData
-    .filter(pkg => pkg.active)
-    .sort((a, b) => a.orders - b.orders);
-
   const handleNext = () => {
     if (!selectedPackage) {
-      alert('Iltimos, paketni tanlang!');
+      alert(t('testRegistration.alerts.selectPackage'));
       return;
     }
 
@@ -46,21 +45,21 @@ const Step1Package = () => {
               <div className="flex items-center justify-center w-10 h-10 rounded-full bg-indigo-600 text-white font-semibold">
                 1
               </div>
-              <span className="ml-2 text-sm font-medium text-indigo-600">Paket tanlash</span>
+              <span className="ml-2 text-sm font-medium text-indigo-600">{t('testRegistration.progress.package')}</span>
             </div>
             <div className="w-16 h-0.5 bg-slate-300" />
             <div className="flex items-center">
               <div className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-300 text-slate-600 font-semibold">
                 2
               </div>
-              <span className="ml-2 text-sm font-medium text-slate-500">Filial</span>
+              <span className="ml-2 text-sm font-medium text-slate-500">{t('testRegistration.progress.branch')}</span>
             </div>
             <div className="w-16 h-0.5 bg-slate-300" />
             <div className="flex items-center">
               <div className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-300 text-slate-600 font-semibold">
                 3
               </div>
-              <span className="ml-2 text-sm font-medium text-slate-500">Ma'lumotlar</span>
+              <span className="ml-2 text-sm font-medium text-slate-500">{t('testRegistration.progress.details')}</span>
             </div>
           </div>
         </div>
@@ -73,10 +72,10 @@ const Step1Package = () => {
           className="text-center mb-8"
         >
           <h1 className="text-4xl font-display font-bold text-slate-900 mb-2">
-            Test Uchun Ro'yxatdan O'tish
+            {t('testRegistration.step1.title')}
           </h1>
           <p className="text-slate-600">
-            IELTS Mock Test uchun paketni tanlang
+            {t('testRegistration.step1.subtitle')}
           </p>
         </motion.div>
 
@@ -88,7 +87,7 @@ const Step1Package = () => {
           className="bg-white rounded-2xl shadow-xl p-6 border border-slate-200 mb-6"
         >
           <h2 className="text-lg font-semibold text-slate-900 mb-4">
-            Kim uchun ro'yxatdan o'tasiz?
+            {t('testRegistration.step1.whoRegistering')}
           </h2>
           <div className="grid grid-cols-2 gap-4">
             <button
@@ -107,8 +106,8 @@ const Step1Package = () => {
                 }`} />
               </div>
               <div className="flex-1 text-left">
-                <div className="font-semibold text-slate-900">O'zim uchun</div>
-                <div className="text-sm text-slate-600">Men test topshiraman</div>
+                <div className="font-semibold text-slate-900">{t('testRegistration.step1.forMyself')}</div>
+                <div className="text-sm text-slate-600">{t('testRegistration.step1.forMyselfDesc')}</div>
               </div>
               {registrationType === 'myself' && (
                 <CheckCircleSolidIcon className="w-6 h-6 text-indigo-600 absolute top-2 right-2" />
@@ -131,8 +130,8 @@ const Step1Package = () => {
                 }`} />
               </div>
               <div className="flex-1 text-left">
-                <div className="font-semibold text-slate-900">Boshqa kishi uchun</div>
-                <div className="text-sm text-slate-600">Boshqa shaxs test topshiradi</div>
+                <div className="font-semibold text-slate-900">{t('testRegistration.step1.forOther')}</div>
+                <div className="text-sm text-slate-600">{t('testRegistration.step1.forOtherDesc')}</div>
               </div>
               {registrationType === 'other' && (
                 <CheckCircleSolidIcon className="w-6 h-6 text-indigo-600 absolute top-2 right-2" />
@@ -149,10 +148,19 @@ const Step1Package = () => {
           className="mb-8"
         >
           <h2 className="text-lg font-semibold text-slate-900 mb-4">
-            Paketni tanlang
+            {t('testRegistration.step1.selectPackage')}
           </h2>
           <div className="grid md:grid-cols-2 gap-4">
-            {activePackages.map((pkg) => (
+            {isLoading && (
+              <div className="col-span-2 text-center py-12">
+                <svg className="animate-spin h-8 w-8 text-indigo-600 mx-auto mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+                <p className="text-slate-600">{t('common.loading')}</p>
+              </div>
+            )}
+            {!isLoading && activePackages.map((pkg) => (
               <motion.button
                 key={pkg.id}
                 whileHover={{ scale: 1.02 }}
@@ -180,15 +188,15 @@ const Step1Package = () => {
                 <div className="space-y-2 mb-4">
                   <div className="flex items-center gap-2 text-sm text-slate-700">
                     <CheckCircleIcon className="w-5 h-5 text-green-600" />
-                    <span>{pkg.totalSessions} ta test sessiyasi</span>
+                    <span>{pkg.totalSessions} {t('testRegistration.step1.sessions')}</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm text-slate-700">
                     <CheckCircleIcon className="w-5 h-5 text-green-600" />
-                    <span>{pkg.speakingSessions} ta Speaking sessiya</span>
+                    <span>{pkg.speakingSessions} {t('testRegistration.step1.speakingSessions')}</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm text-slate-700">
                     <CheckCircleIcon className="w-5 h-5 text-green-600" />
-                    <span>{pkg.durationWeeks} hafta davomida</span>
+                    <span>{pkg.durationWeeks} {t('testRegistration.step1.weeks')}</span>
                   </div>
                 </div>
 
@@ -207,7 +215,7 @@ const Step1Package = () => {
             size="lg"
             onClick={() => navigate('/')}
           >
-            Bekor qilish
+            {t('testRegistration.common.cancel')}
           </Button>
           <Button
             variant="primary"
@@ -215,7 +223,7 @@ const Step1Package = () => {
             onClick={handleNext}
             disabled={!selectedPackage}
           >
-            Keyingisi
+            {t('testRegistration.common.next')}
           </Button>
         </div>
       </div>
