@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import { CheckCircleIcon, UserIcon, UsersIcon } from '@heroicons/react/24/outline';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { CheckCircleIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon as CheckCircleSolidIcon } from '@heroicons/react/24/solid';
 import { usePackages } from '../../contexts/PackageContext';
 import Button from '../../components/ui/Button';
@@ -10,9 +10,31 @@ import { useTranslation } from 'react-i18next';
 const Step1Package = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
   const { activePackages, isLoading } = usePackages();
-  const [registrationType, setRegistrationType] = useState('myself'); // 'myself' or 'other'
+  const [registrationType] = useState('myself');
   const [selectedPackage, setSelectedPackage] = useState(null);
+
+  // Pre-selected package ID from Pricing page (Router state or sessionStorage fallback)
+  const preselectedId =
+    location.state?.preselectedPackageId != null
+      ? String(location.state.preselectedPackageId)
+      : sessionStorage.getItem('preselectedPackageId');
+
+  // Auto-select and skip to step 2 when a package was chosen from the Home page
+  useEffect(() => {
+    if (!preselectedId || isLoading || activePackages.length === 0) return;
+
+    const pkg = activePackages.find((p) => String(p.id) === preselectedId);
+    if (!pkg) return;
+
+    sessionStorage.removeItem('preselectedPackageId');
+    localStorage.setItem(
+      'testRegistration',
+      JSON.stringify({ registrationType: 'myself', package: pkg })
+    );
+    navigate('/test-registration/branch', { replace: true });
+  }, [preselectedId, isLoading, activePackages]);
 
   const handleNext = () => {
     if (!selectedPackage) {
@@ -20,20 +42,33 @@ const Step1Package = () => {
       return;
     }
 
-    // Save to localStorage or state management
     const registrationData = {
       registrationType,
       package: selectedPackage
     };
     localStorage.setItem('testRegistration', JSON.stringify(registrationData));
-
-    // Navigate to step 2
     navigate('/test-registration/branch');
   };
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat('uz-UZ').format(price) + ' UZS';
   };
+
+  // While packages are loading and a preselected ID exists, show a simple loader
+  // so the user doesn't see a flash of the package selection UI before redirecting
+  if (preselectedId && (isLoading || activePackages.length === 0)) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="text-center">
+          <svg className="animate-spin h-8 w-8 text-indigo-600 mx-auto mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+          </svg>
+          <p className="text-slate-600">{t('common.loading')}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 pt-28 pb-12 px-4 sm:px-6 lg:px-8">
@@ -77,67 +112,6 @@ const Step1Package = () => {
           <p className="text-slate-600">
             {t('testRegistration.step1.subtitle')}
           </p>
-        </motion.div>
-
-        {/* Registration Type */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="bg-white rounded-2xl shadow-xl p-6 border border-slate-200 mb-6"
-        >
-          <h2 className="text-lg font-semibold text-slate-900 mb-4">
-            {t('testRegistration.step1.whoRegistering')}
-          </h2>
-          <div className="grid grid-cols-2 gap-4">
-            <button
-              onClick={() => setRegistrationType('myself')}
-              className={`relative flex items-center gap-3 p-4 border-2 rounded-xl transition-all ${
-                registrationType === 'myself'
-                  ? 'border-indigo-600 bg-indigo-50'
-                  : 'border-slate-300 hover:border-slate-400'
-              }`}
-            >
-              <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${
-                registrationType === 'myself' ? 'bg-indigo-100' : 'bg-slate-100'
-              }`}>
-                <UserIcon className={`w-6 h-6 ${
-                  registrationType === 'myself' ? 'text-indigo-600' : 'text-slate-600'
-                }`} />
-              </div>
-              <div className="flex-1 text-left">
-                <div className="font-semibold text-slate-900">{t('testRegistration.step1.forMyself')}</div>
-                <div className="text-sm text-slate-600">{t('testRegistration.step1.forMyselfDesc')}</div>
-              </div>
-              {registrationType === 'myself' && (
-                <CheckCircleSolidIcon className="w-6 h-6 text-indigo-600 absolute top-2 right-2" />
-              )}
-            </button>
-
-            <button
-              onClick={() => setRegistrationType('other')}
-              className={`relative flex items-center gap-3 p-4 border-2 rounded-xl transition-all ${
-                registrationType === 'other'
-                  ? 'border-indigo-600 bg-indigo-50'
-                  : 'border-slate-300 hover:border-slate-400'
-              }`}
-            >
-              <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${
-                registrationType === 'other' ? 'bg-indigo-100' : 'bg-slate-100'
-              }`}>
-                <UsersIcon className={`w-6 h-6 ${
-                  registrationType === 'other' ? 'text-indigo-600' : 'text-slate-600'
-                }`} />
-              </div>
-              <div className="flex-1 text-left">
-                <div className="font-semibold text-slate-900">{t('testRegistration.step1.forOther')}</div>
-                <div className="text-sm text-slate-600">{t('testRegistration.step1.forOtherDesc')}</div>
-              </div>
-              {registrationType === 'other' && (
-                <CheckCircleSolidIcon className="w-6 h-6 text-indigo-600 absolute top-2 right-2" />
-              )}
-            </button>
-          </div>
         </motion.div>
 
         {/* Packages */}

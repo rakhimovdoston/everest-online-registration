@@ -5,13 +5,14 @@
     "signIn": "Kirish",
     "register": "Ro'yxatdan o'tish",
     "myProfile": "Profilim",
+    "testHistory": "Test Tarixi",
     "logout": "Chiqish"
   },
   "hero": {
-    "badge": "Everest Mock Test — Rasmiy ro'yxatdan o'tish",
-    "titleLine1": "IELTS Mock Test uchun",
-    "titleLine2": "Online Ro'yxatdan O'ting",
-    "subtitle": "Qulay vaqt va filialni tanlang, online ro'yxatdan o'ting. Toshkent bo'ylab 6 ta filialda har kuni imtihon topshirish imkoniyati.",
+    "badge": "Everest CDI Mock Test — Rasmiy ro'yxatdan o'tish",
+    "titleLine1": "Everest CDI mock imtihoniga",
+    "titleLine2": "online ro'yxatdan o'ting",
+    "subtitle": "Qulay vaqt va filialni tanlang, online ro'yxatdan o'ting. Toshkent bo'ylab 6 ta filialda har kuni test sessiyalari mavjud.",
     "startButton": "Ro'yxatdan O'tish",
     "pricingButton": "Narxlarni Ko'rish",
     "branches": "Filiallar",
@@ -79,7 +80,18 @@
     "passwordRequired": "Parol kiritish majburiy",
     "passwordMin": "Parol kamida 6 ta belgidan iborat bo'lishi kerak",
     "registerSaving": "Saqlanmoqda...",
-    "registerSave": "Saqlash"
+    "registerSave": "Saqlash",
+    "registerNext": "Keyingisi",
+    "registerBack": "Orqaga",
+    "register1Title": "Asosiy ma'lumotlar",
+    "register1Subtitle": "Ism, familiya va emailingizni kiriting",
+    "register2Title": "Kirish ma'lumotlarini yarating",
+    "register2Subtitle": "Foydalanuvchi nomi va parol yarating",
+    "usernamePlaceholder": "Foydalanuvchi nomi yarating",
+    "passwordPlaceholder": "Parol yarating",
+    "usernameAvailable": "Foydalanuvchi nomi mavjud",
+    "usernameTaken": "Bu foydalanuvchi nomi band",
+    "usernameChecking": "Tekshirilmoqda..."
   },
   "testRegistration": {
     "alerts": {
@@ -108,7 +120,7 @@
       "next": "Keyingisi"
     },
     "step2": {
-      "title": "Filialni Tanlang",
+      "title": "Manzilni Tanlang",
       "subtitle": "Test topshirish uchun filialni tanlang",
       "selectedPackage": "Tanlangan paket",
       "location": "Manzil",
@@ -169,6 +181,11 @@
       "speakingDates": "Speaking Sanalar",
       "sessions": "ta test sessiyasi",
       "speaking": "ta Speaking",
+      "change": "O'zgartirish",
+      "changeTestSession": "Test sessiyasini o'zgartirish",
+      "changeSpeakingSession": "Speaking sessiyasini o'zgartirish",
+      "currentSelection": "O'zgartirilmoqda",
+      "selectedSessions": "Tanlangan sessiyalar",
       "goToPayment": "To'lovga O'tish",
       "saving": "Saqlanmoqda...",
       "saveError": "Ma'lumotlarni saqlashda xatolik yuz berdi"
@@ -249,36 +266,37 @@
     }
   },
   "pricing": {
+    "choosePlan": "Ta'rifni tanlang",
     "title": "O'zingizga Mos",
-    "titleHighlight": "Paketni Tanlang",
+    "titleHighlight": "Tarifni Tanlang",
     "subtitle": "Har bir maqsad uchun moslashuvchan narx paketlari. Barcha paketlarga haqiqiy IELTS test tajribasi kiritilgan.",
     "plans": {
       "onetime": {
         "name": "Bir Martalik",
         "period": "Bir martalik to'lov",
         "description": "Platformani sinab ko'rish uchun",
-        "features": ["1 ta Mock Test sessiya", "1 ta Speaking baholash", "Barcha 4 modul (L, R, W, S)", "Shu kunlik natijalar", "Kompyuter formatida"],
+        "features": ["1 ta Mock Test sessiya", "1 ta Speaking baholash"],
         "cta": "Boshlash"
       },
       "three": {
-        "name": "Uch Sessiya",
+        "name": "Uch Martalik",
         "period": "1 haftalik dastur",
         "description": "Tez ball oshirish uchun",
-        "features": ["3 ta Mock Test sessiya", "1 ta Speaking baholash", "Kun oralab jadval", "Speaking barcha testlarga tegishli", "Progress analitika", "Kompyuter formatida"],
+        "features": ["3 ta Mock Test sessiya", "1 ta Speaking baholash"],
         "cta": "Boshlash"
       },
       "six": {
-        "name": "Olti Sessiya",
+        "name": "Olti Martalik",
         "period": "2 haftalik dastur",
         "description": "To'liq imtihon tayyorgarlik",
-        "features": ["6 ta Mock Test sessiya", "2 ta Speaking baholash", "Kun oralab jadval", "Haftalik speaking ko'rib chiqish", "Kengaytirilgan analitika", "Kompyuter formatida"],
+        "features": ["6 ta Mock Test sessiya", "2 ta Speaking baholash"],
         "cta": "Tanlash"
       },
       "twelve": {
-        "name": "O'n Ikki Sessiya",
+        "name": "O'n Ikki Martalik",
         "period": "4 haftalik dastur",
         "description": "Yuqori ball uchun maksimal tayyorgarlik",
-        "features": ["12 ta Mock Test sessiya", "4 ta Speaking baholash", "Kun oralab jadval", "Haftalik speaking ko'rib chiqish", "To'liq progress kuzatuv", "Kompyuter formatida", "Ustuvor qo'llab-quvvatlash"],
+        "features": ["12 ta Mock Test sessiya", "4 ta Speaking baholash"],
         "cta": "Tanlash"
       }
     },
@@ -321,6 +339,16 @@
     "noSessions": "Bu sana uchun sessiya mavjud emas",
     "full": "To'lgan"
   },
+  "upcomingBooking": {
+    "title": "Yaqinlashib kelayotgan test",
+    "today": "BUGUN!",
+    "soon": "Tez orada!",
+    "daysLeft": "{{count}} kun qoldi",
+    "totalUpcoming": "Jami {{count}} ta topshirilmagan test",
+    "morning": "Ertalab (09:00–12:00)",
+    "afternoon": "Tushdan keyin (12:00–17:00)",
+    "evening": "Kechqurun (17:00–20:00)"
+  },
   "profile": {
     "title": "Profilim",
     "subtitle": "Shaxsiy ma'lumotlar va testlar tarixi",
@@ -330,6 +358,8 @@
     "statistics": "Statistika",
     "totalTests": "Jami testlar",
     "completedTests": "Tugatilgan",
+    "totalSpeaking": "Jami speaking",
+    "completedSpeaking": "Speaking tugatilgan",
     "testHistory": "Testlar Tarixi",
     "testSessions": "Test Sessiyalari",
     "speakingSessions": "Speaking Sessiyalari",
@@ -349,14 +379,20 @@
     "downloadPDF": "PDF Yuklash",
     "status": {
       "completed": "Tugatilgan",
-      "pending": "Kutilmoqda",
+      "pending": "Test topshirish kutilmoqda",
+      "waiting": "Test topshirish kutilmoqda",
+      "process": "Test topshirilmoqda",
+      "failed": "Test topshirilmagan",
       "scheduled": "Rejalashtirilgan",
       "cancelled": "Bekor qilingan"
     },
     "payment": {
       "paid": "To'langan",
       "pending": "Kutilmoqda",
-      "failed": "Muvaffaqiyatsiz"
+      "failed": "Muvaffaqiyatsiz",
+      "pay": "To'lash",
+      "warning": "To'lovni amalga oshirmasangiz sizning bookinglaringiz bekor bo'lishi mumkin. Iltimos to'lovni amalga oshiring.",
+      "warningExpiry": "Booking 2 soat ichida o'chib ketadi."
     },
     "time": {
       "morning": "Ertalab",

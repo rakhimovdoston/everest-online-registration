@@ -1,7 +1,8 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { AuthModalProvider } from './contexts/AuthModalContext';
 import { PackageProvider } from './contexts/PackageContext';
+import { UpcomingBookingProvider } from './contexts/UpcomingBookingContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import LoginModal from './components/auth/LoginModal';
 import Header from './components/layout/Header';
@@ -19,11 +20,11 @@ import ListeningResults from './pages/TestResults/ListeningResults';
 import ReadingResults from './pages/TestResults/ReadingResults';
 import WritingResults from './pages/TestResults/WritingResults';
 
-// Layout component that wraps all pages with Header and Footer
-const Layout = ({ children }) => (
+// Layout wrapper with Header and Footer
+const Layout = () => (
   <>
     <Header />
-    {children}
+    <Outlet />
     <Footer />
   </>
 );
@@ -31,32 +32,37 @@ const Layout = ({ children }) => (
 function App() {
   return (
     <AuthProvider>
+      <UpcomingBookingProvider>
       <PackageProvider>
       <Router>
         <AuthModalProvider>
-          {/* Login Modal - rendered globally */}
           <LoginModal />
 
           <Routes>
-            {/* Public routes */}
-            <Route path="/" element={<Layout><Home /></Layout>} />
-            <Route path="/register" element={<Layout><Register /></Layout>} />
+            <Route element={<Layout />}>
+              {/* Public routes */}
+              <Route path="/" element={<Home />} />
+              <Route path="/register" element={<Register />} />
 
-            {/* Protected routes */}
-            <Route path="/profile" element={<Layout><ProtectedRoute><Profile /></ProtectedRoute></Layout>} />
-            <Route path="/test-registration" element={<Layout><ProtectedRoute><Step1Package /></ProtectedRoute></Layout>} />
-            <Route path="/test-registration/branch" element={<Layout><ProtectedRoute><Step2Branch /></ProtectedRoute></Layout>} />
-            <Route path="/test-registration/details" element={<Layout><ProtectedRoute><Step3Details /></ProtectedRoute></Layout>} />
-            <Route path="/test-registration/speaking" element={<Layout><ProtectedRoute><Step4SpeakingDates /></ProtectedRoute></Layout>} />
-            <Route path="/test-registration/review" element={<Layout><ProtectedRoute><Step5Review /></ProtectedRoute></Layout>} />
-            <Route path="/test-registration/payment/:bookingId" element={<Layout><ProtectedRoute><Step6Payment /></ProtectedRoute></Layout>} />
-            <Route path="/test-results/:sessionId/listening" element={<Layout><ProtectedRoute><ListeningResults /></ProtectedRoute></Layout>} />
-            <Route path="/test-results/:sessionId/reading" element={<Layout><ProtectedRoute><ReadingResults /></ProtectedRoute></Layout>} />
-            <Route path="/test-results/:sessionId/writing" element={<Layout><ProtectedRoute><WritingResults /></ProtectedRoute></Layout>} />
+              {/* Protected routes */}
+              <Route element={<ProtectedRoute />}>
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/test-registration" element={<Step1Package />} />
+                <Route path="/test-registration/branch" element={<Step2Branch />} />
+                <Route path="/test-registration/details" element={<Step3Details />} />
+                <Route path="/test-registration/speaking" element={<Step4SpeakingDates />} />
+                <Route path="/test-registration/review" element={<Step5Review />} />
+                <Route path="/test-registration/payment/:bookingId" element={<Step6Payment />} />
+                <Route path="/test-results/:sessionId/listening" element={<ListeningResults />} />
+                <Route path="/test-results/:sessionId/reading" element={<ReadingResults />} />
+                <Route path="/test-results/:sessionId/writing" element={<WritingResults />} />
+              </Route>
+            </Route>
           </Routes>
         </AuthModalProvider>
       </Router>
       </PackageProvider>
+      </UpcomingBookingProvider>
     </AuthProvider>
   );
 }

@@ -11,9 +11,9 @@ const Step6Payment = () => {
   const navigate = useNavigate();
   const { bookingId } = useParams();
   const { t } = useTranslation();
-  const [registrationData, setRegistrationData] = useState(null);
+  const [bookingData, setBookingData] = useState(null);
   const [paymentMethods, setPaymentMethods] = useState([]);
-  const [isLoadingMethods, setIsLoadingMethods] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -25,19 +25,19 @@ const Step6Payment = () => {
       navigate('/test-registration');
       return;
     }
-    const savedData = localStorage.getItem('testRegistration');
-    if (!savedData) {
-      navigate('/test-registration');
-      return;
-    }
-    const data = JSON.parse(savedData);
-    setRegistrationData(data);
 
-    // Fetch payment methods by bookingId
-    setIsLoadingMethods(true);
+    setIsLoading(true);
     bookingApi.getPaymentMethods(bookingId)
       .then((response) => {
-        const methods = response.data || response || [];
+        const data = response.data || response;
+        setBookingData({
+          packageName: data.packageName,
+          packagePrice: data.packagePrice,
+          packageDescription: data.packageDescription,
+          totalSessions: data.totalSessions,
+          speakingSessions: data.speakingSessions,
+        });
+        const methods = data.methods || [];
         setPaymentMethods(Array.isArray(methods) ? methods : []);
       })
       .catch((err) => {
@@ -47,7 +47,7 @@ const Step6Payment = () => {
         if (err.fieldErrors) setFieldErrors(err.fieldErrors);
       })
       .finally(() => {
-        setIsLoadingMethods(false);
+        setIsLoading(false);
       });
   }, [navigate, bookingId]);
 
@@ -135,7 +135,7 @@ const Step6Payment = () => {
             <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4 mb-6">
               <p className="text-sm text-indigo-700 mb-1">{t('testRegistration.step6.paymentAmount')}:</p>
               <p className="text-2xl font-bold text-indigo-900">
-                {formatPrice(registrationData?.package?.price || 0)}
+                {formatPrice(bookingData?.packagePrice || 0)}
               </p>
             </div>
             <p className="text-xs text-slate-400">
@@ -147,7 +147,18 @@ const Step6Payment = () => {
     );
   }
 
-  if (!registrationData && !error && !fieldErrors) {
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600 mx-auto"></div>
+          <p className="text-slate-600 mt-4">{t('common.loading')}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!bookingData && !error && !fieldErrors) {
     return null;
   }
 
@@ -168,7 +179,7 @@ const Step6Payment = () => {
           </div>
         )}
 
-        {registrationData && (<>
+        {bookingData && (<>
         {/* Progress Steps */}
         <div className="mb-8">
           <div className="flex items-center justify-center space-x-2">
@@ -240,10 +251,10 @@ const Step6Payment = () => {
         >
           <p className="text-lg mb-2 opacity-90">{t('testRegistration.step6.paymentAmount')}</p>
           <p className="text-5xl font-bold mb-2">
-            {formatPrice(registrationData?.package?.price || 0)}
+            {formatPrice(bookingData.packagePrice || 0)}
           </p>
           <p className="text-sm opacity-75">
-            {registrationData?.package?.name} {t('testRegistration.step6.package')}
+            {bookingData.packageName} {t('testRegistration.step6.package')}
           </p>
         </motion.div>
 
@@ -258,7 +269,7 @@ const Step6Payment = () => {
             {t('testRegistration.step6.selectMethod')}
           </h2>
 
-          {isLoadingMethods ? (
+          {isLoading ? (
             <div className="text-center py-12">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto"></div>
               <p className="text-slate-600 mt-3">{t('common.loading')}</p>
@@ -365,6 +376,7 @@ const Step6Payment = () => {
             )}
           </Button>
         </div>
+        </>)}
       </div>
     </div>
   );

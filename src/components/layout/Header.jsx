@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Globe, User, LogOut } from "lucide-react";
+import { Menu, X, Globe, User, LogOut, ClipboardList } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../contexts/AuthContext";
@@ -44,13 +44,28 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handlePricingClick = (e) => {
+    e.preventDefault();
+    setIsMobileMenuOpen(false);
+    if (location.pathname === "/") {
+      // Already on home — just scroll
+      document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" });
+    } else {
+      // Navigate to home, then scroll after render
+      navigate("/");
+      setTimeout(() => {
+        document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    }
+  };
+
   const navItems = [
     {
       label: t("header.testRegistration"),
       href: "/test-registration",
       isLink: true,
     },
-    { label: t("header.pricing"), href: "#pricing" },
+    { label: t("header.pricing"), href: "#pricing", onClick: handlePricingClick },
   ];
 
   return (
@@ -88,11 +103,21 @@ const Header = () => {
                 <a
                   key={item.label}
                   href={item.href}
-                  className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors duration-200 whitespace-nowrap"
+                  onClick={item.onClick}
+                  className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors duration-200 whitespace-nowrap cursor-pointer"
                 >
                   {item.label}
                 </a>
               )
+            )}
+            {isAuthenticated && (
+              <Link
+                to="/profile"
+                className="flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors duration-200 whitespace-nowrap"
+              >
+                <ClipboardList className="w-4 h-4" />
+                {t("header.testHistory")}
+              </Link>
             )}
           </div>
 
@@ -240,8 +265,8 @@ const Header = () => {
                     <a
                       key={item.label}
                       href={item.href}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="block px-4 py-3 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors rounded-lg"
+                      onClick={item.onClick}
+                      className="block px-4 py-3 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors rounded-lg cursor-pointer"
                     >
                       {item.label}
                     </a>
@@ -259,6 +284,14 @@ const Header = () => {
                         className="block w-full text-center px-6 py-3 rounded-lg border-2 border-indigo-600 text-indigo-600 text-sm font-medium hover:bg-indigo-50 transition-colors"
                       >
                         {t("header.myProfile")}
+                      </Link>
+                      <Link
+                        to="/profile"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="flex items-center justify-center gap-2 w-full px-6 py-3 rounded-lg border-2 border-slate-300 text-slate-700 text-sm font-medium hover:bg-slate-50 transition-colors"
+                      >
+                        <ClipboardList className="w-4 h-4" />
+                        {t("header.testHistory")}
                       </Link>
                       <button
                         onClick={() => {

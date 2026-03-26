@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import {
   ArrowLeftIcon,
-  ArrowDownTrayIcon,
   ChevronDownIcon,
   ChevronUpIcon
 } from '@heroicons/react/24/outline';
@@ -149,11 +148,6 @@ const WritingResults = () => {
     }));
   };
 
-  const downloadPDF = () => {
-    console.log('Downloading Writing PDF for session:', sessionId);
-    // TODO: Implement PDF download API call
-  };
-
   const getCriteriaColor = (score) => {
     const numScore = parseFloat(score);
     if (numScore >= 7) return 'text-green-600 bg-green-50 border-green-200';
@@ -199,13 +193,6 @@ const WritingResults = () => {
                 Session #{sessionId}
               </p>
             </div>
-            <button
-              onClick={downloadPDF}
-              className="flex items-center gap-2 px-5 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-medium transition-colors shadow-lg hover:shadow-xl"
-            >
-              <ArrowDownTrayIcon className="w-5 h-5" />
-              <span>{t('profile.downloadPDF')}</span>
-            </button>
           </div>
         </motion.div>
 

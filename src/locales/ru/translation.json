@@ -5,12 +5,13 @@
     "signIn": "Войти",
     "register": "Регистрация",
     "myProfile": "Мой Профиль",
+    "testHistory": "История тестов",
     "logout": "Выйти"
   },
   "hero": {
-    "badge": "Everest Mock Test — Официальная регистрация",
-    "titleLine1": "Зарегистрируйтесь на",
-    "titleLine2": "IELTS Mock Test Онлайн",
+    "badge": "Everest CDI Mock Test — Официальная регистрация",
+    "titleLine1": "Онлайн-регистрация на",
+    "titleLine2": "Everest CDI mock экзамен",
     "subtitle": "Выберите удобное время и филиал, зарегистрируйтесь онлайн. Ежедневные тестовые сессии в 6 филиалах Ташкента.",
     "startButton": "Зарегистрироваться",
     "pricingButton": "Посмотреть Цены",
@@ -79,7 +80,18 @@
     "passwordRequired": "Пароль обязателен",
     "passwordMin": "Пароль должен содержать минимум 6 символов",
     "registerSaving": "Сохранение...",
-    "registerSave": "Сохранить"
+    "registerSave": "Сохранить",
+    "registerNext": "Далее",
+    "registerBack": "Назад",
+    "register1Title": "Основная информация",
+    "register1Subtitle": "Введите ваше имя, фамилию и email",
+    "register2Title": "Создайте данные для входа",
+    "register2Subtitle": "Создайте имя пользователя и пароль",
+    "usernamePlaceholder": "Создайте имя пользователя",
+    "passwordPlaceholder": "Создайте пароль",
+    "usernameAvailable": "Имя пользователя доступно",
+    "usernameTaken": "Это имя пользователя уже занято",
+    "usernameChecking": "Проверка..."
   },
   "testRegistration": {
     "alerts": {
@@ -169,6 +181,11 @@
       "speakingDates": "Даты Speaking",
       "sessions": "тестовых сессий",
       "speaking": "Speaking сессий",
+      "change": "Изменить",
+      "changeTestSession": "Изменить тестовую сессию",
+      "changeSpeakingSession": "Изменить Speaking сессию",
+      "currentSelection": "Изменяется",
+      "selectedSessions": "Выбранные сессии",
       "goToPayment": "Перейти к Оплате",
       "saving": "Сохранение...",
       "saveError": "Ошибка при сохранении данных"
@@ -249,6 +266,7 @@
     }
   },
   "pricing": {
+    "choosePlan": "Выберите тариф",
     "title": "Выберите",
     "titleHighlight": "Идеальный Пакет",
     "subtitle": "Гибкие ценовые пакеты для любой цели подготовки. Все пакеты включают настоящий опыт теста IELTS.",
@@ -321,6 +339,16 @@
     "noSessions": "Нет доступных сессий на эту дату",
     "full": "Заполнено"
   },
+  "upcomingBooking": {
+    "title": "Ближайший тест",
+    "today": "СЕГОДНЯ!",
+    "soon": "Скоро!",
+    "daysLeft": "Осталось {{count}} дн.",
+    "totalUpcoming": "Всего {{count}} предстоящих теста",
+    "morning": "Утро (09:00–12:00)",
+    "afternoon": "День (12:00–17:00)",
+    "evening": "Вечер (17:00–20:00)"
+  },
   "profile": {
     "title": "Мой Профиль",
     "subtitle": "Личные данные и история тестов",
@@ -330,6 +358,8 @@
     "statistics": "Статистика",
     "totalTests": "Всего тестов",
     "completedTests": "Завершено",
+    "totalSpeaking": "Всего speaking",
+    "completedSpeaking": "Speaking завершено",
     "testHistory": "История Тестов",
     "testSessions": "Тестовые Сессии",
     "speakingSessions": "Speaking Сессии",
@@ -349,14 +379,20 @@
     "downloadPDF": "Скачать PDF",
     "status": {
       "completed": "Завершено",
-      "pending": "Ожидание",
+      "pending": "Тест ожидается",
+      "waiting": "Тест ожидается",
+      "process": "Тест проводится",
+      "failed": "Тест не сдан",
       "scheduled": "Запланировано",
       "cancelled": "Отменено"
     },
     "payment": {
       "paid": "Оплачено",
       "pending": "Ожидание",
-      "failed": "Неудачно"
+      "failed": "Неудачно",
+      "pay": "Оплатить",
+      "warning": "Если вы не произведёте оплату, ваша бронь может быть отменена. Пожалуйста, произведите оплату.",
+      "warningExpiry": "Бронь будет удалена через 2 часа."
     },
     "time": {
       "morning": "Утро",

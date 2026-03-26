@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useAuthModal } from '../../contexts/AuthModalContext';
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = () => {
   const navigate = useNavigate();
   const { isAuthenticated, isLoading } = useAuth();
   const { openLoginModal } = useAuthModal();
@@ -34,7 +34,7 @@ const ProtectedRoute = ({ children }) => {
     return null;
   }
 
-  return children;
+  return <Outlet />;
 };
 
 export default ProtectedRoute;

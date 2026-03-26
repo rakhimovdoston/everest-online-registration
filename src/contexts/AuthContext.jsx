@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import Cookies from 'js-cookie';
-import { authApi } from '../services/api';
+import { authApi, setAuthToken, setLogoutCallback } from '../services/api';
 
 const AuthContext = createContext(null);
 
@@ -28,17 +27,18 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const restoreSession = async () => {
       try {
-        const accessToken = Cookies.get('accessToken');
+        const accessToken = localStorage.getItem('accessToken');
         if (accessToken) {
-          // Fetch profile to validate token and get user data
+          // Sahifa yuklanganida Axios default headerini darhol tiklash
+          setAuthToken(accessToken);
           const profileData = await authApi.getProfile();
           setUser(normalizeProfile(profileData));
           setIsAuthenticated(true);
         }
       } catch (error) {
-        // Token invalid or expired — clear cookies
-        Cookies.remove('accessToken');
-        Cookies.remove('refreshToken');
+        // Token invalid or expired — clear localStorage
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
       } finally {
         setIsLoading(false);
       }
@@ -47,12 +47,13 @@ export const AuthProvider = ({ children }) => {
     restoreSession();
   }, []);
 
-  // Login function - stores tokens in cookies and user in state
+  // Login function - stores tokens in localStorage and user in state
   const login = (userData, accessToken, refreshToken) => {
-    Cookies.set('accessToken', accessToken, { expires: 7 });
+    localStorage.setItem('accessToken', accessToken);
     if (refreshToken) {
-      Cookies.set('refreshToken', refreshToken, { expires: 30 });
+      localStorage.setItem('refreshToken', refreshToken);
     }
+    setAuthToken(accessToken);
     setUser(normalizeProfile(userData));
     setIsAuthenticated(true);
   };
@@ -62,13 +63,19 @@ export const AuthProvider = ({ children }) => {
     login(userData, accessToken, refreshToken);
   };
 
-  // Logout function - clears cookies and state
+  // Logout function - clears localStorage and state
   const logout = () => {
-    Cookies.remove('accessToken');
-    Cookies.remove('refreshToken');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    setAuthToken(null);
     setUser(null);
     setIsAuthenticated(false);
   };
+
+  // api.js interceptor token expired bo'lganda shu logout ni chaqiradi
+  useEffect(() => {
+    setLogoutCallback(logout);
+  }, []);
 
   // Update user profile data
   const updateUser = (userData) => {
@@ -82,13 +89,13 @@ export const AuthProvider = ({ children }) => {
 
   // Get auth token
   const getToken = () => {
-    return Cookies.get('accessToken');
+    return localStorage.getItem('accessToken');
   };
 
   const value = {
     isAuthenticated,
     user,
-    token: Cookies.get('accessToken'),
+    token: localStorage.getItem('accessToken'),
     isLoading,
     login,
     register,

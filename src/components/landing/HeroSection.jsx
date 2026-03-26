@@ -2,13 +2,15 @@ import { motion } from 'framer-motion';
 import { CheckCircle2, ChevronRight, MapPin, Calendar, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { usePackages } from '../../contexts/PackageContext';
 
 const HeroSection = () => {
   const { t } = useTranslation();
+  const { activeBranches, testTimes } = usePackages();
 
   const stats = [
-    { icon: MapPin, label: t('hero.branches'), value: '6' },
-    { icon: Calendar, label: t('hero.dailyTests'), value: '3' },
+    { icon: MapPin, label: t('hero.branches'), value: activeBranches.length || '—' },
+    { icon: Calendar, label: t('hero.dailyTests'), value: testTimes.length || '—' },
     { icon: Users, label: t('hero.students'), value: '1,000+' },
   ];
 

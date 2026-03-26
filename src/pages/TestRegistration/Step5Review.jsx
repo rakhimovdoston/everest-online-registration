@@ -9,11 +9,13 @@ import {
   EnvelopeIcon,
   CalendarIcon,
   ClockIcon,
-  CreditCardIcon
+  CreditCardIcon,
+  PencilSquareIcon
 } from '@heroicons/react/24/outline';
 import Button from '../../components/ui/Button';
 import { useTranslation } from 'react-i18next';
 import { bookingApi } from '../../services/api';
+import SessionChangeModal from '../../components/review/SessionChangeModal';
 
 const Step5Review = () => {
   const navigate = useNavigate();
@@ -22,6 +24,9 @@ const Step5Review = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [fieldErrors, setFieldErrors] = useState(null);
+  const [changingSession, setChangingSession] = useState(null);
+  // Tracks which sessions have API errors: [{ type: 'test'|'speaking', index: number, message: string }]
+  const [sessionErrors, setSessionErrors] = useState([]);
 
   useEffect(() => {
     const savedData = localStorage.getItem('testRegistration');
@@ -45,6 +50,7 @@ const Step5Review = () => {
     setIsSubmitting(true);
     setError('');
     setFieldErrors(null);
+    setSessionErrors([]);
 
     try {
       const payload = {
@@ -63,16 +69,112 @@ const Step5Review = () => {
       const response = await bookingApi.save(payload);
       const bookingData = response.data || response;
       const bookingId = bookingData.bookingId;
+      localStorage.removeItem('testRegistration');
       navigate(`/test-registration/payment/${bookingId}`);
     } catch (err) {
       console.error('Booking save error:', err);
-      setError(err.message || t('testRegistration.step5.saveError'));
-      if (err.fieldErrors) {
-        setFieldErrors(err.fieldErrors);
+      // Match error to specific session
+      const matched = matchErrorToSession(err, registrationData);
+      setSessionErrors(matched);
+      if (matched.length > 0) {
+        // Session-specific error — scroll to the error card after render
+        setTimeout(() => {
+          const first = matched[0];
+          const el = document.getElementById(`session-${first.type}-${first.index}`);
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }, 100);
+      } else {
+        // Generic error — show at top
+        setError(err.message || t('testRegistration.step5.saveError'));
+        if (err.fieldErrors) {
+          setFieldErrors(err.fieldErrors);
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleSessionChange = (newSession) => {
+    if (!changingSession || !registrationData) return;
+
+    const updatedData = { ...registrationData };
+
+    if (changingSession.type === 'test') {
+      const newTestDates = [...updatedData.testDates];
+      newTestDates[changingSession.index] = newSession;
+      updatedData.testDates = newTestDates;
+    } else {
+      const newSpeakingDates = [...updatedData.speakingDates];
+      newSpeakingDates[changingSession.index] = newSession;
+      updatedData.speakingDates = newSpeakingDates;
+    }
+
+    setRegistrationData(updatedData);
+    localStorage.setItem('testRegistration', JSON.stringify(updatedData));
+    // Clear error for this session
+    setSessionErrors(prev => prev.filter(
+      e => !(e.type === changingSession.type && e.index === changingSession.index)
+    ));
+    setChangingSession(null);
+  };
+
+  // Parse API error and find which session(s) it refers to
+  const matchErrorToSession = (err, data) => {
+    if (!err || !data) return [];
+    const errData = err.fieldErrors || err.data?.error;
+    if (!errData || typeof errData !== 'object') return [];
+    const message = err.message || '';
+    const results = [];
+
+    if (errData.sessionId) {
+      // Match by sessionId
+      const sid = String(errData.sessionId);
+      const testIdx = data.testDates.findIndex(d => String(d.id) === sid);
+      if (testIdx !== -1) {
+        results.push({ type: 'test', index: testIdx, message });
+      }
+      const speakIdx = data.speakingDates.findIndex(d => String(d.id) === sid);
+      if (speakIdx !== -1) {
+        results.push({ type: 'speaking', index: speakIdx, message });
+      }
+    }
+
+    if (errData.date) {
+      // Match by date + time
+      const testIdx = data.testDates.findIndex(d =>
+        d.date === errData.date && (!errData.time || d.time === errData.time)
+      );
+      if (testIdx !== -1) {
+        results.push({ type: 'test', index: testIdx, message });
+      }
+      const speakIdx = data.speakingDates.findIndex(d =>
+        d.date === errData.date && (!errData.time || d.time === errData.time)
+      );
+      if (speakIdx !== -1) {
+        results.push({ type: 'speaking', index: speakIdx, message });
+      }
+    }
+
+    return results;
+  };
+
+  // Check if a specific session has an error
+  const getSessionError = (type, index) => {
+    return sessionErrors.find(e => e.type === type && e.index === index);
+  };
+
+  const getExcludeIds = () => {
+    if (!changingSession || !registrationData) return [];
+    const dates = changingSession.type === 'test'
+      ? registrationData.testDates
+      : registrationData.speakingDates;
+    return dates
+      .filter((_, i) => i !== changingSession.index)
+      .map(d => d.id);
   };
 
   const formatPrice = (price) => {
@@ -264,17 +366,41 @@ const Step5Review = () => {
               <div className="flex-1">
                 <h3 className="text-lg font-bold text-slate-900 mb-3">{t('testRegistration.step5.testDates')}</h3>
                 <div className="space-y-2">
-                  {registrationData.testDates.map((testDate, index) => (
-                    <div key={testDate.id} className="flex items-start gap-2 p-2 bg-slate-50 rounded-lg">
-                      <span className="flex-shrink-0 w-6 h-6 bg-indigo-600 text-white rounded-full flex items-center justify-center text-xs font-bold">
-                        {index + 1}
-                      </span>
-                      <div className="flex-1">
-                        <p className="text-slate-900 font-medium">{formatDate(testDate.date)}</p>
-                        <p className="text-sm text-slate-600">{testDate.timeString} • {testDate.dayOfWeek}</p>
+                  {registrationData.testDates.map((testDate, index) => {
+                    const sessionErr = getSessionError('test', index);
+                    return (
+                      <div key={testDate.id} id={`session-test-${index}`} className={`flex items-start gap-2 p-2 rounded-lg transition-colors ${
+                        sessionErr
+                          ? 'bg-red-50 border border-red-300 ring-1 ring-red-200'
+                          : 'bg-slate-50'
+                      }`}>
+                        <span className={`flex-shrink-0 w-6 h-6 text-white rounded-full flex items-center justify-center text-xs font-bold ${
+                          sessionErr ? 'bg-red-500' : 'bg-indigo-600'
+                        }`}>
+                          {index + 1}
+                        </span>
+                        <div className="flex-1">
+                          <p className={`font-medium ${sessionErr ? 'text-red-900' : 'text-slate-900'}`}>{formatDate(testDate.date)}</p>
+                          <p className={`text-sm ${sessionErr ? 'text-red-600' : 'text-slate-600'}`}>{testDate.timeString} • {testDate.dayOfWeek}</p>
+                          {sessionErr && (
+                            <p className="text-xs text-red-600 font-medium mt-1">{sessionErr.message}</p>
+                          )}
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setChangingSession({ type: 'test', index })}
+                          className={`flex-shrink-0 flex items-center gap-1 transition-colors px-2 py-1 rounded-lg ${
+                            sessionErr
+                              ? 'text-red-600 hover:text-red-700 hover:bg-red-100'
+                              : 'text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50'
+                          }`}
+                        >
+                          <PencilSquareIcon className="w-4 h-4" />
+                          <span className="text-xs font-medium">{t('testRegistration.step5.change')}</span>
+                        </button>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -294,17 +420,41 @@ const Step5Review = () => {
               <div className="flex-1">
                 <h3 className="text-lg font-bold text-slate-900 mb-3">{t('testRegistration.step5.speakingDates')}</h3>
                 <div className="space-y-2">
-                  {registrationData.speakingDates.map((speakingDate, index) => (
-                    <div key={speakingDate.id} className="flex items-start gap-2 p-2 bg-slate-50 rounded-lg">
-                      <span className="flex-shrink-0 w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center text-xs font-bold">
-                        {index + 1}
-                      </span>
-                      <div className="flex-1">
-                        <p className="text-slate-900 font-medium">{formatDate(speakingDate.date)} - {speakingDate.time}</p>
-                        <p className="text-sm text-slate-600">{speakingDate.speakerName} • {speakingDate.type}</p>
+                  {registrationData.speakingDates.map((speakingDate, index) => {
+                    const sessionErr = getSessionError('speaking', index);
+                    return (
+                      <div key={speakingDate.id} id={`session-speaking-${index}`} className={`flex items-start gap-2 p-2 rounded-lg transition-colors ${
+                        sessionErr
+                          ? 'bg-red-50 border border-red-300 ring-1 ring-red-200'
+                          : 'bg-slate-50'
+                      }`}>
+                        <span className={`flex-shrink-0 w-6 h-6 text-white rounded-full flex items-center justify-center text-xs font-bold ${
+                          sessionErr ? 'bg-red-500' : 'bg-green-600'
+                        }`}>
+                          {index + 1}
+                        </span>
+                        <div className="flex-1">
+                          <p className={`font-medium ${sessionErr ? 'text-red-900' : 'text-slate-900'}`}>{formatDate(speakingDate.date)} - {speakingDate.time}</p>
+                          <p className={`text-sm ${sessionErr ? 'text-red-600' : 'text-slate-600'}`}>{speakingDate.speakerName} • {speakingDate.type}</p>
+                          {sessionErr && (
+                            <p className="text-xs text-red-600 font-medium mt-1">{sessionErr.message}</p>
+                          )}
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setChangingSession({ type: 'speaking', index })}
+                          className={`flex-shrink-0 flex items-center gap-1 transition-colors px-2 py-1 rounded-lg ${
+                            sessionErr
+                              ? 'text-red-600 hover:text-red-700 hover:bg-red-100'
+                              : 'text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50'
+                          }`}
+                        >
+                          <PencilSquareIcon className="w-4 h-4" />
+                          <span className="text-xs font-medium">{t('testRegistration.step5.change')}</span>
+                        </button>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -342,6 +492,28 @@ const Step5Review = () => {
         </div>
         </>)}
       </div>
+
+      {/* Session Change Modal */}
+      {changingSession && registrationData && (
+        <SessionChangeModal
+          type={changingSession.type}
+          branchId={registrationData.branch.id}
+          currentSession={
+            changingSession.type === 'test'
+              ? registrationData.testDates[changingSession.index]
+              : registrationData.speakingDates[changingSession.index]
+          }
+          allSessions={
+            changingSession.type === 'test'
+              ? registrationData.testDates
+              : registrationData.speakingDates
+          }
+          changingIndex={changingSession.index}
+          excludeIds={getExcludeIds()}
+          onSelect={handleSessionChange}
+          onClose={() => setChangingSession(null)}
+        />
+      )}
     </div>
   );
 };

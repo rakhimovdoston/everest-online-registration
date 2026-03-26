@@ -5,12 +5,13 @@
     "signIn": "Sign In",
     "register": "Register Now",
     "myProfile": "My Profile",
+    "testHistory": "Test History",
     "logout": "Logout"
   },
   "hero": {
-    "badge": "Everest Mock Test — Official Registration",
-    "titleLine1": "Register for IELTS",
-    "titleLine2": "Mock Test Online",
+    "badge": "Everest CDI Mock Test — Official Registration",
+    "titleLine1": "Register online for",
+    "titleLine2": "Everest CDI mock exam",
     "subtitle": "Choose a convenient time and branch, register online. Daily test sessions available across 6 branches in Tashkent.",
     "startButton": "Register Now",
     "pricingButton": "View Pricing",
@@ -79,7 +80,18 @@
     "passwordRequired": "Password is required",
     "passwordMin": "Password must be at least 6 characters",
     "registerSaving": "Saving...",
-    "registerSave": "Save"
+    "registerSave": "Save",
+    "registerNext": "Next",
+    "registerBack": "Back",
+    "register1Title": "Basic Information",
+    "register1Subtitle": "Enter your first name, last name and email",
+    "register2Title": "Create Login Credentials",
+    "register2Subtitle": "Choose a username and password",
+    "usernamePlaceholder": "Choose a username",
+    "passwordPlaceholder": "Create a password",
+    "usernameAvailable": "Username is available",
+    "usernameTaken": "Username is already taken",
+    "usernameChecking": "Checking..."
   },
   "testRegistration": {
     "alerts": {
@@ -169,6 +181,11 @@
       "speakingDates": "Speaking Dates",
       "sessions": "test sessions",
       "speaking": "Speaking sessions",
+      "change": "Change",
+      "changeTestSession": "Change Test Session",
+      "changeSpeakingSession": "Change Speaking Session",
+      "currentSelection": "Changing",
+      "selectedSessions": "Selected sessions",
       "goToPayment": "Go to Payment",
       "saving": "Saving...",
       "saveError": "An error occurred while saving your data"
@@ -249,6 +266,7 @@
     }
   },
   "pricing": {
+    "choosePlan": "Choose a plan",
     "title": "Choose Your",
     "titleHighlight": "Perfect Plan",
     "subtitle": "Flexible pricing packages designed for every preparation goal. All plans include authentic IELTS test experience.",
@@ -321,6 +339,16 @@
     "noSessions": "No sessions available for this date",
     "full": "Full"
   },
+  "upcomingBooking": {
+    "title": "Upcoming Test",
+    "today": "TODAY!",
+    "soon": "Coming soon!",
+    "daysLeft": "{{count}} days left",
+    "totalUpcoming": "{{count}} upcoming tests total",
+    "morning": "Morning (09:00–12:00)",
+    "afternoon": "Afternoon (12:00–17:00)",
+    "evening": "Evening (17:00–20:00)"
+  },
   "profile": {
     "title": "My Profile",
     "subtitle": "Personal information and test history",
@@ -330,6 +358,8 @@
     "statistics": "Statistics",
     "totalTests": "Total tests",
     "completedTests": "Completed",
+    "totalSpeaking": "Total speaking",
+    "completedSpeaking": "Speaking completed",
     "testHistory": "Test History",
     "testSessions": "Test Sessions",
     "speakingSessions": "Speaking Sessions",
@@ -349,14 +379,20 @@
     "downloadPDF": "Download PDF",
     "status": {
       "completed": "Completed",
-      "pending": "Pending",
+      "pending": "Waiting for exam",
+      "waiting": "Waiting for exam",
+      "process": "Exam in progress",
+      "failed": "Exam not taken",
       "scheduled": "Scheduled",
       "cancelled": "Cancelled"
     },
     "payment": {
       "paid": "Paid",
       "pending": "Pending",
-      "failed": "Failed"
+      "failed": "Failed",
+      "pay": "Pay Now",
+      "warning": "If you do not make a payment, your booking may be cancelled. Please complete the payment.",
+      "warningExpiry": "Booking will expire in 2 hours."
     },
     "time": {
       "morning": "Morning",

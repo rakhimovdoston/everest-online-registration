@@ -65,7 +65,7 @@ const Pricing = () => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   whileHover={{ y: -8 }}
-                  className="relative bg-white rounded-2xl border border-slate-200 hover:border-indigo-300 hover:shadow-xl transition-all duration-300 p-6"
+                  className="relative flex flex-col bg-white rounded-2xl border border-slate-200 hover:border-indigo-300 hover:shadow-xl transition-all duration-300 p-6"
                 >
                   {/* Plan Header */}
                   <div className="text-center mb-6">
@@ -97,15 +97,21 @@ const Pricing = () => {
                   </ul>
 
                   {/* CTA Button */}
-                  <Link to="/test-registration">
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="w-full py-3 rounded-xl font-semibold text-sm bg-slate-900 text-white hover:bg-slate-800 shadow-md transition-all duration-200"
+                  <div className="mt-auto">
+                    <Link
+                      to="/test-registration"
+                      state={{ preselectedPackageId: pkg.id }}
+                      onClick={() => sessionStorage.setItem('preselectedPackageId', String(pkg.id))}
                     >
-                      {t(`pricing.plans.${key}.cta`, { defaultValue: 'Start Now' })}
-                    </motion.button>
-                  </Link>
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        className="w-full py-3 rounded-xl font-semibold text-sm bg-slate-900 text-white hover:bg-slate-800 shadow-md transition-all duration-200"
+                      >
+                        {t('pricing.choosePlan')}
+                      </motion.button>
+                    </Link>
+                  </div>
                 </motion.div>
               );
             })
