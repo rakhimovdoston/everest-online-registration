@@ -209,7 +209,8 @@
       "contactSoon": "Tez orada siz bilan bog'lanamiz",
       "redirecting": "Avtomatik ravishda bosh sahifaga yo'naltirilmoqda...",
       "paymentError": "To'lovda xatolik yuz berdi. Qaytadan urinib ko'ring.",
-      "noMethods": "To'lov usullari topilmadi"
+      "noMethods": "To'lov usullari topilmadi",
+      "methodInProgress": "Hali jarayonda"
     },
     "common": {
       "back": "Orqaga",
@@ -392,7 +393,7 @@
       "failed": "Muvaffaqiyatsiz",
       "pay": "To'lash",
       "warning": "To'lovni amalga oshirmasangiz sizning bookinglaringiz bekor bo'lishi mumkin. Iltimos to'lovni amalga oshiring.",
-      "warningExpiry": "Booking 2 soat ichida o'chib ketadi."
+      "warningExpiry": "Booking 15 daqiqa ichida o'chib ketadi."
     },
     "time": {
       "morning": "Ertalab",

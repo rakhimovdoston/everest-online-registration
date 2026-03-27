@@ -187,6 +187,8 @@ export const branchApi = {
     api.get('/branch/all', { params: { active } }),
   getSpeakers: (branchId) =>
     api.get(`/branch/speakers/${branchId}`),
+  getPaymentMethods: (lang) =>
+    api.get('/branch/payment-methods', { headers: { lang } }),
 };
 
 export const bookingApi = {
@@ -196,6 +198,11 @@ export const bookingApi = {
     api.get(`/payment/methods/${bookingId}`),
   makePayment: (bookingId, paymentMethod) =>
     api.post('/payment/make', { bookingId, paymentMethod }),
+  getPaymentLink: (orderId, paymentProvider, lang) =>
+    api.post('/orders/payment/link', {
+      orderId: orderId,
+      payment_provider: paymentProvider,
+    }, { headers: { lang } }),
 };
 
 export const testSessionApi = {

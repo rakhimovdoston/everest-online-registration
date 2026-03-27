@@ -209,7 +209,8 @@
       "contactSoon": "We will contact you shortly",
       "redirecting": "Automatically redirecting to the home page...",
       "paymentError": "Payment failed. Please try again.",
-      "noMethods": "No payment methods available"
+      "noMethods": "No payment methods available",
+      "methodInProgress": "Coming soon"
     },
     "common": {
       "back": "Back",
@@ -275,28 +276,28 @@
         "name": "One Timer",
         "period": "One-time payment",
         "description": "Perfect for trying out the platform",
-        "features": ["1 Mock Test Session", "1 Speaking Assessment", "All 4 Modules (L, R, W, S)", "Same-day results", "Computer-based format"],
+        "features": ["1 Mock Test Session", "1 Speaking Assessment"],
         "cta": "Start Now"
       },
       "three": {
         "name": "Three Sessions",
         "period": "1 week program",
         "description": "Ideal for rapid score improvement",
-        "features": ["3 Mock Test Sessions", "1 Speaking Assessment", "Alternate day scheduling", "Speaking applies to all tests", "Progress analytics", "Computer-based format"],
+        "features": ["3 Mock Test Sessions", "1 Speaking Assessment"],
         "cta": "Get Started"
       },
       "six": {
         "name": "Six Sessions",
         "period": "2 week program",
         "description": "Comprehensive exam preparation",
-        "features": ["6 Mock Test Sessions", "2 Speaking Assessments", "Alternate day scheduling", "Weekly speaking reviews", "Advanced analytics", "Computer-based format"],
+        "features": ["6 Mock Test Sessions", "2 Speaking Assessments"],
         "cta": "Choose Plan"
       },
       "twelve": {
         "name": "Twelve Sessions",
         "period": "4 week program",
         "description": "Maximum preparation for high scores",
-        "features": ["12 Mock Test Sessions", "4 Speaking Assessments", "Alternate day scheduling", "Weekly speaking reviews", "Full progress tracking", "Computer-based format", "Priority support"],
+        "features": ["12 Mock Test Sessions", "4 Speaking Assessments"],
         "cta": "Choose Plan"
       }
     },
@@ -392,7 +393,7 @@
       "failed": "Failed",
       "pay": "Pay Now",
       "warning": "If you do not make a payment, your booking may be cancelled. Please complete the payment.",
-      "warningExpiry": "Booking will expire in 2 hours."
+      "warningExpiry": "Booking will expire in 15 minutes."
     },
     "time": {
       "morning": "Morning",

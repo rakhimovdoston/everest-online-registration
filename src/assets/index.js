@@ -1,4 +1,7 @@
 import logo from "./logo.png";
+import uzum from "./uzum.svg";
+import click from "./click.svg";
+import payme from "./payme.svg";
 
 
-export { logo };
+export { logo, uzum, click, payme };
