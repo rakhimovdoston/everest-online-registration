@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +18,7 @@ const Step4SpeakingDates = () => {
   const [speakers, setSpeakers] = useState([]);
   const [selectedSpeaker, setSelectedSpeaker] = useState(null);
   const [isLoadingSpeakers, setIsLoadingSpeakers] = useState(false);
+  const speakerSectionRef = useRef(null);
 
   // Calendar state
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -42,6 +43,11 @@ const Step4SpeakingDates = () => {
     }
     setRegistrationData(data);
 
+    // Scroll to speaker section on page load
+    setTimeout(() => {
+      speakerSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+
     // Load previously selected data if any
     if (data.speakingDates) {
       setSelectedSpeakingDates(data.speakingDates);
@@ -53,7 +59,11 @@ const Step4SpeakingDates = () => {
       branchApi.getSpeakers(data.branch.id)
         .then((response) => {
           const list = response.data || response || [];
-          setSpeakers(Array.isArray(list) ? list : []);
+          const speakerList = Array.isArray(list) ? list : [];
+          setSpeakers(speakerList);
+          if (speakerList.length > 0) {
+            setSelectedSpeaker(speakerList[0]);
+          }
         })
         .catch((error) => {
           console.error('Error fetching speakers:', error);
@@ -341,6 +351,7 @@ const Step4SpeakingDates = () => {
         <form onSubmit={handleSubmit}>
           {/* Speaker Selection */}
           <motion.div
+              ref={speakerSectionRef}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.15 }}
@@ -362,29 +373,7 @@ const Step4SpeakingDates = () => {
                 </div>
               ) : (
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-                  {/* All speakers option */}
-                  <button
-                    type="button"
-                    onClick={() => handleSpeakerChange(null)}
-                    className={`p-4 rounded-xl border-2 transition-all text-center ${
-                      selectedSpeaker === null
-                        ? 'border-indigo-600 bg-indigo-50'
-                        : 'border-slate-200 hover:border-slate-300'
-                    }`}
-                  >
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center mx-auto mb-2 ${
-                      selectedSpeaker === null ? 'bg-indigo-600' : 'bg-slate-200'
-                    }`}>
-                      <svg className={`w-5 h-5 ${selectedSpeaker === null ? 'text-white' : 'text-slate-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </svg>
-                    </div>
-                    <p className={`text-sm font-medium ${selectedSpeaker === null ? 'text-indigo-900' : 'text-slate-700'}`}>
-                      {t('testRegistration.step4Extended.allSpeakers')}
-                    </p>
-                  </button>
-
-                  {speakers.map((speaker) => (
+                  {speakers.map((speaker, index) => (
                     <button
                       key={speaker.id}
                       type="button"
@@ -399,11 +388,11 @@ const Step4SpeakingDates = () => {
                         selectedSpeaker?.id === speaker.id ? 'bg-indigo-600' : 'bg-slate-200'
                       }`}>
                         <span className={`text-sm font-bold ${selectedSpeaker?.id === speaker.id ? 'text-white' : 'text-slate-600'}`}>
-                          {(speaker.firstname || speaker.name || '?')[0].toUpperCase()}
+                          {index + 1}
                         </span>
                       </div>
                       <p className={`text-sm font-medium ${selectedSpeaker?.id === speaker.id ? 'text-indigo-900' : 'text-slate-700'}`}>
-                        {speaker.firstname || speaker.name || `Speaker #${speaker.id}`}
+                        Speaker {index + 1}
                       </p>
                     </button>
                   ))}
@@ -469,7 +458,7 @@ const Step4SpeakingDates = () => {
                         <div>
                           <p className="text-sm font-bold text-slate-900">{formatDate(session.date)}</p>
                           <p className="text-xs text-slate-600">
-                            {session.time} • {session.speakerName || session.speaker_name || ''}
+                            {session.time}{selectedSpeaker ? ` • Speaker ${speakers.findIndex(s => s.id === selectedSpeaker.id) + 1}` : ''}
                           </p>
                         </div>
                       ) : (
@@ -593,7 +582,7 @@ const Step4SpeakingDates = () => {
                                       {session.time}
                                     </p>
                                     <p className="text-xs text-slate-500">
-                                      {session.speakerName || session.speaker_name || ''} • {session.type}
+                                      {selectedSpeaker ? `Speaker ${speakers.findIndex(s => s.id === selectedSpeaker.id) + 1}` : ''}{session.type ? ` • ${session.type}` : ''}
                                     </p>
                                   </div>
                                 </div>
