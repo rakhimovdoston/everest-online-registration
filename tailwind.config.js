@@ -29,8 +29,8 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        display: ['Merriweather', 'Georgia', 'serif'],
+        sans: ['Coolvetica', 'system-ui', 'sans-serif'],
+        display: ['Coolvetica', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         'hero': ['3.5rem', { lineHeight: '1.15', letterSpacing: '-0.02em' }],

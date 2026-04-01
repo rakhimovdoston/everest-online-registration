@@ -1,4 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@700;900&display=swap');
+@font-face {
+  font-family: 'Coolvetica';
+  src: url('/src/assets/fonts/coolvetica.woff2') format('woff2'),
+       url('/src/assets/fonts/coolvetica.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
 @tailwind base;
 @tailwind components;
@@ -11,12 +18,12 @@
 
   body {
     @apply bg-background text-primary m-0 min-h-screen;
-    font-feature-settings: 'kern' 1;
+    font-family: 'Coolvetica', system-ui, sans-serif;
     text-rendering: optimizeLegibility;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-display font-semibold;
+    @apply font-display;
     letter-spacing: -0.01em;
   }
 }
