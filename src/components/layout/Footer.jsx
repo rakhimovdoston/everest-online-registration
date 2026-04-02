@@ -1,5 +1,5 @@
 import { Instagram, Send, Youtube } from "lucide-react";
-import { logo } from "../../assets";
+import { footer_logo } from "../../assets";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -38,7 +38,7 @@ const Footer = () => {
             <div className="mb-4">
               <Link to={"/"}>
                 <img
-                  src={logo}
+                  src={footer_logo}
                   alt="Everest Online Registration Logo"
                   height={200}
                   width={150}
@@ -97,7 +97,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-slate-800 py-8">
           <p className="text-sm text-slate-500">
-            &copy; {currentYear} Everest Mock.
+            {t("footer.allRightsReserved").replace("{year}", currentYear)}
           </p>
         </div>
       </div>

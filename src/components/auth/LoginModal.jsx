@@ -9,6 +9,7 @@ import OTPInput from '../forms/OTPInput';
 import Button from '../ui/Button';
 import { XMarkIcon, ArrowLeftIcon, DevicePhoneMobileIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon, UserPlusIcon } from '@heroicons/react/24/solid';
+import { offertaPdf } from '../../assets';
 
 const RESEND_TIMEOUT = 120; // 2 minutes
 
@@ -648,9 +649,9 @@ const LoginModal = () => {
                 <div className="px-8 py-4 bg-slate-50 border-t border-slate-100">
                   <p className="text-center text-xs text-slate-400">
                     {t('auth.agreeToTerms')}{' '}
-                    <a href="#terms" className="underline hover:text-slate-600">{t('auth.termsOfService')}</a>{' '}
+                    <a href={offertaPdf} target="_blank" rel="noopener noreferrer" className="underline hover:text-slate-600">{t('auth.termsOfService')}</a>{' '}
                     {t('auth.and')}{' '}
-                    <a href="#privacy" className="underline hover:text-slate-600">{t('auth.privacyPolicy')}</a>
+                    <a href={offertaPdf} target="_blank" rel="noopener noreferrer" className="underline hover:text-slate-600">{t('auth.privacyPolicy')}</a>
                   </p>
                 </div>
               </Dialog.Panel>

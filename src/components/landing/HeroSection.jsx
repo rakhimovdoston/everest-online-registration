@@ -9,9 +9,9 @@ const HeroSection = () => {
   const { activeBranches, testTimes } = usePackages();
 
   const stats = [
-    { icon: MapPin, label: t('hero.branches'), value: activeBranches.length || '—' },
-    { icon: Calendar, label: t('hero.dailyTests'), value: testTimes.length || '—' },
-    { icon: Users, label: t('hero.students'), value: '1,000+' },
+    { icon: MapPin, value: activeBranches.length || '—', label: t('hero.branches') },
+    { icon: Calendar, value: testTimes.length || '—', label: t('hero.dailyTests') },
+    { icon: Users, value: '1,000+', label: t('hero.students') },
   ];
 
   return (
@@ -62,13 +62,13 @@ const HeroSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
+            className="flex flex-row gap-3 justify-center mb-16"
           >
             <Link to="/test-registration">
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-indigo-600 text-white font-semibold shadow-xl shadow-indigo-500/30 hover:shadow-indigo-500/40 hover:bg-indigo-700 transition-all duration-200"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-indigo-600 text-white font-semibold text-sm shadow-xl shadow-indigo-500/30 hover:shadow-indigo-500/40 hover:bg-indigo-700 transition-all duration-200"
               >
                 {t('hero.startButton')}
                 <ChevronRight className="w-5 h-5" />
@@ -79,7 +79,7 @@ const HeroSection = () => {
               href="#pricing"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="inline-flex items-center justify-center px-8 py-4 rounded-full border-2 border-slate-300 text-slate-700 font-semibold hover:border-slate-400 hover:bg-slate-50 transition-all duration-200"
+              className="inline-flex items-center justify-center px-6 py-3 rounded-full border-2 border-slate-300 text-slate-700 font-semibold text-sm hover:border-slate-400 hover:bg-slate-50 transition-all duration-200"
             >
               {t('hero.pricingButton')}
             </motion.a>
@@ -97,8 +97,7 @@ const HeroSection = () => {
                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-indigo-50 mb-3">
                   <stat.icon className="w-6 h-6 text-indigo-600" />
                 </div>
-                <div className="text-2xl font-bold text-slate-900">{stat.value}</div>
-                <div className="text-sm text-slate-500">{stat.label}</div>
+                <div className="text-2xl text-slate-900">{stat.value} {stat.label}</div>
               </div>
             ))}
           </motion.div>

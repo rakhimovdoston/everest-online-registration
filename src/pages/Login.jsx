@@ -9,6 +9,7 @@ import Button from '../components/ui/Button';
 import { setAuthToken } from '../services/api';
 import { ArrowLeftIcon, DevicePhoneMobileIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon, UserPlusIcon } from '@heroicons/react/24/solid';
+import { offertaPdf } from '../assets';
 
 const RESEND_TIMEOUT = 120; // 2 minutes
 
@@ -540,9 +541,9 @@ const Login = () => {
         {/* Footer Text */}
         <p className="mt-6 text-center text-xs text-slate-400">
           {t('auth.agreeToTerms')}{' '}
-          <a href="#terms" className="underline hover:text-slate-600">{t('auth.termsOfService')}</a>{' '}
+          <a href={offertaPdf} target="_blank" rel="noopener noreferrer" className="underline hover:text-slate-600">{t('auth.termsOfService')}</a>{' '}
           {t('auth.and')}{' '}
-          <a href="#privacy" className="underline hover:text-slate-600">{t('auth.privacyPolicy')}</a>
+          <a href={offertaPdf} target="_blank" rel="noopener noreferrer" className="underline hover:text-slate-600">{t('auth.privacyPolicy')}</a>
         </p>
       </motion.div>
     </div>

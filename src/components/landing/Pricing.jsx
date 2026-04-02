@@ -8,12 +8,14 @@ const Pricing = () => {
   const { t } = useTranslation();
   const { activePackages, isLoading } = usePackages();
 
-  // Map package names to translation keys
-  const packageToKeyMap = {
-    'One Timer': 'onetime',
-    'Three Sessions': 'three',
-    'Six Sessions': 'six',
-    'Twelve Sessions': 'twelve',
+  // Map package names to translation keys (case-insensitive)
+  const getPackageKey = (name) => {
+    const normalized = name?.toLowerCase().replace(/\s+/g, ' ').trim();
+    if (normalized?.includes('one') || normalized?.includes('1')) return 'onetime';
+    if (normalized?.includes('three') || normalized?.includes('3')) return 'three';
+    if (normalized?.includes('six') || normalized?.includes('6')) return 'six';
+    if (normalized?.includes('twelve') || normalized?.includes('12')) return 'twelve';
+    return normalized?.replace(/\s+/g, '');
   };
 
   const formatPrice = (price) => {
@@ -54,7 +56,7 @@ const Pricing = () => {
             </div>
           ) : (
             activePackages.map((pkg, index) => {
-              const key = packageToKeyMap[pkg.name] || pkg.name.toLowerCase().replace(/\s+/g, '');
+              const key = getPackageKey(pkg.name);
               const features = t(`pricing.plans.${key}.features`, { returnObjects: true });
 
               return (

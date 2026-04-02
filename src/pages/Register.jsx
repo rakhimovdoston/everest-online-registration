@@ -12,6 +12,7 @@ import PasswordInput from '../components/forms/PasswordInput';
 import PhoneInput from '../components/forms/PhoneInput';
 import GoogleButton from '../components/auth/GoogleButton';
 import Button from '../components/ui/Button';
+import { offertaPdf } from '../assets';
 
 const Register = () => {
   const { t } = useTranslation();
@@ -291,11 +292,11 @@ const Register = () => {
         {/* Footer Text */}
         <p className="mt-6 text-center text-xs text-slate-400">
           {t('auth.agreeToTerms')}{' '}
-          <a href="#terms" className="underline hover:text-slate-600">
+          <a href={offertaPdf} target="_blank" rel="noopener noreferrer" className="underline hover:text-slate-600">
             {t('auth.termsOfService')}
           </a>{' '}
           {t('auth.and')}{' '}
-          <a href="#privacy" className="underline hover:text-slate-600">
+          <a href={offertaPdf} target="_blank" rel="noopener noreferrer" className="underline hover:text-slate-600">
             {t('auth.privacyPolicy')}
           </a>
         </p>

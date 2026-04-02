@@ -7,6 +7,15 @@ import { usePackages } from '../../contexts/PackageContext';
 import Button from '../../components/ui/Button';
 import { useTranslation } from 'react-i18next';
 
+const getPackageKey = (name) => {
+  const normalized = name?.toLowerCase().replace(/\s+/g, ' ').trim();
+  if (normalized?.includes('one') || normalized?.includes('1')) return 'onetime';
+  if (normalized?.includes('three') || normalized?.includes('3')) return 'three';
+  if (normalized?.includes('six') || normalized?.includes('6')) return 'six';
+  if (normalized?.includes('twelve') || normalized?.includes('12')) return 'twelve';
+  return normalized?.replace(/\s+/g, '');
+};
+
 const Step1Package = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -134,51 +143,52 @@ const Step1Package = () => {
                 <p className="text-slate-600">{t('common.loading')}</p>
               </div>
             )}
-            {!isLoading && activePackages.map((pkg) => (
-              <motion.button
-                key={pkg.id}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setSelectedPackage(pkg)}
-                className={`relative text-left p-6 border-2 rounded-2xl transition-all ${
-                  selectedPackage?.id === pkg.id
-                    ? 'border-indigo-600 bg-indigo-50 shadow-lg'
-                    : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-md'
-                }`}
-              >
-                {selectedPackage?.id === pkg.id && (
-                  <CheckCircleSolidIcon className="w-8 h-8 text-indigo-600 absolute top-4 right-4" />
-                )}
+            {!isLoading && activePackages.map((pkg) => {
+              const key = getPackageKey(pkg.name);
+              const regFeatures = t(`pricing.plans.${key}.regFeatures`, { returnObjects: true });
+              const regDescription = t(`pricing.plans.${key}.regDescription`, { defaultValue: pkg.description });
+              const planName = t(`pricing.plans.${key}.name`, { defaultValue: pkg.name });
 
-                <div className="mb-3">
-                  <h3 className="text-xl font-bold text-slate-900 mb-1">
-                    {pkg.name}
-                  </h3>
-                  <p className="text-2xl font-bold text-indigo-600">
-                    {formatPrice(pkg.price)}
+              return (
+                <motion.button
+                  key={pkg.id}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setSelectedPackage(pkg)}
+                  className={`relative text-left p-6 border-2 rounded-2xl transition-all ${
+                    selectedPackage?.id === pkg.id
+                      ? 'border-indigo-600 bg-indigo-50 shadow-lg'
+                      : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-md'
+                  }`}
+                >
+                  {selectedPackage?.id === pkg.id && (
+                    <CheckCircleSolidIcon className="w-8 h-8 text-indigo-600 absolute top-4 right-4" />
+                  )}
+
+                  <div className="mb-3">
+                    <h3 className="text-xl font-bold text-slate-900 mb-1">
+                      {planName}
+                    </h3>
+                    <p className="text-2xl font-bold text-indigo-600">
+                      {formatPrice(pkg.price)}
+                    </p>
+                  </div>
+
+                  <div className="space-y-2 mb-4">
+                    {Array.isArray(regFeatures) && regFeatures.map((feature, idx) => (
+                      <div key={idx} className="flex items-center gap-2 text-sm text-slate-700">
+                        <CheckCircleIcon className="w-5 h-5 text-green-600 flex-shrink-0" />
+                        <span>{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <p className="text-sm text-slate-600 line-clamp-3">
+                    {regDescription}
                   </p>
-                </div>
-
-                <div className="space-y-2 mb-4">
-                  <div className="flex items-center gap-2 text-sm text-slate-700">
-                    <CheckCircleIcon className="w-5 h-5 text-green-600" />
-                    <span>{pkg.totalSessions} {t('testRegistration.step1.sessions')}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-slate-700">
-                    <CheckCircleIcon className="w-5 h-5 text-green-600" />
-                    <span>{pkg.speakingSessions} {t('testRegistration.step1.speakingSessions')}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-slate-700">
-                    <CheckCircleIcon className="w-5 h-5 text-green-600" />
-                    <span>{pkg.durationWeeks} {t('testRegistration.step1.weeks')}</span>
-                  </div>
-                </div>
-
-                <p className="text-sm text-slate-600 line-clamp-3">
-                  {pkg.description}
-                </p>
-              </motion.button>
-            ))}
+                </motion.button>
+              );
+            })}
           </div>
         </motion.div>
 
