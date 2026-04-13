@@ -435,7 +435,7 @@ const Step5Review = () => {
                         </span>
                         <div className="flex-1">
                           <p className={`font-medium ${sessionErr ? 'text-red-900' : 'text-slate-900'}`}>{formatDate(speakingDate.date)} - {speakingDate.time}</p>
-                          <p className={`text-sm ${sessionErr ? 'text-red-600' : 'text-slate-600'}`}>{speakingDate.speakerName} • {speakingDate.type}</p>
+                          <p className={`text-sm ${sessionErr ? 'text-red-600' : 'text-slate-600'}`}>{speakingDate.type}</p>
                           {sessionErr && (
                             <p className="text-xs text-red-600 font-medium mt-1">{sessionErr.message}</p>
                           )}

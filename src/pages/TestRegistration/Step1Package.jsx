@@ -4,8 +4,10 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { CheckCircleIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon as CheckCircleSolidIcon } from '@heroicons/react/24/solid';
 import { usePackages } from '../../contexts/PackageContext';
+import { useAuth } from '../../contexts/AuthContext';
 import Button from '../../components/ui/Button';
 import { useTranslation } from 'react-i18next';
+import CompleteProfileModal from '../../components/auth/CompleteProfileModal';
 
 const getPackageKey = (name) => {
   const normalized = name?.toLowerCase().replace(/\s+/g, ' ').trim();
@@ -21,8 +23,13 @@ const Step1Package = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { activePackages, isLoading } = usePackages();
+  const { user, isLoading: isAuthLoading } = useAuth();
   const [registrationType] = useState('myself');
   const [selectedPackage, setSelectedPackage] = useState(null);
+  const [showCompleteProfile, setShowCompleteProfile] = useState(false);
+
+  // Check if user profile is incomplete (no firstName or lastName)
+  const isProfileIncomplete = !isAuthLoading && user && (!user.firstName || !user.lastName);
 
   // Pre-selected package ID from Pricing page (Router state or sessionStorage fallback)
   const preselectedId =
@@ -30,9 +37,17 @@ const Step1Package = () => {
       ? String(location.state.preselectedPackageId)
       : sessionStorage.getItem('preselectedPackageId');
 
+  // Show complete profile modal as soon as we know the profile is incomplete
+  useEffect(() => {
+    if (isProfileIncomplete) {
+      setShowCompleteProfile(true);
+    }
+  }, [isProfileIncomplete]);
+
   // Auto-select and skip to step 2 when a package was chosen from the Home page
   useEffect(() => {
     if (!preselectedId || isLoading || activePackages.length === 0) return;
+    if (isProfileIncomplete) return; // wait until profile is complete
 
     const pkg = activePackages.find((p) => String(p.id) === preselectedId);
     if (!pkg) return;
@@ -43,7 +58,7 @@ const Step1Package = () => {
       JSON.stringify({ registrationType: 'myself', package: pkg })
     );
     navigate('/test-registration/branch', { replace: true });
-  }, [preselectedId, isLoading, activePackages]);
+  }, [preselectedId, isLoading, activePackages, isProfileIncomplete]);
 
   const handleNext = () => {
     if (!selectedPackage) {
@@ -80,6 +95,10 @@ const Step1Package = () => {
   }
 
   return (
+    <>
+    {showCompleteProfile && (
+      <CompleteProfileModal onComplete={() => setShowCompleteProfile(false)} />
+    )}
     <div className="min-h-screen bg-slate-50 pt-28 pb-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         {/* Progress Steps */}
@@ -212,6 +231,7 @@ const Step1Package = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

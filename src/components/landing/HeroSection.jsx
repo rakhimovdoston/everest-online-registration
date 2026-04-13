@@ -62,13 +62,13 @@ const HeroSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="flex flex-row gap-3 justify-center mb-16"
+            className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
           >
             <Link to="/test-registration">
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-indigo-600 text-white font-semibold text-sm shadow-xl shadow-indigo-500/30 hover:shadow-indigo-500/40 hover:bg-indigo-700 transition-all duration-200"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-indigo-600 text-white font-semibold shadow-xl shadow-indigo-500/30 hover:shadow-indigo-500/40 hover:bg-indigo-700 transition-all duration-200"
               >
                 {t('hero.startButton')}
                 <ChevronRight className="w-5 h-5" />
@@ -79,7 +79,7 @@ const HeroSection = () => {
               href="#pricing"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="inline-flex items-center justify-center px-6 py-3 rounded-full border-2 border-slate-300 text-slate-700 font-semibold text-sm hover:border-slate-400 hover:bg-slate-50 transition-all duration-200"
+              className="sm:inline-flex items-center md:max-w-24 max-w-4 justify-center px-8 py-4 rounded-full border-2 border-slate-300 text-slate-700 font-semibold hover:border-slate-400 hover:bg-slate-50 transition-all duration-200"
             >
               {t('hero.pricingButton')}
             </motion.a>

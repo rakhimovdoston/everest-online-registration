@@ -228,8 +228,8 @@ const SessionChangeModal = ({ type, branchId, currentSession, allSessions = [], 
                         {formatDate(currentSession.date)}
                         {' — '}
                         {type === 'test'
-                          ? `${getTimeLabel(currentSession.time)} (${currentSession.timeString})`
-                          : `${currentSession.time} • ${currentSession.speakerName || currentSession.speaker_name || ''}`
+                          ? `${getTimeLabel(currentSession.time)} • ${currentSession.timeString}${currentSession.dayOfWeek ? ` • ${currentSession.dayOfWeek}` : ''}`
+                          : currentSession.time
                         }
                       </p>
                     </div>
@@ -283,11 +283,11 @@ const SessionChangeModal = ({ type, branchId, currentSession, allSessions = [], 
                               selectedSpeaker?.id === speaker.id ? 'bg-indigo-600' : 'bg-slate-200'
                             }`}>
                               <span className={`text-xs font-bold ${selectedSpeaker?.id === speaker.id ? 'text-white' : 'text-slate-600'}`}>
-                                {(speaker.firstname || speaker.name || '?')[0].toUpperCase()}
+                                {speakers.indexOf(speaker) + 1}
                               </span>
                             </div>
                             <p className={`text-xs font-medium ${selectedSpeaker?.id === speaker.id ? 'text-indigo-900' : 'text-slate-700'}`}>
-                              {speaker.firstname || speaker.name || `Speaker #${speaker.id}`}
+                              Speaker {speakers.indexOf(speaker) + 1}
                             </p>
                           </button>
                         ))}
@@ -413,13 +413,15 @@ const SessionChangeModal = ({ type, branchId, currentSession, allSessions = [], 
                                     {type === 'test' ? (
                                       <>
                                         <p className="text-sm font-semibold text-slate-900">{getTimeLabel(session.time)}</p>
-                                        <p className="text-xs text-slate-500">{session.timeString}</p>
+                                        <p className="text-xs text-slate-500">
+                                          {session.timeString}{session.dayOfWeek && ` • ${session.dayOfWeek}`}
+                                        </p>
                                       </>
                                     ) : (
                                       <>
                                         <p className="text-sm font-semibold text-slate-900">{session.time}</p>
                                         <p className="text-xs text-slate-500">
-                                          {session.speakerName || session.speaker_name || ''} • {session.type}
+                                          {session.type}
                                         </p>
                                       </>
                                     )}

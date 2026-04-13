@@ -501,7 +501,8 @@ const Step3Details = () => {
                       <div>
                         <p className="text-sm font-bold text-slate-900">{formatDate(session.date)}</p>
                         <p className="text-xs text-slate-600">
-                          {getTimeLabel(session.time)} ({session.timeString})
+                          {getTimeLabel(session.time)} • {session.timeString}
+                          {session.dayOfWeek && ` • ${session.dayOfWeek}`}
                         </p>
                       </div>
                     ) : (
