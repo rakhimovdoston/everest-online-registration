@@ -10,6 +10,7 @@ import Button from '../ui/Button';
 import { XMarkIcon, ArrowLeftIcon, DevicePhoneMobileIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon, UserPlusIcon } from '@heroicons/react/24/solid';
 import { offertaPdf } from '../../assets';
+import { trackCompleteRegistration } from '../../utils/pixel';
 
 const RESEND_TIMEOUT = 120; // 2 minutes
 
@@ -235,6 +236,7 @@ const LoginModal = () => {
         const accessToken = localStorage.getItem('accessToken');
         const refreshToken = localStorage.getItem('refreshToken');
         login(profileData, accessToken, refreshToken);
+        trackCompleteRegistration();
         onLoginSuccess();
       } else {
         setServerError(result?.message || t('common.error'));
@@ -564,6 +566,16 @@ const LoginModal = () => {
                           <ArrowLeftIcon className="w-4 h-4" />
                           <span className="text-sm">{t('auth.registerBack')}</span>
                         </button>
+
+                        {/* Warning */}
+                        <div className="flex items-start gap-3 bg-amber-50 border border-amber-300 rounded-xl px-4 py-3 mb-4">
+                          <svg className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                          </svg>
+                          <p className="text-sm text-amber-800 leading-snug">
+                            {t('auth.credentialsWarning')}
+                          </p>
+                        </div>
 
                         <div className="space-y-4">
                           {/* Username */}

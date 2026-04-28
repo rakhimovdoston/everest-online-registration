@@ -81,6 +81,7 @@
     "passwordMin": "Parol kamida 6 ta belgidan iborat bo‘lishi kerak",
     "registerSaving": "Saqlanmoqda...",
     "registerSave": "Saqlash",
+    "credentialsWarning": "Ushbu username va parolni eslab qoling — ular testga kirish uchun sizning shaxsiy kalitingiz hisoblanadi.",
     "registerNext": "Keyingisi",
     "registerBack": "Orqaga",
     "register1Title": "Asosiy ma‘lumotlar",

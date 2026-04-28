@@ -7,6 +7,7 @@ import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import Button from '../../components/ui/Button';
 import { bookingApi, branchApi } from '../../services/api';
 import { click, payme, uzum } from '../../assets';
+import { trackPurchase } from '../../utils/pixel';
 
 const METHOD_LOGOS = {
   payme,
@@ -111,6 +112,7 @@ const Step6Payment = () => {
     // If link already arrived, redirect immediately
     if (paymentUrl) {
       setIsProcessing(true);
+      trackPurchase(bookingData?.packagePrice);
       localStorage.removeItem('testRegistration');
       window.location.href = paymentUrl;
       return;
@@ -127,6 +129,7 @@ const Step6Payment = () => {
     setWaitingForLink(false);
 
     if (url) {
+      trackPurchase(bookingData?.packagePrice);
       localStorage.removeItem('testRegistration');
       window.location.href = url;
     } else {

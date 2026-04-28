@@ -81,6 +81,7 @@
     "passwordMin": "Password must be at least 6 characters",
     "registerSaving": "Saving...",
     "registerSave": "Save",
+    "credentialsWarning": "Remember this username and password — they are your personal key to access the test.",
     "registerNext": "Next",
     "registerBack": "Back",
     "register1Title": "Basic Information",

@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
+import { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Outlet, useLocation } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { AuthModalProvider } from './contexts/AuthModalContext';
 import { PackageProvider } from './contexts/PackageContext';
@@ -7,6 +8,16 @@ import ProtectedRoute from './components/auth/ProtectedRoute';
 import LoginModal from './components/auth/LoginModal';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
+import { trackPageView } from './utils/pixel';
+
+// Tracks PageView on every SPA route change
+const PixelPageView = () => {
+  const location = useLocation();
+  useEffect(() => {
+    trackPageView();
+  }, [location.pathname]);
+  return null;
+};
 import Home from './pages/Home';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
@@ -36,6 +47,7 @@ function App() {
       <PackageProvider>
       <Router>
         <AuthModalProvider>
+          <PixelPageView />
           <LoginModal />
 
           <Routes>

@@ -216,6 +216,8 @@ export const testSessionApi = {
     api.get(`/history/mock-exam/${sessionId}`, { params: { type: 'listening' } }),
   getReadingResults: (sessionId) =>
     api.get(`/history/mock-exam/${sessionId}`, { params: { type: 'reading' } }),
+  getWritingResults: (sessionId) =>
+    api.get(`/history/mock-exam/${sessionId}`, { params: { type: 'writing' } }),
 };
 
 export { ApiError };

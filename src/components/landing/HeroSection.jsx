@@ -3,6 +3,7 @@ import { CheckCircle2, ChevronRight, MapPin, Calendar, Users } from 'lucide-reac
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { usePackages } from '../../contexts/PackageContext';
+import { trackInitiateCheckout } from '../../utils/pixel';
 
 const HeroSection = () => {
   const { t } = useTranslation();
@@ -64,7 +65,7 @@ const HeroSection = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
           >
-            <Link to="/test-registration">
+            <Link to="/test-registration" onClick={trackInitiateCheckout}>
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
