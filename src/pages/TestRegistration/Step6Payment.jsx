@@ -51,6 +51,10 @@ const Step6Payment = () => {
           packageDescription: data.packageDescription,
           totalSessions: data.totalSessions,
           speakingSessions: data.speakingSessions,
+          finalPrice: data.finalPrice ?? null,
+          discountPercent: data.discountPercent ?? null,
+          discountAmount: data.discountAmount ?? null,
+          discountDescription: data.discountDescription ?? null,
         });
 
         const methods = methodsRes.data || methodsRes;
@@ -112,7 +116,7 @@ const Step6Payment = () => {
     // If link already arrived, redirect immediately
     if (paymentUrl) {
       setIsProcessing(true);
-      trackPurchase(bookingData?.packagePrice);
+      trackPurchase(bookingData?.finalPrice ?? bookingData?.packagePrice);
       localStorage.removeItem('testRegistration');
       window.location.href = paymentUrl;
       return;
@@ -243,7 +247,30 @@ const Step6Payment = () => {
           className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl shadow-xl p-8 mb-8 text-white text-center"
         >
           <p className="text-lg mb-2 opacity-90">{t('testRegistration.step6.paymentAmount')}</p>
-          <p className="text-5xl font-bold mb-2">{formatPrice(bookingData.packagePrice || 0)}</p>
+
+          {bookingData.finalPrice != null && bookingData.finalPrice !== bookingData.packagePrice ? (
+            <>
+              <p className="text-2xl font-medium opacity-60 line-through mb-1">
+                {formatPrice(bookingData.packagePrice || 0)}
+              </p>
+              <p className="text-5xl font-bold mb-2">
+                {formatPrice(bookingData.finalPrice)}
+              </p>
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <span className="bg-white/20 text-white text-sm font-semibold px-3 py-1 rounded-full">
+                  -{bookingData.discountPercent}%
+                </span>
+                {bookingData.discountDescription && (
+                  <span className="bg-white/20 text-white text-sm px-3 py-1 rounded-full">
+                    {bookingData.discountDescription}
+                  </span>
+                )}
+              </div>
+            </>
+          ) : (
+            <p className="text-5xl font-bold mb-2">{formatPrice(bookingData.packagePrice || 0)}</p>
+          )}
+
           <p className="text-sm opacity-75">
             {bookingData.packageName} {t('testRegistration.step6.package')}
           </p>
