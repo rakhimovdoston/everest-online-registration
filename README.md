@@ -1,90 +1,88 @@
 # Everest Online Registration
 
-IELTS CDI Mock Test imtihoniga onlayn ro'yxatdan o'tish platformasi.
+Online registration platform for Everest Academy IELTS CDI Mock Test exams.
 
-## Loyiha haqida
+## About
 
-Everest Academy CDI mock imtihonlariga o'quvchilarni onlayn ro'yxatdan o'tkazish uchun yaratilgan React SPA. Foydalanuvchilar telefon raqami orqali tizimga kirib, o'zlariga mos paket, filial va test sanalarini tanlab, onlayn to'lov qilishadi.
+A React SPA that allows students to register for Everest Academy CDI mock exams online. Users sign in with their phone number, choose a package, branch, and test dates, then complete payment — all in one flow.
 
 ## Tech Stack
 
-| Kutubxona | Versiya | Maqsad |
+| Library | Version | Purpose |
 |---|---|---|
 | React | 19.2.0 | UI framework |
 | Vite | 7.2.4 | Build tool |
 | React Router DOM | 7.12.0 | Client-side routing |
 | Tailwind CSS | 3.4.19 | Styling |
-| Framer Motion | 11.18.2 | Animatsiyalar |
-| React Hook Form + Zod | 7.70.0 + 3.25.76 | Form validatsiya |
+| Framer Motion | 11.18.2 | Animations |
+| React Hook Form + Zod | 7.70.0 + 3.25.76 | Form validation |
 | Axios | 1.13.5 | HTTP requests |
-| i18next | 25.7.4 | Ko'p tillilik (uz/ru/en) |
-| Headless UI | 2.2.9 | Accessible UI komponentlar |
+| i18next | 25.7.4 | Internationalization (uz/ru/en) |
+| Headless UI | 2.2.9 | Accessible UI components |
 
-## Muhit o'zgaruvchilari
+## Environment Variables
 
-`.env` faylini yarating:
+Create a `.env` file in the project root:
 
 ```env
 VITE_API_URL=https://api.example.com
 ```
 
-## O'rnatish va ishga tushirish
+## Getting Started
 
 ```bash
-# Dependencylarni o'rnatish
+# Install dependencies
 npm install
 
-# Development server
+# Start development server
 npm run dev
 
 # Production build
 npm run build
 
-# Build preview
+# Preview production build
 npm run preview
 ```
 
-## Loyiha tuzilishi
+## Project Structure
 
 ```
 src/
-├── assets/              # Rasmlar, logolar, PDF
+├── assets/              # Images, logos, PDF files
 ├── components/
 │   ├── auth/            # LoginModal, ProtectedRoute, CompleteProfileModal
-│   ├── forms/           # FormInput, OTPInput, PhoneInput ...
-│   ├── landing/         # HeroSection, Pricing, Testimonials ...
+│   ├── forms/           # FormInput, OTPInput, PhoneInput, ...
+│   ├── landing/         # HeroSection, Pricing, Testimonials, ...
 │   ├── layout/          # Header, Footer
 │   ├── profile/         # BookingCard
 │   ├── review/          # SessionChangeModal
 │   ├── ui/              # Button, Card, Accordion
 │   └── upcoming/        # UpcomingBookingCard, UpcomingBookingBanner
 ├── contexts/
-│   ├── AuthContext.jsx          # Auth holati, login/logout
-│   ├── AuthModalContext.jsx     # Login modal boshqaruvi
-│   ├── PackageContext.jsx       # Packages, branches, testTimes
-│   └── UpcomingBookingContext.jsx
-├── hooks/
-│   └── useIntersectionObserver.js
+│   ├── AuthContext.jsx            # Auth state, login/logout
+│   ├── AuthModalContext.jsx       # Login modal control
+│   ├── PackageContext.jsx         # Packages, branches, test times
+│   └── UpcomingBookingContext.jsx # Next upcoming test
 ├── locales/
-│   ├── uz/translation.json     # O'zbek (default)
-│   ├── ru/translation.json     # Rus
-│   └── en/translation.json     # Ingliz
+│   ├── uz/translation.json        # Uzbek (default)
+│   ├── ru/translation.json        # Russian
+│   └── en/translation.json        # English
 ├── pages/
 │   ├── Home.jsx
 │   ├── Profile.jsx
 │   └── TestRegistration/
-│       ├── Step1Package.jsx     # Paket tanlash
-│       ├── Step2Branch.jsx      # Filial tanlash
-│       ├── Step3Details.jsx     # Shaxsiy ma'lumot + test sanalari
-│       ├── Step4SpeakingDates.jsx  # Speaking sanalari + speaker
-│       ├── Step5Review.jsx      # Ko'rib chiqish va booking yaratish
-│       └── Step6Payment.jsx     # To'lov (Payme / Click / Uzum)
+│       ├── Step1Package.jsx        # Package selection
+│       ├── Step2Branch.jsx         # Branch selection
+│       ├── Step3Details.jsx        # Personal info + test dates
+│       ├── Step4SpeakingDates.jsx  # Speaking dates + speaker
+│       ├── Step5Review.jsx         # Review and create booking
+│       └── Step6Payment.jsx        # Payment (Payme / Click / Uzum)
 │   └── TestResults/
 │       ├── ListeningResults.jsx
 │       ├── ReadingResults.jsx
 │       └── WritingResults.jsx
 ├── services/
-│   └── api.js           # Axios instance, interceptors, API modullar
+│   └── api.js           # Axios instance, interceptors, API modules
 ├── utils/
 │   ├── constants.js     # Static data
 │   ├── pixel.js         # Facebook Pixel tracking
@@ -94,57 +92,57 @@ src/
 └── main.jsx
 ```
 
-## Autentifikatsiya oqimi
+## Authentication Flow
 
 ```
-Telefon raqam
+Phone number
     ↓
-SMS kod yuborish
+Send SMS code
     ↓
-OTP tasdiqlash (6 raqam)
+OTP verification (6 digits)
     ↓
-Mavjud foydalanuvchi → Login → Dashboard
+Existing user  →  Login  →  Dashboard
     ↓
-Yangi foydalanuvchi → Ro'yxat (ism/familiya/email → username/parol)
+New user  →  Registration (first/last name + email  →  username + password)
 ```
 
-Tokenlar `localStorage`da saqlanadi. Access token expired bo'lganda `api.js` interceptor avtomatik refresh qiladi.
+Tokens are stored in `localStorage`. When the access token expires, the `api.js` interceptor automatically refreshes it using the refresh token. Concurrent requests that hit a 401 are queued and retried once the new token is obtained.
 
-## Test ro'yxatdan o'tish oqimi
+## Registration Flow
 
 ```
-1. Paket tanlash  →  2. Filial  →  3. Shaxsiy ma'lumot + Test sanalari
-                                                ↓
-                              4. Speaking sanalari + Speaker
-                                                ↓
-                              5. Ko'rib chiqish → Booking yaratish
-                                                ↓
-                              6. To'lov (Payme / Click / Uzum)
+1. Package  →  2. Branch  →  3. Personal info + Test dates
+                                        ↓
+                             4. Speaking dates + Speaker
+                                        ↓
+                             5. Review  →  Create booking
+                                        ↓
+                             6. Payment (Payme / Click / Uzum)
 ```
 
-Har bosqich ma'lumotlari `localStorage`ga saqlanadi. Foydalanuvchi brauzer yopsa ham ma'lumotlar saqlanib qoladi.
+Each step's data is persisted in `localStorage` so progress is not lost on page refresh.
 
-## API Endpointlar
+## API Endpoints
 
-| Endpoint | Metod | Tavsif |
+| Endpoint | Method | Description |
 |---|---|---|
-| `/auth/sms/send-code` | POST | SMS kod yuborish |
-| `/auth/sms/verify` | POST | OTP tasdiqlash |
-| `/auth/refresh-token` | POST | Token yangilash |
-| `/user/profile` | GET | Profil ma'lumotlari |
-| `/user/complete-registration` | POST | Ro'yxatni yakunlash |
-| `/user/upcoming-booking` | GET | Keyingi test |
-| `/branch/all` | GET | Paketlar, filiallar, vaqtlar |
-| `/branch/speakers/:branchId` | GET | Filial speakerlari |
-| `/branch/payment-methods` | GET | To'lov usullari |
-| `/test-session/available` | GET | Mavjud test sessiyalari |
-| `/test-session/speaking/available` | GET | Mavjud speaking sessiyalari |
-| `/booking/save` | POST | Booking yaratish |
-| `/booking/by-user` | GET | Foydalanuvchi bookinglari |
-| `/payment/methods/:bookingId` | GET | Booking to'lov usullari |
-| `/orders/payment/link` | POST | To'lov havolasi olish |
-| `/history/mock-exam/:sessionId` | GET | Test natijalari |
+| `/auth/sms/send-code` | POST | Send SMS verification code |
+| `/auth/sms/verify` | POST | Verify OTP code |
+| `/auth/refresh-token` | POST | Refresh access token |
+| `/user/profile` | GET | Get user profile |
+| `/user/complete-registration` | POST | Complete new user registration |
+| `/user/upcoming-booking` | GET | Get next upcoming test |
+| `/branch/all` | GET | Get packages, branches, test times |
+| `/branch/speakers/:branchId` | GET | Get branch speakers |
+| `/branch/payment-methods` | GET | Get available payment methods |
+| `/test-session/available` | GET | Get available test sessions |
+| `/test-session/speaking/available` | GET | Get available speaking sessions |
+| `/booking/save` | POST | Create a booking |
+| `/booking/by-user` | GET | Get user's bookings |
+| `/payment/methods/:bookingId` | GET | Get payment methods for booking |
+| `/orders/payment/link` | POST | Get payment redirect URL |
+| `/history/mock-exam/:sessionId` | GET | Get test results |
 
-## Ko'p tillilik
+## Internationalization
 
-Dastur 3 tilda ishlaydi: O'zbek (default), Rus, Ingliz. Til `src/i18n.js` da sozlanadi, tarjimalar `src/locales/` papkasida joylashgan.
+The app supports three languages: **Uzbek** (default), **Russian**, and **English**. Language configuration is in `src/i18n.js` and translation files are located in `src/locales/`.
