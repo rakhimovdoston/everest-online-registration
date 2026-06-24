@@ -211,7 +211,9 @@
       "redirecting": "Automatically redirecting to the home page...",
       "paymentError": "Payment failed. Please try again.",
       "noMethods": "No payment methods available",
-      "methodInProgress": "Coming soon"
+      "methodInProgress": "Coming soon",
+      "lateReminderTitle": "Please note! Don't be late for your test",
+      "lateReminder": "Make sure to arrive on time on your test day. Latecomers may not be admitted to the exam."
     },
     "common": {
       "back": "Back",
@@ -362,7 +364,8 @@
     "totalUpcoming": "{{count}} upcoming tests total",
     "morning": "Morning (09:00–12:00)",
     "afternoon": "Afternoon (12:00–17:00)",
-    "evening": "Evening (17:00–20:00)"
+    "evening": "Evening (17:00–20:00)",
+    "lateReminder": "Please arrive on time — do not be late for your test."
   },
   "profile": {
     "title": "My Account",

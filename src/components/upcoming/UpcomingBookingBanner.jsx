@@ -98,6 +98,11 @@ const UpcomingBookingBanner = () => {
       <span className={`flex-shrink-0 text-xs font-bold px-3 py-1 rounded-full ${cfg.badge}`}>
         {daysLabel}
       </span>
+
+      <p className="basis-full flex items-center gap-1.5 text-xs font-medium text-slate-600 border-t border-slate-200/70 pt-2 mt-1">
+        <ClockIcon className="w-3.5 h-3.5 flex-shrink-0 text-amber-500" />
+        {t('upcomingBooking.lateReminder')}
+      </p>
     </div>
   );
 };

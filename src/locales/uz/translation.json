@@ -211,7 +211,9 @@
       "redirecting": "Avtomatik ravishda bosh sahifaga yo‘naltirilmoqda...",
       "paymentError": "To‘lovda xatolik yuz berdi. Qaytadan urinib ko‘ring.",
       "noMethods": "To‘lov usullari topilmadi",
-      "methodInProgress": "Hali jarayonda"
+      "methodInProgress": "Hali jarayonda",
+      "lateReminderTitle": "Diqqat! Test vaqtiga kechikmang",
+      "lateReminder": "Iltimos, test kuni belgilangan vaqtga kechikmasdan yetib keling. Kechikkan ishtirokchilar imtihonga kiritilmasligi mumkin."
     },
     "common": {
       "back": "Orqaga",
@@ -362,7 +364,8 @@
     "totalUpcoming": "Jami {{count}} ta topshirilmagan test",
     "morning": "Ertalab (09:00–12:00)",
     "afternoon": "Tushdan keyin (12:00–17:00)",
-    "evening": "Kechqurun (17:00–20:00)"
+    "evening": "Kechqurun (17:00–20:00)",
+    "lateReminder": "Iltimos, test vaqtiga kechikmasdan yetib keling."
   },
   "profile": {
     "title": "Shaxsiy kabinet",
