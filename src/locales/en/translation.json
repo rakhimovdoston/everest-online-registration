@@ -215,6 +215,11 @@
       "lateReminderTitle": "Please note! Don't be late for your test",
       "lateReminder": "Make sure to arrive on time on your test day. Latecomers may not be admitted to the exam."
     },
+    "lateWarning": {
+      "title": "Please note! Test day reminder",
+      "arriveEarly": "Please arrive 10 minutes before your scheduled test time.",
+      "lateNotAdmitted": "If you arrive late, you will not be admitted to the Mock test."
+    },
     "common": {
       "back": "Back",
       "next": "Next",
@@ -259,7 +264,7 @@
     },
     "step4Extended": {
       "title": "Speaking date",
-      "subtitle": "Choose an examiner and speaking date",
+      "subtitle": "Select your Speaking date and time",
       "selectType": "Select speaking type",
       "typeDescription": "Choose Online or Face-to-face speaking test",
       "online": "Online",
@@ -271,7 +276,10 @@
       "allSpeakers": "All examiners",
       "speakingDatesTitle": "Select speaking date",
       "speakingDatesNeeded": "speaking dates need to be selected",
-      "speakingDate": "Speaking date"
+      "speakingDate": "Speaking date",
+      "selectTime": "Select time",
+      "noSlots": "No available time",
+      "unavailableDay": "Speaking is not available on this day. Please choose another day."
     }
   },
   "pricing": {

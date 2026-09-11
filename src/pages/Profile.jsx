@@ -14,6 +14,7 @@ import { authApi } from "../services/api";
 import Button from "../components/ui/Button";
 import BookingCard from "../components/profile/BookingCard";
 import UpcomingBookingBanner from "../components/upcoming/UpcomingBookingBanner";
+import LateArrivalWarning from "../components/ui/LateArrivalWarning";
 import FormInput from "../components/forms/FormInput";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -386,6 +387,9 @@ const Profile = () => {
               <h2 className="text-2xl font-bold text-slate-900 mb-6">
                 {t("profile.testHistory")}
               </h2>
+              {!isLoadingBookings && testRegistrations.length > 0 && (
+                <LateArrivalWarning className="mb-6" />
+              )}
               <UpcomingBookingBanner />
 
               <div className="space-y-6">

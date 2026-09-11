@@ -215,6 +215,11 @@
       "lateReminderTitle": "Внимание! Не опаздывайте на тест",
       "lateReminder": "Пожалуйста, приходите вовремя в день теста. Опоздавшие могут не быть допущены к экзамену."
     },
+    "lateWarning": {
+      "title": "Внимание! Напоминание о дне теста",
+      "arriveEarly": "Пожалуйста, приходите за 10 минут до назначенного времени теста.",
+      "lateNotAdmitted": "Если вы опоздаете, вы не будете допущены к Mock тесту."
+    },
     "common": {
       "back": "Назад",
       "next": "Далее",
@@ -259,7 +264,7 @@
     },
     "step4Extended": {
       "title": "Дата Speaking",
-      "subtitle": "Выберите экзаменатора и дату speaking",
+      "subtitle": "Выберите дату и время Speaking",
       "selectType": "Выберите тип speaking",
       "typeDescription": "Выберите Online или очный speaking тест",
       "online": "Онлайн",
@@ -271,7 +276,10 @@
       "allSpeakers": "Все экзаменаторы",
       "speakingDatesTitle": "Выберите дату speaking",
       "speakingDatesNeeded": "дат speaking необходимо выбрать",
-      "speakingDate": "Дата Speaking"
+      "speakingDate": "Дата Speaking",
+      "selectTime": "Выберите время",
+      "noSlots": "Нет свободного времени",
+      "unavailableDay": "В этот день Speaking недоступен. Пожалуйста, выберите другой день."
     }
   },
   "pricing": {

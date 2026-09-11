@@ -16,6 +16,7 @@ import Button from '../../components/ui/Button';
 import { useTranslation } from 'react-i18next';
 import { bookingApi } from '../../services/api';
 import SessionChangeModal from '../../components/review/SessionChangeModal';
+import LateArrivalWarning from '../../components/ui/LateArrivalWarning';
 
 const Step5Review = () => {
   const navigate = useNavigate();
@@ -460,6 +461,9 @@ const Step5Review = () => {
             </div>
           </motion.div>
         </div>
+
+        {/* Late Arrival Warning */}
+        <LateArrivalWarning className="mb-8" />
 
         {/* Navigation */}
         <div className="flex justify-between items-center">

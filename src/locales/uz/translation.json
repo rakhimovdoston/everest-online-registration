@@ -215,6 +215,11 @@
       "lateReminderTitle": "Diqqat! Test vaqtiga kechikmang",
       "lateReminder": "Iltimos, test kuni belgilangan vaqtga kechikmasdan yetib keling. Kechikkan ishtirokchilar imtihonga kiritilmasligi mumkin."
     },
+    "lateWarning": {
+      "title": "Diqqat! Test kuni eslatmasi",
+      "arriveEarly": "Iltimos, testga belgilangan vaqtdan 10 daqiqa oldin yetib keling.",
+      "lateNotAdmitted": "Agar test vaqtidan kechikib kelsangiz, Mock testga kiritilmaysiz."
+    },
     "common": {
       "back": "Orqaga",
       "next": "Keyingisi",
@@ -259,7 +264,7 @@
     },
     "step4Extended": {
       "title": "Speaking sanasi",
-      "subtitle": "Examiner va speaking sanasini tanlang",
+      "subtitle": "Speaking sanasi va vaqtini tanlang",
       "selectType": "Speaking turini tanlang",
       "typeDescription": "Online yoki Yuzma-yuz speaking testini tanlang",
       "online": "Online",
@@ -271,7 +276,10 @@
       "allSpeakers": "Barcha examinerlar",
       "speakingDatesTitle": "Speaking sanasini tanlang",
       "speakingDatesNeeded": "ta speaking sanasini tanlashingiz kerak",
-      "speakingDate": "Speaking sana"
+      "speakingDate": "Speaking sana",
+      "selectTime": "Vaqtni tanlang",
+      "noSlots": "Bo'sh vaqt yo'q",
+      "unavailableDay": "Bu kunda Speaking olinmaydi. Iltimos, boshqa kunni tanlang."
     }
   },
   "pricing": {
