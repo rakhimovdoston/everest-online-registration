@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
           setUser(normalizeProfile(profileData));
           setIsAuthenticated(true);
         }
-      } catch (error) {
+      } catch {
         // Token invalid or expired — clear localStorage
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
@@ -56,11 +56,6 @@ export const AuthProvider = ({ children }) => {
     setAuthToken(accessToken);
     setUser(normalizeProfile(userData));
     setIsAuthenticated(true);
-  };
-
-  // Register function - same as login
-  const register = (userData, accessToken, refreshToken) => {
-    login(userData, accessToken, refreshToken);
   };
 
   // Logout function - clears localStorage and state
@@ -98,7 +93,6 @@ export const AuthProvider = ({ children }) => {
     token: localStorage.getItem('accessToken'),
     isLoading,
     login,
-    register,
     logout,
     updateUser,
     isLoggedIn,

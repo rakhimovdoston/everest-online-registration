@@ -23,7 +23,16 @@ export default defineConfig([
       },
     },
     rules: {
-      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      // `motion` is only referenced as <motion.div>, which core no-unused-vars can't see
+      'no-unused-vars': ['error', { varsIgnorePattern: '^([A-Z_]|motion$)' }],
+    },
+  },
+  {
+    // Context files intentionally export both the Provider and its hook
+    { "success": true, "code": 200, "data": { "username": "ali123", "password": "qwerty12" } }
+    files: ['src/contexts/**/*.jsx'],
+    rules: {
+      'react-refresh/only-export-components': 'off',
     },
   },
 ])

@@ -9,8 +9,8 @@ import AnswerTable from '../../components/results/AnswerTable';
 const LISTENING_SECTIONS = [
   { label: 'Part 1', range: [1, 10],  color: 'bg-indigo-50 text-indigo-700' },
   { label: 'Part 2', range: [11, 20], color: 'bg-blue-50 text-blue-700' },
-  { label: 'Part 3', range: [21, 30], color: 'bg-violet-50 text-violet-700' },
-  { label: 'Part 4', range: [31, 40], color: 'bg-purple-50 text-purple-700' },
+  { label: 'Part 3', range: [21, 30], color: 'bg-indigo-50 text-indigo-700' },
+  { label: 'Part 4', range: [31, 40], color: 'bg-indigo-50 text-indigo-700' },
 ];
 
 const ListeningResults = () => {

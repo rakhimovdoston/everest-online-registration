@@ -175,6 +175,14 @@ export const authApi = {
   getUpcomingBooking: () =>
     api.get('/user/upcoming-booking'),
 
+  // Javob: { data: { username, password } }
+  getPassword: () =>
+    api.get('/user/my-password'),
+
+  // data: { oldPassword, newPassword, confirmNewPassword }
+  updatePassword: (data) =>
+    api.put('/user/update/password', data),
+
   checkUsername: (username) =>
     api.post('/admin/user/check-username', { username }),
 

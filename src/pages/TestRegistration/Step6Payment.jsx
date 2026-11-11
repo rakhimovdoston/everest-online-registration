@@ -2,9 +2,9 @@ import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { CheckCircleIcon as CheckCircleSolidIcon } from '@heroicons/react/24/solid';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import Button from '../../components/ui/Button';
+import StepProgress from '../../components/registration/StepProgress';
 import { bookingApi, branchApi } from '../../services/api';
 import { click, payme, uzum } from '../../assets';
 import { trackPurchase } from '../../utils/pixel';
@@ -26,18 +26,10 @@ const Step6Payment = () => {
   const [paymentUrl, setPaymentUrl] = useState(null);
   const [isLinkLoading, setIsLinkLoading] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [waitingForLink, setWaitingForLink] = useState(false);
   const [error, setError] = useState('');
   const [fieldErrors, setFieldErrors] = useState(null);
 
   useEffect(() => {
-    if (!bookingId) {
-      navigate('/test-registration');
-      return;
-    }
-
-    setIsLoading(true);
-
     // Fetch booking info and payment methods in parallel
     Promise.all([
       bookingApi.getPaymentMethods(bookingId),
@@ -69,14 +61,18 @@ const Step6Payment = () => {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [navigate, bookingId, i18n.language]);
+  }, [bookingId, i18n.language, t]);
 
+  // The booking already exists and the wizard state was cleared on save,
+  // so "back" goes to the profile where the booking is listed (and can be paid later)
   const handleBack = () => {
-    navigate('/test-registration/review');
+    navigate('/profile');
   };
 
   // Stores the in-flight payment link promise so handlePayment can await it
   const paymentLinkPromiseRef = useRef(null);
+  // Id of the latest link request — responses from earlier method clicks are ignored
+  const linkRequestIdRef = useRef(0);
 
   const handlePaymentMethod = (method) => {
     if (!method.active) return;
@@ -85,6 +81,8 @@ const Step6Payment = () => {
     setPaymentUrl(null);
     setError('');
     setIsLinkLoading(true);
+    const requestId = ++linkRequestIdRef.current;
+    const isStale = () => requestId !== linkRequestIdRef.current;
 
     // Fire API request and store the promise
     const linkPromise = bookingApi.getPaymentLink(
@@ -95,16 +93,17 @@ const Step6Payment = () => {
       .then((response) => {
         const data = response.data || response;
         const url = data.payment_url || data.paymentUrl;
+        if (isStale()) return null;
         setPaymentUrl(url);
         return url;
       })
       .catch((err) => {
         console.error('Error getting payment link:', err);
-        setError(err.message || t('testRegistration.step6.paymentError'));
+        if (!isStale()) setError(err.message || t('testRegistration.step6.paymentError'));
         return null;
       })
       .finally(() => {
-        setIsLinkLoading(false);
+        if (!isStale()) setIsLinkLoading(false);
       });
 
     paymentLinkPromiseRef.current = linkPromise;
@@ -124,16 +123,13 @@ const Step6Payment = () => {
 
     // Link not ready yet — show loading and wait for it
     setIsProcessing(true);
-    setWaitingForLink(true);
 
     const url = paymentLinkPromiseRef.current
       ? await paymentLinkPromiseRef.current
       : null;
 
-    setWaitingForLink(false);
-
     if (url) {
-      trackPurchase(bookingData?.packagePrice);
+      trackPurchase(bookingData?.finalPrice ?? bookingData?.packagePrice);
       localStorage.removeItem('testRegistration');
       window.location.href = url;
     } else {
@@ -179,52 +175,7 @@ const Step6Payment = () => {
         )}
 
         {bookingData && (<>
-        {/* Progress Steps */}
-        <div className="mb-8">
-          <div className="flex items-center justify-center space-x-2">
-            <div className="flex items-center">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-600 text-white">
-                <CheckCircleSolidIcon className="w-6 h-6" />
-              </div>
-              <span className="ml-2 text-sm font-medium text-green-600">{t('testRegistration.progress.package')}</span>
-            </div>
-            <div className="w-12 h-0.5 bg-green-600" />
-            <div className="flex items-center">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-600 text-white">
-                <CheckCircleSolidIcon className="w-6 h-6" />
-              </div>
-              <span className="ml-2 text-sm font-medium text-green-600">{t('testRegistration.progress.branch')}</span>
-            </div>
-            <div className="w-12 h-0.5 bg-green-600" />
-            <div className="flex items-center">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-600 text-white">
-                <CheckCircleSolidIcon className="w-6 h-6" />
-              </div>
-              <span className="ml-2 text-sm font-medium text-green-600">{t('testRegistration.progress.test')}</span>
-            </div>
-            <div className="w-12 h-0.5 bg-green-600" />
-            <div className="flex items-center">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-600 text-white">
-                <CheckCircleSolidIcon className="w-6 h-6" />
-              </div>
-              <span className="ml-2 text-sm font-medium text-green-600">{t('testRegistration.progress.speaking')}</span>
-            </div>
-            <div className="w-12 h-0.5 bg-green-600" />
-            <div className="flex items-center">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-600 text-white">
-                <CheckCircleSolidIcon className="w-6 h-6" />
-              </div>
-              <span className="ml-2 text-sm font-medium text-green-600">{t('testRegistration.progress.view')}</span>
-            </div>
-            <div className="w-12 h-0.5 bg-indigo-600" />
-            <div className="flex items-center">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-indigo-600 text-white font-semibold">
-                6
-              </div>
-              <span className="ml-2 text-sm font-medium text-indigo-600">{t('testRegistration.progress.payment')}</span>
-            </div>
-          </div>
-        </div>
+        <StepProgress current={6} />
 
         {/* Header */}
         <motion.div
@@ -233,7 +184,7 @@ const Step6Payment = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-8"
         >
-          <h1 className="text-4xl font-display font-bold text-slate-900 mb-2">
+          <h1 className="text-3xl sm:text-4xl font-display font-bold text-slate-900 mb-2">
             {t('testRegistration.step6.title')}
           </h1>
           <p className="text-slate-600">{t('testRegistration.step6.subtitle')}</p>
@@ -244,7 +195,7 @@ const Step6Payment = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl shadow-xl p-8 mb-8 text-white text-center"
+          className="bg-gradient-to-r from-indigo-600 to-indigo-800 rounded-2xl shadow-xl p-5 sm:p-8 mb-8 text-white text-center"
         >
           <p className="text-lg mb-2 opacity-90">{t('testRegistration.step6.paymentAmount')}</p>
 
@@ -253,7 +204,7 @@ const Step6Payment = () => {
               <p className="text-2xl font-medium opacity-60 line-through mb-1">
                 {formatPrice(bookingData.packagePrice || 0)}
               </p>
-              <p className="text-5xl font-bold mb-2">
+              <p className="text-4xl sm:text-5xl font-bold mb-2">
                 {formatPrice(bookingData.finalPrice)}
               </p>
               <div className="flex items-center justify-center gap-2 mb-2">
@@ -268,7 +219,7 @@ const Step6Payment = () => {
               </div>
             </>
           ) : (
-            <p className="text-5xl font-bold mb-2">{formatPrice(bookingData.packagePrice || 0)}</p>
+            <p className="text-4xl sm:text-5xl font-bold mb-2">{formatPrice(bookingData.packagePrice || 0)}</p>
           )}
 
           <p className="text-sm opacity-75">
@@ -301,7 +252,7 @@ const Step6Payment = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="bg-white rounded-2xl shadow-xl p-8 border border-slate-200 mb-6"
+          className="bg-white rounded-2xl shadow-xl p-5 sm:p-8 border border-slate-200 mb-6"
         >
           <h2 className="text-lg font-semibold text-slate-900 mb-6">
             {t('testRegistration.step6.selectMethod')}
@@ -394,7 +345,7 @@ const Step6Payment = () => {
         </motion.div>
 
         {/* Navigation */}
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center gap-3">
           <Button variant="secondary" size="lg" onClick={handleBack} disabled={isProcessing}>
             {t('testRegistration.common.back')}
           </Button>

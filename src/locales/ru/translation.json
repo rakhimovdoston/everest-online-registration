@@ -1,4 +1,8 @@
 {
+  "seo": {
+    "title": "Пробные IELTS CDI экзамены | EVEREST",
+    "description": "Запишитесь на пробный IELTS CDI Mock от EVEREST онлайн. Оригинальные материалы IELTS, условия, приближённые к реальному экзамену, удобное время и место проведения."
+  },
   "header": {
     "testRegistration": "Регистрация",
     "pricing": "Цены",
@@ -282,8 +286,29 @@
       "unavailableDay": "В этот день Speaking недоступен. Пожалуйста, выберите другой день."
     }
   },
+  "why": {
+    "title": "Почему именно",
+    "titleHighlight": "mock экзамены Everest?",
+    "score": {
+      "title": "Минимум +1 балл",
+      "description": "С регулярными CDI mock экзаменами повысьте результат на реальном IELTS минимум на 1 балл."
+    },
+    "users": {
+      "title": "10,000+ пользователей",
+      "description": "Более 10 тысяч студентов уже прошли наши mock экзамены."
+    },
+    "materials": {
+      "title": "Оригинальные материалы",
+      "description": "Оригинальные материалы, подготовленные Everest Academic Department."
+    },
+    "branches": {
+      "title": "{{count}} филиалов",
+      "description": "В ближайшем к вам месте, в условиях реального экзамена."
+    }
+  },
   "pricing": {
     "choosePlan": "Выберите тариф",
+    "popular": "Часто выбирают",
     "title": "Выберите",
     "titleHighlight": "подходящий тариф",
     "subtitle": "Участвуйте в mock экзаменах EVEREST CDI по одному из 4 тарифов и точно оцените свой уровень.",
@@ -380,6 +405,22 @@
     "subtitle": "Личные данные и история экзаменов",
     "personalInfo": "Личные данные",
     "username": "Имя пользователя",
+    "password": "Пароль",
+    "showPassword": "Показать пароль",
+    "hidePassword": "Скрыть пароль",
+    "passwordLoadError": "Не удалось загрузить пароль. Попробуйте ещё раз.",
+    "changePassword": {
+      "open": "Изменить пароль",
+      "title": "Изменение пароля",
+      "oldPassword": "Текущий пароль",
+      "newPassword": "Новый пароль",
+      "confirmNewPassword": "Подтвердите новый пароль",
+      "submit": "Сохранить",
+      "saving": "Сохранение...",
+      "success": "Пароль успешно изменён",
+      "required": "Заполните поле",
+      "mismatch": "Пароли не совпадают"
+    },
     "fullName": "Полное имя и фамилия",
     "email": "Email",
     "phone": "Телефон",

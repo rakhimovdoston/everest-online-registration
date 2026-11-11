@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Outlet, useLocation } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
-import { AuthModalProvider } from './contexts/AuthModalContext';
+import { BrowserRouter as Router, Routes, Route, Outlet, Navigate, useLocation } from 'react-router-dom';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { AuthModalProvider, useAuthModal } from './contexts/AuthModalContext';
 import { PackageProvider } from './contexts/PackageContext';
 import { UpcomingBookingProvider } from './contexts/UpcomingBookingContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
@@ -18,8 +18,19 @@ const PixelPageView = () => {
   }, [location.pathname]);
   return null;
 };
+
+// Login happens in LoginModal — /login and old /register links open it on the home page
+const LoginRedirect = () => {
+  const { isAuthenticated, isLoading } = useAuth();
+  const { openLoginModal } = useAuthModal();
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) openLoginModal();
+  }, [isLoading, isAuthenticated, openLoginModal]);
+  // Wait for session restore, otherwise we'd leave before knowing whether to open the modal
+  if (isLoading) return null;
+  return <Navigate to="/" replace />;
+};
 import Home from './pages/Home';
-import Register from './pages/Register';
 import Profile from './pages/Profile';
 import Step1Package from './pages/TestRegistration/Step1Package';
 import Step2Branch from './pages/TestRegistration/Step2Branch';
@@ -54,7 +65,8 @@ function App() {
             <Route element={<Layout />}>
               {/* Public routes */}
               <Route path="/" element={<Home />} />
-              <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<LoginRedirect />} />
+              <Route path="/register" element={<LoginRedirect />} />
 
               {/* Protected routes */}
               <Route element={<ProtectedRoute />}>
@@ -69,6 +81,8 @@ function App() {
                 <Route path="/test-results/:sessionId/reading" element={<ReadingResults />} />
                 <Route path="/test-results/:sessionId/writing" element={<WritingResults />} />
               </Route>
+
+              <Route path="*" element={<Navigate to="/" replace />} />
             </Route>
           </Routes>
         </AuthModalProvider>

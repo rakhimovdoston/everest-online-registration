@@ -69,13 +69,13 @@ const BookingCard = ({ registration, isOpen, onToggle }) => {
       <button
         type="button"
         onClick={onToggle}
-        className="w-full p-6 flex items-start justify-between cursor-pointer hover:bg-slate-50 transition-colors"
+        className="w-full p-4 sm:p-6 flex items-start justify-between gap-3 cursor-pointer hover:bg-slate-50 transition-colors"
       >
-        <div className="text-left">
-          <h3 className="text-xl font-bold text-slate-900 mb-2">
+        <div className="text-left min-w-0">
+          <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-2">
             {registration.mockPackages.name}
           </h3>
-          <div className="flex items-center gap-4 text-sm text-slate-600">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-600">
             <div className="flex items-center gap-1">
               <CalendarIcon className="w-4 h-4" />
               {formatDate(registration.date)}
@@ -88,7 +88,7 @@ const BookingCard = ({ registration, isOpen, onToggle }) => {
         </div>
         <div className="flex items-center gap-3 flex-shrink-0">
           <div className="text-right">
-            <p className="text-2xl font-bold text-indigo-600">
+            <p className="text-lg sm:text-2xl font-bold text-indigo-600 whitespace-nowrap">
               {formatPrice(registration.mockPackages.price)}
             </p>
             {registration.payment === "PAID" ? (
@@ -120,7 +120,7 @@ const BookingCard = ({ registration, isOpen, onToggle }) => {
           isOpen ? "max-h-[2000px] opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <div className="px-6 pb-6">
+        <div className="px-4 sm:px-6 pb-6">
           {/* Payment Warning */}
           {!isPaid &&
             (registration.payment === "PENDING" ||
@@ -179,7 +179,7 @@ const BookingCard = ({ registration, isOpen, onToggle }) => {
               return (
                 <div
                   key={testSession.id}
-                  className={`rounded-xl border-2 p-5 transition-all ${
+                  className={`rounded-xl border-2 p-4 sm:p-5 transition-all ${
                     testSession.examStatus === "FAILED"
                       ? "bg-gradient-to-br from-red-50 to-white border-red-200"
                       : isPaid
@@ -188,8 +188,8 @@ const BookingCard = ({ registration, isOpen, onToggle }) => {
                   }`}
                 >
                   {/* Session Header */}
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-3">
+                  <div className="flex items-start justify-between gap-2 mb-4">
+                    <div className="flex items-center gap-3 min-w-0">
                       <div className="bg-indigo-100 rounded-lg px-3 py-1">
                         <span className="text-sm font-bold text-indigo-700">
                           {t("profile.session")} {idx + 1}
@@ -219,7 +219,7 @@ const BookingCard = ({ registration, isOpen, onToggle }) => {
                   {testSession.examStatus === "COMPLETED" ? (
                     <>
 
-                      <div className="grid grid-cols-5 gap-3">
+                      <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 sm:gap-3">
                         {/* Listening */}
                         <Link
                           to={
@@ -259,7 +259,7 @@ const BookingCard = ({ registration, isOpen, onToggle }) => {
                               Listening
                             </p>
                           </div>
-                          <p className="text-2xl font-bold text-indigo-600">
+                          <p className="text-lg sm:text-2xl font-bold text-indigo-600 whitespace-nowrap">
                             {testSession.listening || "-"}
                           </p>
                         </Link>
@@ -303,7 +303,7 @@ const BookingCard = ({ registration, isOpen, onToggle }) => {
                               Reading
                             </p>
                           </div>
-                          <p className="text-2xl font-bold text-indigo-600">
+                          <p className="text-lg sm:text-2xl font-bold text-indigo-600 whitespace-nowrap">
                             {testSession.reading || "-"}
                           </p>
                         </Link>
@@ -347,7 +347,7 @@ const BookingCard = ({ registration, isOpen, onToggle }) => {
                               Writing
                             </p>
                           </div>
-                          <p className="text-2xl font-bold text-indigo-600">
+                          <p className="text-lg sm:text-2xl font-bold text-indigo-600 whitespace-nowrap">
                             {testSession.writing || "-"}
                           </p>
                         </Link>
@@ -372,7 +372,7 @@ const BookingCard = ({ registration, isOpen, onToggle }) => {
                               Speaking
                             </p>
                           </div>
-                          <p className="text-2xl font-bold text-indigo-600">
+                          <p className="text-lg sm:text-2xl font-bold text-indigo-600 whitespace-nowrap">
                             {relatedSpeaking?.score ||
                               testSession.speaking ||
                               "-"}
@@ -390,14 +390,14 @@ const BookingCard = ({ registration, isOpen, onToggle }) => {
                         </div>
 
                         {/* Overall */}
-                        <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-lg p-3 border-2 border-indigo-300 text-center">
+                        <div className="col-span-2 sm:col-span-1 bg-gradient-to-br from-indigo-50 to-indigo-50 rounded-lg p-3 border-2 border-indigo-300 text-center">
                           <div className="flex items-center justify-center gap-1 mb-1">
                             <TrophyIcon className="w-4 h-4 text-indigo-600" />
                             <p className="text-[10px] font-semibold text-slate-700">
                               Overall
                             </p>
                           </div>
-                          <p className="text-2xl font-bold text-indigo-600">
+                          <p className="text-lg sm:text-2xl font-bold text-indigo-600 whitespace-nowrap">
                             {(() => {
                               const roundBand = (score) => {
                                 const rounded = Math.round(score * 100) / 100;

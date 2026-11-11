@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion';
-import { CheckCircle2, ChevronRight, MapPin, Calendar, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { CheckCircleIcon, MapPinIcon } from '@heroicons/react/24/solid';
+import CalendarFilledIcon from '../ui/CalendarFilledIcon';
 import { usePackages } from '../../contexts/PackageContext';
 import { trackInitiateCheckout } from '../../utils/pixel';
 
@@ -10,103 +11,71 @@ const HeroSection = () => {
   const { activeBranches, testTimes } = usePackages();
 
   const stats = [
-    { icon: MapPin, value: activeBranches.length || '—', label: t('hero.branches') },
-    { icon: Calendar, value: testTimes.length || '—', label: t('hero.dailyTests') },
-    { icon: Users, value: '1,000+', label: t('hero.students') },
+    { icon: MapPinIcon, value: activeBranches.length || '—', label: t('hero.branches'), circle: 'bg-hot-light', color: 'text-hot' },
+    { icon: CalendarFilledIcon, value: testTimes.length || '—', label: t('hero.dailyTests'), circle: 'bg-indigo-50', color: 'text-indigo-600' },
   ];
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-slate-50 to-white overflow-hidden pt-20">
-      {/* Subtle background pattern */}
-      <div className="absolute inset-0 opacity-[0.015]">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle at 1px 1px, rgb(15 23 42) 1px, transparent 0)`,
-          backgroundSize: '40px 40px'
-        }} />
-      </div>
+    <section className="flex min-h-[max(520px,100svh)] items-center justify-center bg-white px-5 pb-12 pt-[70px]">
+      <div className="mx-auto max-w-5xl text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="mb-5 inline-flex items-center gap-2 rounded-full border border-line bg-white px-3 py-1.5 text-sm font-semibold text-ink"
+        >
+          <CheckCircleIcon className="h-5 w-5 text-indigo-600" />
+          {t('hero.badge')}
+        </motion.div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-24 lg:py-32">
-        <div className="text-center max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-sm font-medium mb-6"
+        <motion.h1
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.08 }}
+          className="mb-7 text-[40px] font-extrabold leading-[1.12] tracking-[-0.02em] text-ink sm:text-5xl lg:text-[64px]"
+        >
+          {t('hero.titleLine1')}
+          <br />
+          <span className="text-hot">{t('hero.titleLine2')}</span>
+        </motion.h1>
+
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.16 }}
+          className="mb-12 flex flex-wrap justify-center gap-3"
+        >
+          <Link
+            to="/test-registration"
+            onClick={trackInitiateCheckout}
+            className="rounded-xl bg-indigo-600 px-7 py-3.5 text-[15px] font-semibold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-indigo-700"
           >
-            <CheckCircle2 className="w-4 h-4" />
-            {t('hero.badge')}
-          </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-5xl lg:text-6xl xl:text-7xl font-bold text-slate-900 leading-tight mb-6"
+            {t('hero.startButton')}
+          </Link>
+          <a
+            href="#pricing"
+            className="rounded-xl bg-control px-7 py-3.5 text-[15px] font-semibold text-ink transition duration-200 hover:-translate-y-0.5 hover:bg-control-hover"
           >
-            {t('hero.titleLine1')}
-            <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">
-              {t('hero.titleLine2')}
-            </span>
-          </motion.h1>
+            {t('hero.pricingButton')}
+          </a>
+        </motion.div>
 
-          {/* <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-lg lg:text-xl text-slate-600 max-w-2xl mx-auto mb-10 leading-relaxed"
-          >
-            {t('hero.subtitle')}
-          </motion.p> */}
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
-          >
-            <Link to="/test-registration" onClick={trackInitiateCheckout}>
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-indigo-600 text-white font-semibold shadow-xl shadow-indigo-500/30 hover:shadow-indigo-500/40 hover:bg-indigo-700 transition-all duration-200"
-              >
-                {t('hero.startButton')}
-                <ChevronRight className="w-5 h-5" />
-              </motion.button>
-            </Link>
-
-            <motion.a
-              href="#pricing"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="sm:inline-flex items-center md:max-w-24 max-w-4 justify-center px-8 py-4 rounded-full border-2 border-slate-300 text-slate-700 font-semibold hover:border-slate-400 hover:bg-slate-50 transition-all duration-200"
-            >
-              {t('hero.pricingButton')}
-            </motion.a>
-          </motion.div>
-
-          {/* Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="grid grid-cols-3 gap-6 max-w-lg mx-auto"
-          >
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-indigo-50 mb-3">
-                  <stat.icon className="w-6 h-6 text-indigo-600" />
-                </div>
-                <div className="text-2xl text-slate-900">{stat.value} {stat.label}</div>
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.24 }}
+          className="flex justify-center gap-11"
+        >
+          {stats.map((stat) => (
+            <div key={stat.label} className="text-center">
+              <div className={`mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full ${stat.circle}`}>
+                <stat.icon className={`h-6 w-6 ${stat.color}`} />
               </div>
-            ))}
-          </motion.div>
-        </div>
+              <p className="text-lg font-bold text-ink">{stat.value} {stat.label}</p>
+            </div>
+          ))}
+        </motion.div>
       </div>
-
-      {/* Bottom gradient fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent" />
     </section>
   );
 };

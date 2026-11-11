@@ -1,4 +1,8 @@
 {
+  "seo": {
+    "title": "IELTS CDI Mock Exams | EVEREST",
+    "description": "EVEREST Mock imtihonlariga onlayn ro‘yxatdan o‘ting. Original IELTS Mock materiallari, haqiqiy imtihon muhiti. O‘zingizga qulay vaqt va manzilda IELTS CDI Mock topshiring."
+  },
   "header": {
     "testRegistration": "Ro‘yxatdan o‘tish",
     "pricing": "Narxlar",
@@ -11,7 +15,7 @@
   "hero": {
     "badge": "Everest CDI mock exams",
     "titleLine1": "Everest CDI mock imtihoniga",
-    "titleLine2": "onlayn ro‘yxatdan o‘ting",
+    "titleLine2": "ro‘yxatdan o‘ting",
     "subtitle": "✅ IELTS imtihoniga haqiqiy imtihon sharoitida tayyorlaning",
     "startButton": "Ro‘yxatdan o‘tish",
     "pricingButton": "Tariflar",
@@ -282,8 +286,29 @@
       "unavailableDay": "Bu kunda Speaking olinmaydi. Iltimos, boshqa kunni tanlang."
     }
   },
+  "why": {
+    "title": "Nega aynan",
+    "titleHighlight": "Everest mock imtihonlari?",
+    "score": {
+      "title": "Kamida +1 ball",
+      "description": "Muntazam CDI mocklarimiz bilan haqiqiy IELTS imtihonida kamida 1 ball o‘sishga erishing."
+    },
+    "users": {
+      "title": "10,000+ foydalanuvchi",
+      "description": "10 mingdan ortiq o‘quvchilar mock imtihonlarimizdan foydalanishdi."
+    },
+    "materials": {
+      "title": "Original materiallar",
+      "description": "Everest Academic Department tomonidan tayyorlangan original materiallar."
+    },
+    "branches": {
+      "title": "{{count}} ta filialda",
+      "description": "O‘zingizga eng yaqin manzilda, haqiqiy imtihon sharoitida."
+    }
+  },
   "pricing": {
-    "choosePlan": "Ta‘rifni tanlang",
+    "choosePlan": "Tarifni tanlang",
+    "popular": "Ko‘p tanlanadigan",
     "title": "O‘zingizga mos",
     "titleHighlight": "tarifni tanlang",
     "subtitle": "EVEREST CDI mock imtihonlarida 4 xil tarif orqali qatnashib, darajangizni aniq baholashingiz mumkin.",
@@ -299,7 +324,7 @@
       },
       "three": {
         "name": "Three Sessions",
-        "period": "1 haftalik dastur",
+        "period": "1 haftalik tarif",
         "description": "Taxminiy natijangizni aniqlang",
         "features": ["3 ta to’liq mock imtihon", "1 ta Speaking imtihoni"],
         "regFeatures": ["1 hafta davomida amal qiladi", "3 ta to’liq mock imtihon", "1 ta Speaking imtihoni"],
@@ -308,7 +333,7 @@
       },
       "six": {
         "name": "Six Sessions",
-        "period": "2 haftalik dastur",
+        "period": "2 haftalik tarif",
         "description": "Imtihon muhitiga moslashing",
         "features": ["6 ta to’liq mock imtihon", "2 ta Speaking imtihoni"],
         "regFeatures": ["2 hafta davomida amal qiladi", "6 ta to’liq mock imtihon", "2 ta Speaking imtihoni"],
@@ -317,7 +342,7 @@
       },
       "twelve": {
         "name": "Twelve Sessions",
-        "period": "4 haftalik dastur",
+        "period": "4 haftalik tarif",
         "description": "Natijangizni kamida 1 ballga oshiring",
         "features": ["12 ta to’liq mock imtihon", "4 ta Speaking imtihoni"],
         "regFeatures": ["4 hafta davomida amal qiladi", "12 ta to’liq mock imtihon", "4 ta Speaking imtihoni"],
@@ -380,6 +405,22 @@
     "subtitle": "Shaxsiy ma’lumotlar va imtihonlar tarixi",
     "personalInfo": "Shaxsiy ma’lumotlar",
     "username": "Foydalanuvchi nomi",
+    "password": "Parol",
+    "showPassword": "Parolni ko‘rsatish",
+    "hidePassword": "Parolni yashirish",
+    "passwordLoadError": "Parolni yuklab bo‘lmadi. Qaytadan urinib ko‘ring.",
+    "changePassword": {
+      "open": "Parolni o‘zgartirish",
+      "title": "Parolni o‘zgartirish",
+      "oldPassword": "Joriy parol",
+      "newPassword": "Yangi parol",
+      "confirmNewPassword": "Yangi parolni tasdiqlang",
+      "submit": "Saqlash",
+      "saving": "Saqlanmoqda...",
+      "success": "Parol muvaffaqiyatli o‘zgartirildi",
+      "required": "Maydonni to‘ldiring",
+      "mismatch": "Parollar mos kelmadi"
+    },
     "fullName": "To’liq ism-familiya",
     "email": "Email",
     "phone": "Telefon",

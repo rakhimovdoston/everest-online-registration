@@ -167,7 +167,7 @@ const LoginModal = () => {
         login(profileData, accessToken, refreshToken);
         onLoginSuccess();
       }
-    } catch (error) {
+    } catch {
       setOtpError(t('auth.invalidCode'));
     } finally {
       setIsVerifying(false);
@@ -355,7 +355,7 @@ const LoginModal = () => {
                   </button>
                 )}
 
-                <div className="p-8">
+                <div className="p-6 sm:p-8">
                   {/* Header */}
                   <div className="text-center mb-6">
                     <Dialog.Title className="text-2xl font-bold text-slate-900 mb-1">

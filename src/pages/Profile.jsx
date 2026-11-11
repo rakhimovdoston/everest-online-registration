@@ -8,11 +8,15 @@ import {
   PhoneIcon,
   PencilIcon,
   TrophyIcon,
+  KeyIcon,
+  EyeIcon,
+  EyeSlashIcon,
 } from "@heroicons/react/24/outline";
 import { useAuth } from "../contexts/AuthContext";
 import { authApi } from "../services/api";
 import Button from "../components/ui/Button";
 import BookingCard from "../components/profile/BookingCard";
+import ChangePasswordForm from "../components/profile/ChangePasswordForm";
 import UpcomingBookingBanner from "../components/upcoming/UpcomingBookingBanner";
 import LateArrivalWarning from "../components/ui/LateArrivalWarning";
 import FormInput from "../components/forms/FormInput";
@@ -31,10 +35,48 @@ const profileSchema = z.object({
 const Profile = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { isAuthenticated, user, updateUser } = useAuth();
+  const { user, updateUser } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState("");
+
+  // Password is fetched only when the user asks to see it, and kept hidden by default
+  const [password, setPassword] = useState(null);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isPasswordLoading, setIsPasswordLoading] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [passwordChanged, setPasswordChanged] = useState(false);
+
+  const handlePasswordChanged = () => {
+    setIsChangingPassword(false);
+    setPasswordChanged(true);
+    // Drop the cached password so the eye button fetches the new one
+    setPassword(null);
+    setIsPasswordVisible(false);
+  };
+
+  const togglePassword = async () => {
+    if (isPasswordVisible) {
+      setIsPasswordVisible(false);
+      return;
+    }
+    if (password === null) {
+      try {
+        setIsPasswordLoading(true);
+        setPasswordError("");
+        const response = await authApi.getPassword();
+        const data = response.data ?? response;
+        setPassword(typeof data === "string" ? data : data?.password || "");
+      } catch {
+        setPasswordError(t("profile.passwordLoadError"));
+        return;
+      } finally {
+        setIsPasswordLoading(false);
+      }
+    }
+    setIsPasswordVisible(true);
+  };
 
   // Check if profile is incomplete
   const isProfileIncomplete =
@@ -57,13 +99,8 @@ const Profile = () => {
     mode: "onBlur",
   });
 
+  // Set initial form values (auth is enforced by ProtectedRoute)
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/login");
-      return;
-    }
-
-    // Set initial form values
     if (user) {
       setValue("username", user.username || "");
       setValue("firstName", user.firstName || "");
@@ -71,7 +108,7 @@ const Profile = () => {
       setValue("phone", user.phone || "");
       setValue("email", user.email || "");
     }
-  }, [isAuthenticated, navigate, user, setValue]);
+  }, [user, setValue]);
 
   // Fetch bookings from API
   useEffect(() => {
@@ -151,7 +188,7 @@ const Profile = () => {
           transition={{ duration: 0.5 }}
           className="mb-8"
         >
-          <h1 className="text-4xl font-display font-bold text-slate-900 mb-2">
+          <h1 className="text-3xl sm:text-4xl font-display font-bold text-slate-900 mb-2">
             {t("profile.title")}
           </h1>
           <p className="text-slate-600">{t("profile.subtitle")}</p>
@@ -159,7 +196,7 @@ const Profile = () => {
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Left Sidebar - User Info */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 min-w-0">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -278,6 +315,67 @@ const Profile = () => {
                     </div>
                   </div>
 
+                  <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-xl">
+                    <KeyIcon className="w-5 h-5 text-slate-400 flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm text-slate-600">
+                        {t("profile.password")}
+                      </p>
+                      <p className="text-slate-900 break-all">
+                        {isPasswordVisible ? password || "—" : "••••••••"}
+                      </p>
+                      {passwordError && (
+                        <p className="text-xs text-red-600 mt-1">{passwordError}</p>
+                      )}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={togglePassword}
+                      disabled={isPasswordLoading}
+                      aria-label={isPasswordVisible ? t("profile.hidePassword") : t("profile.showPassword")}
+                      title={isPasswordVisible ? t("profile.hidePassword") : t("profile.showPassword")}
+                      className="p-2 rounded-lg text-indigo-600 hover:bg-indigo-50 transition-colors disabled:opacity-50 flex-shrink-0"
+                    >
+                      {isPasswordLoading ? (
+                        <svg className="animate-spin w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                        </svg>
+                      ) : isPasswordVisible ? (
+                        <EyeSlashIcon className="w-5 h-5" />
+                      ) : (
+                        <EyeIcon className="w-5 h-5" />
+                      )}
+                    </button>
+                  </div>
+
+                  {passwordChanged && (
+                    <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+                      <p className="text-sm text-green-700 text-center">
+                        {t("profile.changePassword.success")}
+                      </p>
+                    </div>
+                  )}
+
+                  {isChangingPassword ? (
+                    <ChangePasswordForm
+                      onSuccess={handlePasswordChanged}
+                      onCancel={() => setIsChangingPassword(false)}
+                    />
+                  ) : (
+                    <Button
+                      variant="secondary"
+                      onClick={() => {
+                        setIsChangingPassword(true);
+                        setPasswordChanged(false);
+                      }}
+                      className="w-full"
+                    >
+                      <KeyIcon className="w-4 h-4 mr-2" />
+                      {t("profile.changePassword.open")}
+                    </Button>
+                  )}
+
                   <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-xl">
                     <UserCircleIcon className="w-12 h-12 text-slate-400" />
                     <div>
@@ -295,10 +393,10 @@ const Profile = () => {
                   </div>
 
                   <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-xl">
-                    <EnvelopeIcon className="w-5 h-5 text-slate-400" />
-                    <div>
+                    <EnvelopeIcon className="w-5 h-5 text-slate-400 flex-shrink-0" />
+                    <div className="min-w-0">
                       <p className="text-sm text-slate-600">Email</p>
-                      <p className="text-slate-900">{user.email || "—"}</p>
+                      <p className="text-slate-900 break-all">{user.email || "—"}</p>
                     </div>
                   </div>
 
@@ -346,8 +444,8 @@ const Profile = () => {
                       {t("profile.completedTests")}
                     </p>
                   </div>
-                  <div className="text-center p-3 bg-purple-50 rounded-lg">
-                    <p className="text-2xl font-bold text-purple-600">
+                  <div className="text-center p-3 bg-indigo-50 rounded-lg">
+                    <p className="text-2xl font-bold text-indigo-600">
                       {testRegistrations.reduce(
                         (sum, reg) => sum + (reg.speakings?.length || 0),
                         0
@@ -378,7 +476,7 @@ const Profile = () => {
           </div>
 
           {/* Right Content - Test History */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 min-w-0">
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}

@@ -6,6 +6,7 @@ import { CheckCircleIcon as CheckCircleSolidIcon } from '@heroicons/react/24/sol
 import { usePackages } from '../../contexts/PackageContext';
 import { useAuth } from '../../contexts/AuthContext';
 import Button from '../../components/ui/Button';
+import StepProgress from '../../components/registration/StepProgress';
 import { useTranslation } from 'react-i18next';
 import CompleteProfileModal from '../../components/auth/CompleteProfileModal';
 
@@ -26,7 +27,7 @@ const Step1Package = () => {
   const { user, isLoading: isAuthLoading } = useAuth();
   const [registrationType] = useState('myself');
   const [selectedPackage, setSelectedPackage] = useState(null);
-  const [showCompleteProfile, setShowCompleteProfile] = useState(false);
+  const [profileModalClosed, setProfileModalClosed] = useState(false);
 
   // Check if user profile is incomplete (no firstName or lastName)
   const isProfileIncomplete = !isAuthLoading && user && (!user.firstName || !user.lastName);
@@ -38,11 +39,7 @@ const Step1Package = () => {
       : sessionStorage.getItem('preselectedPackageId');
 
   // Show complete profile modal as soon as we know the profile is incomplete
-  useEffect(() => {
-    if (isProfileIncomplete) {
-      setShowCompleteProfile(true);
-    }
-  }, [isProfileIncomplete]);
+  const showCompleteProfile = isProfileIncomplete && !profileModalClosed;
 
   // Auto-select and skip to step 2 when a package was chosen from the Home page
   useEffect(() => {
@@ -58,7 +55,7 @@ const Step1Package = () => {
       JSON.stringify({ registrationType: 'myself', package: pkg })
     );
     navigate('/test-registration/branch', { replace: true });
-  }, [preselectedId, isLoading, activePackages, isProfileIncomplete]);
+  }, [preselectedId, isLoading, activePackages, isProfileIncomplete, navigate]);
 
   const handleNext = () => {
     if (!selectedPackage) {
@@ -97,35 +94,11 @@ const Step1Package = () => {
   return (
     <>
     {showCompleteProfile && (
-      <CompleteProfileModal onComplete={() => setShowCompleteProfile(false)} />
+      <CompleteProfileModal onComplete={() => setProfileModalClosed(true)} />
     )}
     <div className="min-h-screen bg-slate-50 pt-28 pb-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
-        {/* Progress Steps */}
-        <div className="mb-8">
-          <div className="flex items-center justify-center space-x-4">
-            <div className="flex items-center">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-indigo-600 text-white font-semibold">
-                1
-              </div>
-              <span className="ml-2 text-sm font-medium text-indigo-600">{t('testRegistration.progress.package')}</span>
-            </div>
-            <div className="w-16 h-0.5 bg-slate-300" />
-            <div className="flex items-center">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-300 text-slate-600 font-semibold">
-                2
-              </div>
-              <span className="ml-2 text-sm font-medium text-slate-500">{t('testRegistration.progress.branch')}</span>
-            </div>
-            <div className="w-16 h-0.5 bg-slate-300" />
-            <div className="flex items-center">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-300 text-slate-600 font-semibold">
-                3
-              </div>
-              <span className="ml-2 text-sm font-medium text-slate-500">{t('testRegistration.progress.details')}</span>
-            </div>
-          </div>
-        </div>
+        <StepProgress current={1} />
 
         {/* Header */}
         <motion.div
@@ -134,7 +107,7 @@ const Step1Package = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-8"
         >
-          <h1 className="text-4xl font-display font-bold text-slate-900 mb-2">
+          <h1 className="text-3xl sm:text-4xl font-display font-bold text-slate-900 mb-2">
             {t('testRegistration.step1.title')}
           </h1>
           <p className="text-slate-600">
@@ -212,7 +185,7 @@ const Step1Package = () => {
         </motion.div>
 
         {/* Navigation */}
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center gap-3">
           <Button
             variant="secondary"
             size="lg"

@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
+import { useTranslation } from 'react-i18next';
+import { ExclamationCircleIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 
 const FormInput = ({
   label,
@@ -11,6 +13,14 @@ const FormInput = ({
   required = false,
   ...props
 }) => {
+  const { t } = useTranslation();
+  // Password fields get a show/hide toggle
+  const isPassword = type === 'password';
+  const [isVisible, setIsVisible] = useState(false);
+
+  // Leave room on the right for the error icon and/or the toggle
+  const rightPadding = isPassword ? (error ? 'pr-20' : 'pr-12') : error ? 'pr-11' : '';
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -25,19 +35,30 @@ const FormInput = ({
       <div className="relative">
         <input
           id={name}
-          type={type}
+          type={isPassword && isVisible ? 'text' : type}
           placeholder={placeholder}
           {...register(name)}
-          className={`w-full px-4 py-3 rounded-lg border-2 transition-all duration-200 focus:outline-none focus:ring-2 ${
+          className={`w-full px-4 py-3 rounded-lg border-2 transition-all duration-200 focus:outline-none focus:ring-2 ${rightPadding} ${
             error
               ? 'border-red-500 focus:border-red-500 focus:ring-red-200 animate-shake'
               : 'border-slate-300 focus:border-indigo-500 focus:ring-indigo-200'
           }`}
           {...props}
         />
-        {error && (
-          <div className="absolute right-3 top-1/2 -translate-y-1/2">
-            <ExclamationCircleIcon className="w-5 h-5 text-red-500" />
+        {(error || isPassword) && (
+          <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+            {error && <ExclamationCircleIcon className="w-5 h-5 text-red-500" />}
+            {isPassword && (
+              <button
+                type="button"
+                onClick={() => setIsVisible((v) => !v)}
+                aria-label={isVisible ? t('profile.hidePassword') : t('profile.showPassword')}
+                title={isVisible ? t('profile.hidePassword') : t('profile.showPassword')}
+                className="p-1 rounded-md text-slate-500 hover:text-indigo-600 transition-colors"
+              >
+                {isVisible ? <EyeSlashIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
+              </button>
+            )}
           </div>
         )}
       </div>

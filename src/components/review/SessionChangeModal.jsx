@@ -5,6 +5,13 @@ import { CalendarIcon, ClockIcon, ChevronLeftIcon, ChevronRightIcon, CheckCircle
 import { useTranslation } from 'react-i18next';
 import { testSessionApi, branchApi } from '../../services/api';
 
+const formatDateISO = (date) => {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+};
+
 const SessionChangeModal = ({ type, branchId, currentSession, allSessions = [], changingIndex, excludeIds = [], onSelect, onClose }) => {
   const { t } = useTranslation();
 
@@ -34,58 +41,64 @@ const SessionChangeModal = ({ type, branchId, currentSession, allSessions = [], 
   // Fetch speakers for speaking mode and pre-select current session's speaker
   useEffect(() => {
     if (type !== 'speaking' || !branchId) return;
-    setIsLoadingSpeakers(true);
-    branchApi.getSpeakers(branchId)
-      .then((response) => {
-        const list = response.data || response || [];
-        const speakerList = Array.isArray(list) ? list : [];
-        setSpeakers(speakerList);
 
-        // Pre-select current session's speaker
-        if (currentSession) {
-          const currentSpeakerName = currentSession.speakerName || currentSession.speaker_name;
-          const currentSpeakerId = currentSession.speakerId || currentSession.speaker_id;
-          const matched = speakerList.find(s =>
-            (currentSpeakerId && s.id === currentSpeakerId) ||
-            (currentSpeakerName && (s.firstname === currentSpeakerName || s.name === currentSpeakerName))
-          );
-          if (matched) {
-            setSelectedSpeaker(matched);
+    const fetchSpeakers = () => {
+      setIsLoadingSpeakers(true);
+      return branchApi.getSpeakers(branchId)
+        .then((response) => {
+          const list = response.data || response || [];
+          const speakerList = Array.isArray(list) ? list : [];
+          setSpeakers(speakerList);
+
+          // Pre-select current session's speaker
+          if (currentSession) {
+            const currentSpeakerName = currentSession.speakerName || currentSession.speaker_name;
+            const currentSpeakerId = currentSession.speakerId || currentSession.speaker_id;
+            const matched = speakerList.find(s =>
+              (currentSpeakerId && s.id === currentSpeakerId) ||
+              (currentSpeakerName && (s.firstname === currentSpeakerName || s.name === currentSpeakerName))
+            );
+            if (matched) {
+              setSelectedSpeaker(matched);
+            }
           }
-        }
-      })
-      .catch(() => setSpeakers([]))
-      .finally(() => setIsLoadingSpeakers(false));
-  }, [type, branchId]);
+        })
+        .catch(() => setSpeakers([]))
+        .finally(() => setIsLoadingSpeakers(false));
+    };
+
+    fetchSpeakers();
+  }, [type, branchId, currentSession]);
 
   // Fetch sessions when date selected
   useEffect(() => {
     if (!selectedDate || !branchId) return;
-    setIsLoadingSessions(true);
-    setAvailableSessions([]);
+    // Ignore responses for a date/speaker the user has already switched away from
+    let ignore = false;
 
-    const dateStr = formatDateISO(selectedDate);
+    const fetchSessions = () => {
+      setIsLoadingSessions(true);
+      setAvailableSessions([]);
 
-    const promise = type === 'test'
-      ? testSessionApi.getAvailable(dateStr, branchId)
-      : testSessionApi.getSpeakingAvailable(dateStr, branchId, 'FACE_TO_FACE', selectedSpeaker?.id || undefined);
+      const dateStr = formatDateISO(selectedDate);
+      const promise = type === 'test'
+        ? testSessionApi.getAvailable(dateStr, branchId)
+        : testSessionApi.getSpeakingAvailable(dateStr, branchId, 'FACE_TO_FACE', selectedSpeaker?.id || undefined);
 
-    promise
-      .then((response) => {
-        const sessions = response.data || response || [];
-        setAvailableSessions(Array.isArray(sessions) ? sessions : []);
-      })
-      .catch(() => setAvailableSessions([]))
-      .finally(() => setIsLoadingSessions(false));
+      return promise
+        .then((response) => {
+          const sessions = response.data || response || [];
+          if (!ignore) setAvailableSessions(Array.isArray(sessions) ? sessions : []);
+        })
+        .catch(() => { if (!ignore) setAvailableSessions([]); })
+        .finally(() => { if (!ignore) setIsLoadingSessions(false); });
+    };
+
+    fetchSessions();
+    return () => { ignore = true; };
   }, [selectedDate, branchId, type, selectedSpeaker?.id]);
 
   // Calendar helpers
-  const formatDateISO = (date) => {
-    const y = date.getFullYear();
-    const m = String(date.getMonth() + 1).padStart(2, '0');
-    const d = String(date.getDate()).padStart(2, '0');
-    return `${y}-${m}-${d}`;
-  };
 
   const getDaysInMonth = (date) => new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
 

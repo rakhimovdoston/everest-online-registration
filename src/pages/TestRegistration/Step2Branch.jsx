@@ -5,6 +5,8 @@ import { BuildingOfficeIcon, MapPinIcon, UsersIcon } from '@heroicons/react/24/o
 import { CheckCircleIcon as CheckCircleSolidIcon } from '@heroicons/react/24/solid';
 import { usePackages } from '../../contexts/PackageContext';
 import Button from '../../components/ui/Button';
+import StepProgress from '../../components/registration/StepProgress';
+import { loadRegistration } from '../../utils/registrationStorage';
 import { useTranslation } from 'react-i18next';
 
 const Step2Branch = () => {
@@ -12,17 +14,12 @@ const Step2Branch = () => {
   const navigate = useNavigate();
   const { activeBranches, isLoading } = usePackages();
   const [selectedBranch, setSelectedBranch] = useState(null);
-  const [registrationData, setRegistrationData] = useState(null);
+  const [registrationData] = useState(loadRegistration);
 
+  // No previous step data — start over
   useEffect(() => {
-    // Load previous step data
-    const savedData = localStorage.getItem('testRegistration');
-    if (!savedData) {
-      navigate('/test-registration');
-      return;
-    }
-    setRegistrationData(JSON.parse(savedData));
-  }, [navigate]);
+    if (!registrationData) navigate('/test-registration');
+  }, [registrationData, navigate]);
 
   const handleNext = () => {
     if (!selectedBranch) {
@@ -48,31 +45,7 @@ const Step2Branch = () => {
   return (
     <div className="min-h-screen bg-slate-50 pt-28 pb-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
-        {/* Progress Steps */}
-        <div className="mb-8">
-          <div className="flex items-center justify-center space-x-4">
-            <div className="flex items-center">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-600 text-white">
-                <CheckCircleSolidIcon className="w-6 h-6" />
-              </div>
-              <span className="ml-2 text-sm font-medium text-green-600">{t('testRegistration.progress.package')}</span>
-            </div>
-            <div className="w-16 h-0.5 bg-indigo-600" />
-            <div className="flex items-center">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-indigo-600 text-white font-semibold">
-                2
-              </div>
-              <span className="ml-2 text-sm font-medium text-indigo-600">{t('testRegistration.progress.branch')}</span>
-            </div>
-            <div className="w-16 h-0.5 bg-slate-300" />
-            <div className="flex items-center">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-300 text-slate-600 font-semibold">
-                3
-              </div>
-              <span className="ml-2 text-sm font-medium text-slate-500">{t('testRegistration.progress.details')}</span>
-            </div>
-          </div>
-        </div>
+        <StepProgress current={2} />
 
         {/* Header */}
         <motion.div
@@ -81,7 +54,7 @@ const Step2Branch = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-8"
         >
-          <h1 className="text-4xl font-display font-bold text-slate-900 mb-2">
+          <h1 className="text-3xl sm:text-4xl font-display font-bold text-slate-900 mb-2">
             {t('testRegistration.step2.title')}
           </h1>
           <p className="text-slate-600">
@@ -178,7 +151,7 @@ const Step2Branch = () => {
         </motion.div>
 
         {/* Navigation */}
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center gap-3">
           <Button
             variant="secondary"
             size="lg"

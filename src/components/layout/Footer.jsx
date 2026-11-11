@@ -1,4 +1,4 @@
-import { Instagram, Send, Youtube } from "lucide-react";
+import { Instagram, Phone, Send, Youtube } from "lucide-react";
 import { footer_logo } from "../../assets";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -10,80 +10,80 @@ const Footer = () => {
   const lang = i18n.language?.slice(0, 2);
   const aboutUrl = `https://everestlc.uz/${lang === "ru" ? "ru" : lang === "en" ? "en" : "uz"}/about`;
 
-  const socialLinks = [
+  const contactLinks = [
+    {
+      label: "78 888 8008",
+      href: "tel:+998788888008",
+      icon: Phone,
+    },
     {
       label: "Instagram",
       href: "https://www.instagram.com/everest_learning_center/",
       icon: Instagram,
+      external: true,
     },
     {
       label: "Telegram",
       href: "https://t.me/everestofficial",
       icon: Send,
+      external: true,
     },
     {
       label: "YouTube",
       href: "https://www.youtube.com/@everest_official",
       icon: Youtube,
+      external: true,
     },
   ];
 
   return (
-    <footer className="relative bg-slate-900 text-white">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+    <footer className="bg-ink px-5 text-white">
+      <div className="mx-auto max-w-[1200px]">
         {/* Main Footer Content */}
-        <div className="py-16 grid md:grid-cols-2 gap-12">
+        <div className="flex flex-col justify-between gap-10 py-12 md:flex-row md:py-14">
           {/* Brand Column */}
           <div>
-            <div className="mb-4">
-              <Link to={"/"}>
-                <img
-                  src={footer_logo}
-                  alt="Everest Online Registration Logo"
-                  height={200}
-                  width={150}
-                />
-              </Link>
-            </div>
-            <p className="text-slate-400 mb-6 leading-relaxed max-w-sm">
+            <Link to={"/"} className="mb-5 inline-block">
+              <img
+                src={footer_logo}
+                alt="Everest Online Registration Logo"
+                className="h-auto w-[135px]"
+              />
+            </Link>
+            <p className="max-w-lg text-[15px] font-medium leading-relaxed text-ink-muted">
               {t("footer.description")}
             </p>
           </div>
 
-          {/* Company + Social */}
-          <div className="flex flex-col sm:flex-row gap-12">
+          {/* Company + Contact */}
+          <div className="flex gap-12">
             {/* Company Links */}
             <div>
-              <h4 className="font-semibold mb-4">{t("footer.company")}</h4>
-              <ul className="space-y-3">
-                <li>
-                  <a
-                    href={aboutUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm text-slate-400 hover:text-white transition-colors"
-                  >
-                    {t("footer.aboutUs")}
-                  </a>
-                </li>
-              </ul>
+              <h4 className="mb-4 font-bold">{t("footer.company")}</h4>
+              <a
+                href={aboutUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-medium text-ink-muted transition-colors hover:text-white"
+              >
+                {t("footer.aboutUs")}
+              </a>
             </div>
 
-            {/* Social Links */}
+            {/* Contact Links */}
             <div>
-              <h4 className="font-semibold mb-4">{t("footer.contact")}</h4>
+              <h4 className="mb-4 font-bold">{t("footer.contact")}</h4>
               <ul className="space-y-3">
-                {socialLinks.map((item) => {
+                {contactLinks.map((item) => {
                   const Icon = item.icon;
                   return (
                     <li key={item.label}>
                       <a
                         href={item.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
+                        {...(item.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                        className="flex items-center gap-2.5 text-sm font-medium text-ink-muted transition-colors hover:text-white"
                       >
-                        <Icon className="w-4 h-4" />
+                        <Icon className="h-4 w-4" />
                         {item.label}
                       </a>
                     </li>
@@ -95,15 +95,12 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-slate-800 py-8">
-          <p className="text-sm text-slate-500">
+        <div className="border-t border-white/15 py-6">
+          <p className="text-sm font-medium text-ink-muted">
             {t("footer.allRightsReserved").replace("{year}", currentYear)}
           </p>
         </div>
       </div>
-
-      {/* Decorative gradient */}
-      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" />
     </footer>
   );
 };

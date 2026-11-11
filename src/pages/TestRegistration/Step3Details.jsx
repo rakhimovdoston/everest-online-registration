@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { motion } from 'framer-motion';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { CheckCircleIcon as CheckCircleSolidIcon, PencilIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { CalendarIcon, ClockIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import { Dialog, Transition } from '@headlessui/react';
@@ -13,22 +13,31 @@ import { usePackages } from '../../contexts/PackageContext';
 import { testSessionApi } from '../../services/api';
 import FormInput from '../../components/forms/FormInput';
 import Button from '../../components/ui/Button';
+import StepProgress from '../../components/registration/StepProgress';
+import { loadRegistration } from '../../utils/registrationStorage';
 
 const detailsSchema = z.object({
   firstName: z.string().min(2, "Ism kamida 2 ta belgidan iborat bo'lishi kerak"),
   lastName: z.string().min(2, "Familiya kamida 2 ta belgidan iborat bo'lishi kerak"),
-  phone: z.string().regex(/^[\+]?[0-9]{9,13}$/, "Telefon raqami noto'g'ri"),
+  phone: z.string().regex(/^\+?[0-9]{9,13}$/, "Telefon raqami noto'g'ri"),
   email: z.string().email("Email noto'g'ri").optional().or(z.literal('')),
 });
+
+const formatDateISO = (date) => {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+};
 
 const Step3Details = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const location = useLocation();
-  const { isAuthenticated, user } = useAuth();
+  const { user } = useAuth();
   const { activePackages, activeBranches } = usePackages();
-  const [registrationData, setRegistrationData] = useState(null);
-  const [selectedTestDates, setSelectedTestDates] = useState([]);
+  // Load registration data + any previously selected test dates
+  const [registrationData, setRegistrationData] = useState(loadRegistration);
+  const [selectedTestDates, setSelectedTestDates] = useState(() => registrationData?.testDates || []);
 
   // Calendar state
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -53,71 +62,52 @@ const Step3Details = () => {
     mode: 'onBlur',
   });
 
-  // Check authentication and load registration data
+  // Missing earlier steps — send the user back (auth is enforced by ProtectedRoute)
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate(`/login?returnUrl=${encodeURIComponent(location.pathname)}`);
-      return;
-    }
-
-    const savedData = localStorage.getItem('testRegistration');
-    if (!savedData) {
+    if (!registrationData) {
       navigate('/test-registration');
-      return;
-    }
-    const data = JSON.parse(savedData);
-    if (!data.branch) {
+    } else if (!registrationData.branch) {
       navigate('/test-registration/branch');
-      return;
     }
-    setRegistrationData(data);
-
-    // Load previously selected test dates if any
-    if (data.testDates) {
-      setSelectedTestDates(data.testDates);
-    }
-  }, [isAuthenticated, navigate, location.pathname]);
+  }, [registrationData, navigate]);
 
   // Auto-fill form if registrationType is 'myself'
   useEffect(() => {
-    if (registrationData?.registrationType === 'myself' && isAuthenticated && user) {
+    if (registrationData?.registrationType === 'myself' && user) {
       if (user.firstName) setValue('firstName', user.firstName, { shouldValidate: false });
       if (user.lastName) setValue('lastName', user.lastName, { shouldValidate: false });
       if (user.email) setValue('email', user.email, { shouldValidate: false });
       if (user.phone) setValue('phone', user.phone, { shouldValidate: false });
     }
-  }, [registrationData, isAuthenticated, user, setValue]);
+  }, [registrationData, user, setValue]);
 
-  // Fetch available sessions when a date is selected
+  // Fetch available sessions when a date is selected.
+  // `ignore` drops responses for a date the user has already clicked away from.
+  const branchId = registrationData?.branch?.id;
   useEffect(() => {
-    if (selectedDate && registrationData?.branch?.id) {
-      fetchSessions(selectedDate, registrationData.branch.id);
-    }
-  }, [selectedDate, registrationData?.branch?.id]);
+    if (!selectedDate || !branchId) return;
+    let ignore = false;
 
-  const fetchSessions = async (date, branchId) => {
-    setIsLoadingSessions(true);
-    setAvailableSessions([]);
-    try {
-      const dateStr = formatDateISO(date);
-      const response = await testSessionApi.getAvailable(dateStr, branchId);
-      const sessions = response.data || response || [];
-      setAvailableSessions(Array.isArray(sessions) ? sessions : []);
-    } catch (error) {
-      console.error('Error fetching sessions:', error);
+    const fetchSessions = async () => {
+      setIsLoadingSessions(true);
       setAvailableSessions([]);
-    } finally {
-      setIsLoadingSessions(false);
-    }
-  };
+      try {
+        const response = await testSessionApi.getAvailable(formatDateISO(selectedDate), branchId);
+        const sessions = response.data || response || [];
+        if (!ignore) setAvailableSessions(Array.isArray(sessions) ? sessions : []);
+      } catch (error) {
+        console.error('Error fetching sessions:', error);
+        if (!ignore) setAvailableSessions([]);
+      } finally {
+        if (!ignore) setIsLoadingSessions(false);
+      }
+    };
+
+    fetchSessions();
+    return () => { ignore = true; };
+  }, [selectedDate, branchId]);
 
   // Calendar helpers
-  const formatDateISO = (date) => {
-    const y = date.getFullYear();
-    const m = String(date.getMonth() + 1).padStart(2, '0');
-    const d = String(date.getDate()).padStart(2, '0');
-    return `${y}-${m}-${d}`;
-  };
 
   const getDaysInMonth = (date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -306,38 +296,7 @@ const Step3Details = () => {
   return (
     <div className="min-h-screen bg-slate-50 pt-28 pb-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
-        {/* Progress Steps */}
-        <div className="mb-8">
-          <div className="flex items-center justify-center space-x-4">
-            <div className="flex items-center">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-600 text-white">
-                <CheckCircleSolidIcon className="w-6 h-6" />
-              </div>
-              <span className="ml-2 text-sm font-medium text-green-600">{t('testRegistration.progress.package')}</span>
-            </div>
-            <div className="w-16 h-0.5 bg-green-600" />
-            <div className="flex items-center">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-600 text-white">
-                <CheckCircleSolidIcon className="w-6 h-6" />
-              </div>
-              <span className="ml-2 text-sm font-medium text-green-600">{t('testRegistration.progress.branch')}</span>
-            </div>
-            <div className="w-16 h-0.5 bg-indigo-600" />
-            <div className="flex items-center">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-indigo-600 text-white font-semibold">
-                3
-              </div>
-              <span className="ml-2 text-sm font-medium text-indigo-600">{t('testRegistration.progress.testDates')}</span>
-            </div>
-            <div className="w-16 h-0.5 bg-slate-300" />
-            <div className="flex items-center">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-300 text-slate-600 font-semibold">
-                4
-              </div>
-              <span className="ml-2 text-sm font-medium text-slate-400">{t('testRegistration.progress.speaking')}</span>
-            </div>
-          </div>
-        </div>
+        <StepProgress current={3} />
 
         {/* Header */}
         <motion.div
@@ -346,7 +305,7 @@ const Step3Details = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-8"
         >
-          <h1 className="text-4xl font-display font-bold text-slate-900 mb-2">
+          <h1 className="text-3xl sm:text-4xl font-display font-bold text-slate-900 mb-2">
             {t('testRegistration.step3Extended.title')}
           </h1>
           <p className="text-slate-600">
@@ -397,7 +356,7 @@ const Step3Details = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="bg-white rounded-2xl shadow-xl p-8 border border-slate-200 mb-6"
+            className="bg-white rounded-2xl shadow-xl p-5 sm:p-8 border border-slate-200 mb-6"
           >
             <h2 className="text-lg font-semibold text-slate-900 mb-6">
               {t('testRegistration.step3Extended.personalInfo')}
@@ -448,7 +407,7 @@ const Step3Details = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="bg-white rounded-2xl shadow-xl p-8 border border-slate-200 mb-6"
+            className="bg-white rounded-2xl shadow-xl p-5 sm:p-8 border border-slate-200 mb-6"
           >
             <div className="mb-6">
               <h2 className="text-lg font-semibold text-slate-900 mb-2">
@@ -660,7 +619,7 @@ const Step3Details = () => {
           </motion.div>
 
           {/* Navigation */}
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center gap-3">
             <Button
               variant="secondary"
               size="lg"

@@ -36,8 +36,19 @@ i18n
     },
   });
 
+// Keep <html lang>, <title> and meta description in the active language
+const applySeo = (lng) => {
+  const t = i18n.getFixedT(lng);
+  document.documentElement.lang = lng;
+  document.title = t('seo.title');
+  document.querySelector('meta[name="description"]')?.setAttribute('content', t('seo.description'));
+};
+
+applySeo(i18n.language);
+
 i18n.on('languageChanged', (lng) => {
   Cookies.set('language', lng, { expires: 365 });
+  applySeo(lng);
 });
 
 export default i18n;

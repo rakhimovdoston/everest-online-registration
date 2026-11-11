@@ -120,7 +120,7 @@ const WritingResults = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.1 }}
-          className="bg-gradient-to-r from-orange-50 to-amber-50 rounded-2xl shadow-xl p-8 mb-8 border-2 border-orange-200 text-center"
+          className="bg-gradient-to-r from-orange-50 to-amber-50 rounded-2xl shadow-xl p-5 sm:p-8 mb-8 border-2 border-orange-200 text-center"
         >
           <p className="text-sm text-slate-600 mb-2">Overall Writing Score</p>
           <p className={`text-6xl font-bold ${getOverallColor(results.score)}`}>
@@ -140,7 +140,7 @@ const WritingResults = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.2 + answerIdx * 0.1 }}
-                className="bg-white rounded-2xl shadow-xl p-8 border border-slate-200"
+                className="bg-white rounded-2xl shadow-xl p-5 sm:p-8 border border-slate-200"
               >
                 {/* Task Header */}
                 <div className="flex items-center justify-between mb-6">

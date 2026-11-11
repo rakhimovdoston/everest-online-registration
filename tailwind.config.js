@@ -1,3 +1,32 @@
+// Brand scales: every indigo-*/blue-* and red-* class across the pages resolves to these
+const brandBlue = {
+  50: '#E6EEFF',
+  100: '#D6E3FF',
+  200: '#A9C4FF',
+  300: '#7EA6FF',
+  400: '#4D83FC',
+  500: '#0154F8',
+  600: '#0154F8',
+  700: '#0046D2',
+  800: '#0037A6',
+  900: '#002A80',
+  950: '#001A52',
+};
+
+const brandRed = {
+  50: '#FFE6ED',
+  100: '#FFE6ED',
+  200: '#FFB8CC',
+  300: '#FF8AAB',
+  400: '#FF4D7E',
+  500: '#FE014D',
+  600: '#FE014D',
+  700: '#DB0042',
+  800: '#B80037',
+  900: '#8F002B',
+  950: '#5C001C',
+};
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -7,9 +36,27 @@ export default {
   theme: {
     extend: {
       colors: {
+        indigo: brandBlue,
+        blue: brandBlue,
+        red: brandRed,
+        ink: {
+          DEFAULT: '#1C2329',
+          soft: '#4F565C',
+          muted: '#B4BBC1',
+        },
+        hot: {
+          DEFAULT: '#FE014D',
+          light: '#FFE6ED',
+        },
+        line: '#E6E8EB',
+        surface: '#F5F6F7',
+        control: {
+          DEFAULT: '#EBEDF0',
+          hover: '#DFE2E6',
+        },
         // Primary - Near-black (exam serious tone)
         primary: {
-          DEFAULT: '#1a1a1a',
+          DEFAULT: '#1C2329',
           light: '#2a2a2a',
         },
         // Accent - Restrained indigo
@@ -29,8 +76,8 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['Coolvetica', 'system-ui', 'sans-serif'],
-        display: ['Coolvetica', 'system-ui', 'sans-serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['Inter', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         'hero': ['3.5rem', { lineHeight: '1.15', letterSpacing: '-0.02em' }],

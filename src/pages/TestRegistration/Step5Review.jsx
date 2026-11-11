@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {
-  CheckCircleIcon as CheckCircleSolidIcon,
   BuildingOfficeIcon,
   UserIcon,
   PhoneIcon,
@@ -13,6 +12,7 @@ import {
   PencilSquareIcon
 } from '@heroicons/react/24/outline';
 import Button from '../../components/ui/Button';
+import StepProgress from '../../components/registration/StepProgress';
 import { useTranslation } from 'react-i18next';
 import { bookingApi } from '../../services/api';
 import SessionChangeModal from '../../components/review/SessionChangeModal';
@@ -213,45 +213,7 @@ const Step5Review = () => {
         )}
 
         {registrationData && (<>
-        {/* Progress Steps */}
-        <div className="mb-8">
-          <div className="flex items-center justify-center space-x-2">
-            <div className="flex items-center">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-600 text-white">
-                <CheckCircleSolidIcon className="w-6 h-6" />
-              </div>
-              <span className="ml-2 text-sm font-medium text-green-600">{t('testRegistration.progress.package')}</span>
-            </div>
-            <div className="w-12 h-0.5 bg-green-600" />
-            <div className="flex items-center">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-600 text-white">
-                <CheckCircleSolidIcon className="w-6 h-6" />
-              </div>
-              <span className="ml-2 text-sm font-medium text-green-600">{t('testRegistration.progress.branch')}</span>
-            </div>
-            <div className="w-12 h-0.5 bg-green-600" />
-            <div className="flex items-center">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-600 text-white">
-                <CheckCircleSolidIcon className="w-6 h-6" />
-              </div>
-              <span className="ml-2 text-sm font-medium text-green-600">{t('testRegistration.progress.test')}</span>
-            </div>
-            <div className="w-12 h-0.5 bg-green-600" />
-            <div className="flex items-center">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-600 text-white">
-                <CheckCircleSolidIcon className="w-6 h-6" />
-              </div>
-              <span className="ml-2 text-sm font-medium text-green-600">{t('testRegistration.progress.speaking')}</span>
-            </div>
-            <div className="w-12 h-0.5 bg-indigo-600" />
-            <div className="flex items-center">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-indigo-600 text-white font-semibold">
-                5
-              </div>
-              <span className="ml-2 text-sm font-medium text-indigo-600">{t('testRegistration.progress.confirm')}</span>
-            </div>
-          </div>
-        </div>
+        <StepProgress current={5} />
 
         {/* Header */}
         <motion.div
@@ -260,7 +222,7 @@ const Step5Review = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-8"
         >
-          <h1 className="text-4xl font-display font-bold text-slate-900 mb-2">
+          <h1 className="text-3xl sm:text-4xl font-display font-bold text-slate-900 mb-2">
             {t('testRegistration.step5.title')}
           </h1>
           <p className="text-slate-600">
@@ -275,13 +237,13 @@ const Step5Review = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="bg-white rounded-2xl shadow-lg p-6 border border-slate-200"
+            className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 border border-slate-200"
           >
             <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
+              <div className="flex-shrink-0 w-12 h-12 bg-indigo-100 rounded-xl hidden sm:flex items-center justify-center">
                 <CreditCardIcon className="w-6 h-6 text-indigo-600" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <h3 className="text-lg font-bold text-slate-900 mb-2">{t('testRegistration.step5.selectedPackage')}</h3>
                 <div className="space-y-1">
                   <p className="text-slate-700">
@@ -304,13 +266,13 @@ const Step5Review = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="bg-white rounded-2xl shadow-lg p-6 border border-slate-200"
+            className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 border border-slate-200"
           >
             <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
+              <div className="flex-shrink-0 w-12 h-12 bg-indigo-100 rounded-xl hidden sm:flex items-center justify-center">
                 <BuildingOfficeIcon className="w-6 h-6 text-indigo-600" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <h3 className="text-lg font-bold text-slate-900 mb-2">{t('testRegistration.step5.branch')}</h3>
                 <p className="text-slate-700 font-semibold">{registrationData.branch.name}</p>
                 <p className="text-sm text-slate-600">{registrationData.branch.location}</p>
@@ -323,13 +285,13 @@ const Step5Review = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="bg-white rounded-2xl shadow-lg p-6 border border-slate-200"
+            className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 border border-slate-200"
           >
             <div className="flex items-start gap-4 mb-4">
-              <div className="flex-shrink-0 w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
+              <div className="flex-shrink-0 w-12 h-12 bg-indigo-100 rounded-xl hidden sm:flex items-center justify-center">
                 <UserIcon className="w-6 h-6 text-indigo-600" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <h3 className="text-lg font-bold text-slate-900 mb-3">{t('testRegistration.step5.personalInfo')}</h3>
                 <div className="space-y-3">
                   <div className="flex items-center gap-2">
@@ -345,7 +307,7 @@ const Step5Review = () => {
                   {registrationData.personalInfo.email && (
                     <div className="flex items-center gap-2">
                       <EnvelopeIcon className="w-5 h-5 text-slate-500" />
-                      <span className="text-slate-700">{registrationData.personalInfo.email}</span>
+                      <span className="text-slate-700 break-all">{registrationData.personalInfo.email}</span>
                     </div>
                   )}
                 </div>
@@ -358,13 +320,13 @@ const Step5Review = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="bg-white rounded-2xl shadow-lg p-6 border border-slate-200"
+            className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 border border-slate-200"
           >
             <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
+              <div className="flex-shrink-0 w-12 h-12 bg-indigo-100 rounded-xl hidden sm:flex items-center justify-center">
                 <CalendarIcon className="w-6 h-6 text-indigo-600" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <h3 className="text-lg font-bold text-slate-900 mb-3">{t('testRegistration.step5.testDates')}</h3>
                 <div className="space-y-2">
                   {registrationData.testDates.map((testDate, index) => {
@@ -380,7 +342,7 @@ const Step5Review = () => {
                         }`}>
                           {index + 1}
                         </span>
-                        <div className="flex-1">
+                        <div className="flex-1 min-w-0">
                           <p className={`font-medium ${sessionErr ? 'text-red-900' : 'text-slate-900'}`}>{formatDate(testDate.date)}</p>
                           <p className={`text-sm ${sessionErr ? 'text-red-600' : 'text-slate-600'}`}>{testDate.timeString} • {testDate.dayOfWeek}</p>
                           {sessionErr && (
@@ -412,13 +374,13 @@ const Step5Review = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.5 }}
-            className="bg-white rounded-2xl shadow-lg p-6 border border-slate-200"
+            className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 border border-slate-200"
           >
             <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
+              <div className="flex-shrink-0 w-12 h-12 bg-indigo-100 rounded-xl hidden sm:flex items-center justify-center">
                 <ClockIcon className="w-6 h-6 text-indigo-600" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <h3 className="text-lg font-bold text-slate-900 mb-3">{t('testRegistration.step5.speakingDates')}</h3>
                 <div className="space-y-2">
                   {registrationData.speakingDates.map((speakingDate, index) => {
@@ -434,7 +396,7 @@ const Step5Review = () => {
                         }`}>
                           {index + 1}
                         </span>
-                        <div className="flex-1">
+                        <div className="flex-1 min-w-0">
                           <p className={`font-medium ${sessionErr ? 'text-red-900' : 'text-slate-900'}`}>{formatDate(speakingDate.date)} - {speakingDate.time}</p>
                           <p className={`text-sm ${sessionErr ? 'text-red-600' : 'text-slate-600'}`}>{speakingDate.type}</p>
                           {sessionErr && (
@@ -466,7 +428,7 @@ const Step5Review = () => {
         <LateArrivalWarning className="mb-8" />
 
         {/* Navigation */}
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center gap-3">
           <Button
             variant="secondary"
             size="lg"

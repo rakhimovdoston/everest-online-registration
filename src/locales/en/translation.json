@@ -1,4 +1,8 @@
 {
+  "seo": {
+    "title": "IELTS CDI Mock Exams | EVEREST",
+    "description": "Register for EVEREST Mock exams online. Take an IELTS CDI Mock with original IELTS materials, a real exam-like environment, and convenient dates and locations."
+  },
   "header": {
     "testRegistration": "Registration",
     "pricing": "Pricing",
@@ -282,8 +286,29 @@
       "unavailableDay": "Speaking is not available on this day. Please choose another day."
     }
   },
+  "why": {
+    "title": "Why",
+    "titleHighlight": "Everest mock exams?",
+    "score": {
+      "title": "At least +1 band",
+      "description": "Reach at least a 1-band gain on the real IELTS with our regular CDI mocks."
+    },
+    "users": {
+      "title": "10,000+ users",
+      "description": "More than 10,000 students have taken our mock exams."
+    },
+    "materials": {
+      "title": "Original materials",
+      "description": "Original materials prepared by the Everest Academic Department."
+    },
+    "branches": {
+      "title": "{{count}} branches",
+      "description": "At the location nearest to you, in real exam conditions."
+    }
+  },
   "pricing": {
     "choosePlan": "Choose a plan",
+    "popular": "Most popular",
     "title": "Choose your",
     "titleHighlight": "perfect plan",
     "subtitle": "Participate in EVEREST CDI mock exams with one of 4 plans and accurately assess your level.",
@@ -380,6 +405,22 @@
     "subtitle": "Personal information and exam history",
     "personalInfo": "Personal Information",
     "username": "Username",
+    "password": "Password",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "passwordLoadError": "Could not load the password. Please try again.",
+    "changePassword": {
+      "open": "Change password",
+      "title": "Change password",
+      "oldPassword": "Current password",
+      "newPassword": "New password",
+      "confirmNewPassword": "Confirm new password",
+      "submit": "Save",
+      "saving": "Saving...",
+      "success": "Password changed successfully",
+      "required": "This field is required",
+      "mismatch": "Passwords do not match"
+    },
     "fullName": "Full name",
     "email": "Email",
     "phone": "Phone number",

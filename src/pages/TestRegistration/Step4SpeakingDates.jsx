@@ -2,42 +2,39 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { CheckCircleIcon as CheckCircleSolidIcon, PencilIcon, XMarkIcon } from '@heroicons/react/24/solid';
+import { PencilIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import Button from '../../components/ui/Button';
+import StepProgress from '../../components/registration/StepProgress';
 import SpeakingSlotPicker from '../../components/registration/SpeakingSlotPicker';
+import { loadRegistration } from '../../utils/registrationStorage';
 
 const SPEAKING_TYPE = 'FACE_TO_FACE';
 
 const Step4SpeakingDates = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const [registrationData, setRegistrationData] = useState(null);
-  const [selectedSpeakingDates, setSelectedSpeakingDates] = useState([]);
-  const [activeSlotIndex, setActiveSlotIndex] = useState(0);
-
   // Load registration data + restore any previously chosen speaking dates
-  useEffect(() => {
-    const savedData = localStorage.getItem('testRegistration');
-    if (!savedData) {
-      navigate('/test-registration');
-      return;
-    }
-    const data = JSON.parse(savedData);
-    if (!data.personalInfo || !data.testDates) {
-      navigate('/test-registration/details');
-      return;
-    }
-    setRegistrationData(data);
+  const [registrationData, setRegistrationData] = useState(loadRegistration);
+  const [selectedSpeakingDates, setSelectedSpeakingDates] = useState(() =>
+    Array.isArray(registrationData?.speakingDates) ? registrationData.speakingDates : []
+  );
+  // Point the active slot at the first empty position
+  const [activeSlotIndex, setActiveSlotIndex] = useState(() => {
+    const dates = registrationData?.speakingDates;
+    if (!Array.isArray(dates)) return 0;
+    const totalSlots = registrationData.package?.speakingSessions || 0;
+    const firstEmpty = dates.findIndex((d) => !d);
+    if (firstEmpty !== -1) return firstEmpty;
+    return dates.length < totalSlots ? dates.length : 0;
+  });
 
-    if (Array.isArray(data.speakingDates)) {
-      setSelectedSpeakingDates(data.speakingDates);
-      // Point the active slot at the first empty position
-      const totalSlots = data.package?.speakingSessions || 0;
-      let firstEmpty = data.speakingDates.findIndex((d) => !d);
-      if (firstEmpty === -1) firstEmpty = data.speakingDates.length < totalSlots ? data.speakingDates.length : 0;
-      setActiveSlotIndex(firstEmpty);
+  useEffect(() => {
+    if (!registrationData) {
+      navigate('/test-registration');
+    } else if (!registrationData.personalInfo || !registrationData.testDates) {
+      navigate('/test-registration/details');
     }
-  }, [navigate]);
+  }, [registrationData, navigate]);
 
   const totalSpeakingDates = registrationData?.package?.speakingSessions || 0;
 
@@ -119,38 +116,7 @@ const Step4SpeakingDates = () => {
   return (
     <div className="min-h-screen bg-slate-50 pt-28 pb-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
-        {/* Progress Steps */}
-        <div className="mb-8">
-          <div className="flex items-center justify-center space-x-2">
-            <div className="flex items-center">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-600 text-white">
-                <CheckCircleSolidIcon className="w-6 h-6" />
-              </div>
-              <span className="ml-2 text-sm font-medium text-green-600">{t('testRegistration.progress.package')}</span>
-            </div>
-            <div className="w-12 h-0.5 bg-green-600" />
-            <div className="flex items-center">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-600 text-white">
-                <CheckCircleSolidIcon className="w-6 h-6" />
-              </div>
-              <span className="ml-2 text-sm font-medium text-green-600">{t('testRegistration.progress.branch')}</span>
-            </div>
-            <div className="w-12 h-0.5 bg-green-600" />
-            <div className="flex items-center">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-600 text-white">
-                <CheckCircleSolidIcon className="w-6 h-6" />
-              </div>
-              <span className="ml-2 text-sm font-medium text-green-600">{t('testRegistration.progress.test')}</span>
-            </div>
-            <div className="w-12 h-0.5 bg-indigo-600" />
-            <div className="flex items-center">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-indigo-600 text-white font-semibold">
-                4
-              </div>
-              <span className="ml-2 text-sm font-medium text-indigo-600">{t('testRegistration.progress.speaking')}</span>
-            </div>
-          </div>
-        </div>
+        <StepProgress current={4} />
 
         {/* Header */}
         <motion.div
@@ -159,7 +125,7 @@ const Step4SpeakingDates = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-8"
         >
-          <h1 className="text-4xl font-display font-bold text-slate-900 mb-2">
+          <h1 className="text-3xl sm:text-4xl font-display font-bold text-slate-900 mb-2">
             {t('testRegistration.step4Extended.title')}
           </h1>
           <p className="text-slate-600">{t('testRegistration.step4Extended.subtitle')}</p>
@@ -204,7 +170,7 @@ const Step4SpeakingDates = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="bg-white rounded-2xl shadow-xl p-8 border border-slate-200 mb-6"
+            className="bg-white rounded-2xl shadow-xl p-5 sm:p-8 border border-slate-200 mb-6"
           >
             <div className="mb-6">
               <h2 className="text-lg font-semibold text-slate-900 mb-2">
@@ -278,7 +244,7 @@ const Step4SpeakingDates = () => {
           </motion.div>
 
           {/* Navigation */}
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center gap-3">
             <Button variant="secondary" size="lg" type="button" onClick={handleBack}>
               {t('testRegistration.common.back')}
             </Button>
